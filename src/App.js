@@ -1,12 +1,12 @@
 import "./App.css";
-import { Login } from "./components/form/index";
+import { SignInContainer } from "./containers";
 import { NativeBaseProvider } from "native-base";
 
 function App() {
   return (
     <div className="App">
       <NativeBaseProvider>
-        <Login />
+        <SignInContainer />
       </NativeBaseProvider>
     </div>
   );
