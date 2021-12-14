@@ -1,0 +1,13 @@
+.base-container {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto auto;
+  margin-top: 4em;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0.05px;
+  font-family: "Baxter Sans Regular";
+}
