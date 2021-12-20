@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "native-base";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
 import Select from "@mui/material/Select";
 
@@ -65,7 +65,7 @@ export function Register() {
             size="small"
           />
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Position</InputLabel>
+            <InputLabel>Position</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -82,7 +82,9 @@ export function Register() {
         </div>
       </div>
       <div className="footer">
-        <Button size="lg">Sign Up</Button>
+        <Button variant="contained" size="lg">
+          Sign Up
+        </Button>
       </div>
     </div>
   );

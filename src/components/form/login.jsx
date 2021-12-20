@@ -1,11 +1,13 @@
 import React from "react";
-import { Button } from "native-base";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
 
 import "./style.scss";
 
-export function Login() {
+export function Login(props) {
+  const { email, setEmail, password, setPassword, handleLogin } = props;
+
   return (
     <div className="container">
       <div className="image">
@@ -22,19 +24,26 @@ export function Login() {
             variant="outlined"
             required
             size="small"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             className="form-group"
             id="outlined-basic"
             label="Password"
+            type="password"
             variant="outlined"
             required
             size="small"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
       <div className="footer">
-        <Button size="lg">Sign In</Button>
+        <Button variant="contained" size="lg" onClick={() => handleLogin()}>
+          Sign In
+        </Button>
       </div>
     </div>
   );
