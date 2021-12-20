@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { useState } from "react";
 
 import { Login } from "../components/form/login";
 import { Register } from "../components/form/register";
@@ -30,8 +31,18 @@ function TabPanel(props) {
   );
 }
 
-export function SignInContainer() {
-  const [value, setValue] = React.useState(0);
+export function SignInSignUpContainer(props) {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleLogin,
+    emailError,
+    passwordError,
+  } = props;
+
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -48,7 +59,15 @@ export function SignInContainer() {
         <Tab label="Sign Up" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Login />
+        <Login
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+          emailError={emailError}
+          passwordError={passwordError}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Register />
