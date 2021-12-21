@@ -38,8 +38,13 @@ export function SignInSignUpContainer(props) {
     password,
     setPassword,
     handleLogin,
-    emailError,
-    passwordError,
+    handleSignup,
+    firstname,
+    setFirstname,
+    lastname,
+    setLastname,
+    position,
+    setPosition,
   } = props;
 
   const [value, setValue] = useState(0);
@@ -65,12 +70,22 @@ export function SignInSignUpContainer(props) {
           password={password}
           setPassword={setPassword}
           handleLogin={handleLogin}
-          emailError={emailError}
-          passwordError={passwordError}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Register />
+        <Register
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleSignup={handleSignup}
+          firstname={firstname}
+          setFirstname={setFirstname}
+          lastname={lastname}
+          setLastname={setLastname}
+          position={position}
+          setPosition={setPosition}
+        />
       </TabPanel>
     </div>
   );

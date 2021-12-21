@@ -9,8 +9,20 @@ import Select from "@mui/material/Select";
 
 import "./style.scss";
 
-export function Register() {
-  const [position, setPosition] = React.useState("");
+export function Register(props) {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSignup,
+    firstname,
+    setFirstname,
+    lastname,
+    setLastname,
+    position,
+    setPosition,
+  } = props;
 
   const handleChange = (event) => {
     setPosition(event.target.value);
@@ -29,16 +41,18 @@ export function Register() {
             id="outlined-basic"
             label="First Name"
             variant="outlined"
-            required
             size="small"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
           />
           <TextField
             className="form-group"
             id="outlined-basic"
             label="Last Name"
             variant="outlined"
-            required
             size="small"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
           />
           <TextField
             className="form-group"
@@ -47,6 +61,8 @@ export function Register() {
             variant="outlined"
             required
             size="small"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             className="form-group"
@@ -54,35 +70,52 @@ export function Register() {
             label="Password"
             variant="outlined"
             required
+            type="password"
             size="small"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <TextField
             className="form-group"
             id="outlined-basic"
             label="Confirm Password"
             variant="outlined"
-            required
+            type="password"
             size="small"
           />
           <FormControl fullWidth>
-            <InputLabel>Position</InputLabel>
+            <InputLabel id="demo-simple-select-label">Position</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              size="small"
               value={position}
               label="Position"
               onChange={handleChange}
             >
-              <MenuItem value={"Client"}>Client</MenuItem>
-              <MenuItem value={"Supervisor"}>Supervisor</MenuItem>
-              <MenuItem value={"Technician"}>Technician</MenuItem>
+              <MenuItem
+                value={"Client"}
+                onClick={(e) => setPosition(e.target.value)}
+              >
+                Client
+              </MenuItem>
+              <MenuItem
+                value={"Supervisor"}
+                onClick={(e) => setPosition(e.target.value)}
+              >
+                Supervisor
+              </MenuItem>
+              <MenuItem
+                value={"Technician"}
+                onClick={(e) => setPosition(e.target.value)}
+              >
+                Technician
+              </MenuItem>
             </Select>
           </FormControl>
         </div>
       </div>
       <div className="footer">
-        <Button variant="contained" size="lg">
+        <Button variant="contained" size="lg" onClick={() => handleSignup()}>
           Sign Up
         </Button>
       </div>
