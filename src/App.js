@@ -5,12 +5,15 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 import { NativeBaseProvider } from "native-base";
 import { useState, useEffect } from "react";
 import Home from "./components/home";
-import app from "./firebase/config";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebase/config";
+
+initializeApp(firebaseConfig);
 
 function App() {
   const [user, setUser] = useState("");
@@ -18,6 +21,9 @@ function App() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [position, setPosition] = useState("");
 
   const handleLogin = () => {
     const auth = getAuth();
@@ -40,18 +46,27 @@ function App() {
   };
 
   const handleSignup = () => {
+    const db = getFirestore();
     const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password).catch((err) => {
-      switch (err.code) {
-        case "auth/email-already-in-use":
-        case "auth/invalid-email":
-          setEmailError(err.message);
-          break;
-        case "auth/weak-password":
-          setPasswordError(err.messae);
-          break;
-      }
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setDoc(doc(db, "users", auth.currentUser.uid), {
+          firstname: firstname,
+          lastname: lastname,
+          position: position,
+        });
+      })
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/email-already-in-use":
+          case "auth/invalid-email":
+            setEmailError(err.message);
+            break;
+          case "auth/weak-password":
+            setPasswordError(err.messae);
+            break;
+        }
+      });
   };
 
   const handleLogout = () => {
@@ -85,8 +100,12 @@ function App() {
             setPassword={setPassword}
             handleLogin={handleLogin}
             handleSignup={handleSignup}
-            emailError={emailError}
-            passwordError={passwordError}
+            firstname={firstname}
+            setFirstname={setFirstname}
+            lastname={lastname}
+            setLastname={setLastname}
+            position={position}
+            setPosition={setPosition}
           />
         </NativeBaseProvider>
       )}
