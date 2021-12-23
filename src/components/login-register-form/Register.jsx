@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -7,22 +7,46 @@ import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
 import Select from "@mui/material/Select";
 
-import "./style.scss";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
-export function Register(props) {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleSignup,
-    firstname,
-    setFirstname,
-    lastname,
-    setLastname,
-    position,
-    setPosition,
-  } = props;
+import "./login-register-style.scss";
+
+export function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [position, setPosition] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleSignup = () => {
+    const db = getFirestore();
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setDoc(doc(db, "users", auth.currentUser.uid), {
+          firstname: firstname,
+          lastname: lastname,
+          position: position,
+        });
+      })
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/email-already-exists":
+            setEmailError("Account on this email already exists");
+            break;
+          case "auth/invalid-email":
+            setEmailError("Email is invalid");
+            break;
+          case "auth/invalid-password":
+            setPasswordError("Password is incorrect");
+            break;
+        }
+      });
+  };
 
   const handleChange = (event) => {
     setPosition(event.target.value);
@@ -42,6 +66,7 @@ export function Register(props) {
             label="First Name"
             variant="outlined"
             size="small"
+            required
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
           />
@@ -51,6 +76,7 @@ export function Register(props) {
             label="Last Name"
             variant="outlined"
             size="small"
+            required
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
           />
@@ -82,8 +108,11 @@ export function Register(props) {
             variant="outlined"
             type="password"
             size="small"
+            required
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
           />
-          <FormControl fullWidth>
+          <FormControl size="small" fullWidth>
             <InputLabel id="demo-simple-select-label">Position</InputLabel>
             <Select
               labelId="demo-simple-select-label"
