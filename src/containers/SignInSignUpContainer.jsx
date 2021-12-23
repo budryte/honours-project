@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useState } from "react";
 
-import { Login } from "../components/form/login";
-import { Register } from "../components/form/register";
+import { Login } from "../components/login-register-form/Login";
+import { Register } from "../components/login-register-form/Register";
 
-import "./index.scss";
+import "./sign-in-sign-up.scss";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -31,22 +31,7 @@ function TabPanel(props) {
   );
 }
 
-export function SignInSignUpContainer(props) {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleLogin,
-    handleSignup,
-    firstname,
-    setFirstname,
-    lastname,
-    setLastname,
-    position,
-    setPosition,
-  } = props;
-
+export function SignInSignUpContainer() {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -64,28 +49,10 @@ export function SignInSignUpContainer(props) {
         <Tab label="Sign Up" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Login
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-        />
+        <Login />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Register
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          handleSignup={handleSignup}
-          firstname={firstname}
-          setFirstname={setFirstname}
-          lastname={lastname}
-          setLastname={setLastname}
-          position={position}
-          setPosition={setPosition}
-        />
+        <Register />
       </TabPanel>
     </div>
   );
