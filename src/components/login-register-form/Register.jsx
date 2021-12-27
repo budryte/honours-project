@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
@@ -21,6 +22,9 @@ export function Register() {
   const [position, setPosition] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [firstnameError, setFirstnameError] = useState("");
+  const [lastnameError, setLastnameError] = useState("");
+  const [positionError, setPositionError] = useState("");
 
   const handleSignup = () => {
     const db = getFirestore();
@@ -34,17 +38,18 @@ export function Register() {
         });
       })
       .catch((err) => {
-        switch (err.code) {
-          case "auth/email-already-exists":
-            setEmailError("Account on this email already exists");
-            break;
-          case "auth/invalid-email":
-            setEmailError("Email is invalid");
-            break;
-          case "auth/invalid-password":
-            setPasswordError("Password is incorrect");
-            break;
-        }
+        if (!password) setPasswordError("Password is invalid");
+        if (firstname === "") setFirstnameError("Please enter your first name");
+        if (lastname === "") setLastnameError("Please enter your last name");
+        if (position === "") setPositionError("Please select position");
+        if (password !== passwordConfirm)
+          setPasswordError("Passwords don't match");
+        if (err.code === "auth/email-already-exists")
+          setEmailError("Account on this email already exists");
+        if (err.code === "auth/invalid-email")
+          setEmailError("Email is invalid");
+        if (err.code === "auth/wrong-password")
+          setPasswordError("Password is incorrect");
       });
   };
 
@@ -68,7 +73,12 @@ export function Register() {
             size="small"
             required
             value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
+            error={firstnameError !== ""}
+            onChange={(e) => {
+              setFirstnameError("");
+              setFirstname(e.target.value);
+            }}
+            helperText={firstnameError}
           />
           <TextField
             className="form-group"
@@ -77,8 +87,13 @@ export function Register() {
             variant="outlined"
             size="small"
             required
+            error={lastnameError !== ""}
             value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
+            onChange={(e) => {
+              setLastnameError("");
+              setLastname(e.target.value);
+            }}
+            helperText={lastnameError}
           />
           <TextField
             className="form-group"
@@ -87,8 +102,13 @@ export function Register() {
             variant="outlined"
             required
             size="small"
+            error={emailError !== ""}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmailError("");
+              setEmail(e.target.value);
+            }}
+            helperText={emailError}
           />
           <TextField
             className="form-group"
@@ -98,8 +118,13 @@ export function Register() {
             required
             type="password"
             size="small"
+            error={passwordError !== ""}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPasswordError("");
+              setPassword(e.target.value);
+            }}
+            helperText={passwordError}
           />
           <TextField
             className="form-group"
@@ -109,37 +134,69 @@ export function Register() {
             type="password"
             size="small"
             required
+            error={passwordError !== ""}
             value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
+            onChange={(e) => {
+              setPasswordError("");
+              setPasswordConfirm(e.target.value);
+            }}
+            helperText={passwordError}
           />
-          <FormControl size="small" fullWidth>
-            <InputLabel id="demo-simple-select-label">Position</InputLabel>
+          <FormControl size="small" fullWidth error={positionError !== ""}>
+            <InputLabel
+              id={
+                positionError !== ""
+                  ? "demo-simple-select-error-label"
+                  : "demo-simple-select-label"
+              }
+            >
+              Position *
+            </InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId={
+                positionError !== ""
+                  ? "demo-simple-select-error-label"
+                  : "demo-simple-select-label"
+              }
+              id={
+                positionError !== ""
+                  ? "demo-simple-select-error"
+                  : "demo-simple-select"
+              }
               value={position}
-              label="Position"
+              label="Position *"
+              error={positionError !== ""}
               onChange={handleChange}
             >
               <MenuItem
                 value={"Client"}
-                onClick={(e) => setPosition(e.target.value)}
+                onClick={(e) => {
+                  setPositionError("");
+                  setPosition(e.target.value);
+                }}
               >
                 Client
               </MenuItem>
               <MenuItem
                 value={"Supervisor"}
-                onClick={(e) => setPosition(e.target.value)}
+                onClick={(e) => {
+                  setPositionError("");
+                  setPosition(e.target.value);
+                }}
               >
                 Supervisor
               </MenuItem>
               <MenuItem
                 value={"Technician"}
-                onClick={(e) => setPosition(e.target.value)}
+                onClick={(e) => {
+                  setPositionError("");
+                  setPosition(e.target.value);
+                }}
               >
                 Technician
               </MenuItem>
             </Select>
+            <FormHelperText>{positionError}</FormHelperText>
           </FormControl>
         </div>
       </div>
