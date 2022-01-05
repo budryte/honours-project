@@ -1,0 +1,37 @@
+.box {
+  align-items: center;
+  justify-content: center;
+  padding: 7% 10%;
+}
+
+.page-title {
+  color: white;
+  font-size: 4em;
+  font-family: "Baxter Sans Semibold";
+  margin-bottom: 15px;
+}
+
+.card-container {
+  width: 75%;
+  background-color: white;
+  font-family: "Baxter Sans Regular";
+  padding: 1em 2em 2em 2em;
+}
+
+.card {
+  min-width: 250px;
+  max-width: 250px;
+  min-height: 120px;
+  max-height: 120px;
+  padding: 5px 25px 25px 25px;
+  //   border-color: black;
+  //   border-width: 2em;
+  //   border-radius: 5px;
+  background-color: #d1e2f2;
+  color: #464646;
+  margin-bottom: 10px;
+}
+
+.h3 {
+  margin-bottom: 5px;
+}
