@@ -1,9 +1,12 @@
 import "./App.css";
 import { SignInSignUpContainer } from "./containers/SignInSignUpContainer";
 import Home from "./components/home/Home";
+import { NewRequestContainer } from "./containers/NewRequestContainer";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
+//import "semantic-ui-css/semantic.min.css";
+// import { Route, Routes, Navigate } from "react-router-dom";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -25,7 +28,12 @@ function App() {
 
   return (
     <div className="App">
-      {user ? <Home></Home> : <SignInSignUpContainer />}
+      {user ? <NewRequestContainer /> : <SignInSignUpContainer />}
+      {/* <Routes>
+        <Route path="/welcome" element={<SignInSignUpContainer />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/request" element={<Request />} />
+      </Routes> */}
     </div>
   );
 }
