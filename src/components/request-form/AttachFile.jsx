@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { useDropzone } from "react-dropzone";
-import { Form, TextArea } from "semantic-ui-react";
+import { TextArea } from "semantic-ui-react";
 
 import "./request-form-style.scss";
 
@@ -30,7 +30,9 @@ function Basic(props) {
   );
 }
 
-export function AttachFile() {
+export function AttachFile(props) {
+  const { handleChange, extraInfo, setExtraInfo } = props;
+
   return (
     <div className="request-form-tab">
       <h2>Attach Files</h2>
@@ -40,13 +42,29 @@ export function AttachFile() {
         <TextArea
           className="extra-info"
           placeholder="Please include any additional information"
+          value={extraInfo}
+          onChange={(e) => setExtraInfo(e.target.value)}
         />
       </div>
       <div className="buttons">
         <div className="request-form-button">
-          <Button variant="contained">Back</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleChange(null, 0);
+            }}
+          >
+            Back
+          </Button>
         </div>
-        <Button variant="contained">Next</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleChange(null, 2);
+          }}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
