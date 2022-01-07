@@ -7,9 +7,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import { getAuth } from "firebase/auth";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
 
-function saveToFirestore() {
+async function saveToFirestore(details, extraInfo) {
   //TO-DO: Save to Firestore
+  const db = getFirestore();
+  const auth = getAuth();
+  await addDoc(collection(db, "users", auth.currentUser.uid, "requests"), {
+    ...details,
+    extraInfo,
+  });
+  alert("Successfully uploaded");
 }
 
 export function ReviewAndSend(props) {
@@ -62,7 +71,7 @@ export function ReviewAndSend(props) {
           variant="contained"
           onClick={() => {
             //TO-DO: Save to Firestore
-            saveToFirestore();
+            saveToFirestore(details, extraInfo);
           }}
         >
           Send
