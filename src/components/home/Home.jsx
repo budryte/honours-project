@@ -35,47 +35,47 @@ export default function Home() {
           <p>Change your account details</p>
           <Button variant="outlined">My Account</Button>
         </div>
-        {position !== "Technician" ? (
+        {position !== "Technician" && (
           <div className="card">
             <h3>New Request</h3>
             <p>Create and send your new request</p>
             <Button variant="outlined">New Request</Button>
           </div>
-        ) : undefined}
-        {position !== "Technician" ? (
+        )}
+        {position !== "Technician" && (
           <div className="card">
             <h3>Track Requests</h3>
             <p>Track your request status</p>
             <Button variant="outlined">Track Requests</Button>
           </div>
-        ) : undefined}
-        {position === "Supervisor" ? (
+        )}
+        {position === "Supervisor" && (
           <div className="card">
             <h3>Pending Requests</h3>
             <p>Approve your pending requests</p>
             <Button variant="outlined">Pending Requests</Button>
           </div>
-        ) : undefined}
+        )}
         <div className="card">
           <h3>Archive</h3>
           <p>View archive</p>
           <Button variant="outlined">Archive</Button>
         </div>
-        {position === "Technician" ? (
+        {position === "Technician" && (
           <div className="card">
             <h3>List of Requests</h3>
             <p>View the list of requets</p>
             <Button variant="outlined">List of Requets</Button>
           </div>
-        ) : undefined}
-        {position === "Technician" ? (
+        )}
+        {position === "Technician" && (
           <div className="card">
             <h3>My Work</h3>
             <p>View your tasks</p>
             <Button variant="outlined">My Work</Button>
           </div>
-        ) : undefined}
-        <Button variant="contained" onClick={() => handleLogout()}>
+        )}
+        <Button variant="contained" onClick={handleLogout}>
           Sign Out
         </Button>
       </div>
