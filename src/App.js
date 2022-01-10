@@ -5,8 +5,8 @@ import { NewRequestContainer } from "./containers/NewRequestContainer";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
-//import "semantic-ui-css/semantic.min.css";
-// import { Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Agreement from "./components/request-form/Agreement";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -28,12 +28,22 @@ function App() {
 
   return (
     <div className="App">
-      {user ? <NewRequestContainer /> : <SignInSignUpContainer />}
-      {/* <Routes>
-        <Route path="/welcome" element={<SignInSignUpContainer />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/request" element={<Request />} />
-      </Routes> */}
+      <Routes>
+        {user ? (
+          <Route index element={<Home />} />
+        ) : (
+          <Route index element={<SignInSignUpContainer />} />
+        )}
+        <Route path="request" element={<NewRequestContainer />} />
+        <Route path="agreement" element={<Agreement />} />
+        <Route path="request" element={<NewRequestContainer />} />
+        {/* <Route path="/track" component={} />
+              <Route path="/pending-requests" component={} />
+              <Route path="/my-account" component={} />
+              <Route path="/archive" component={} />
+              <Route path="/list-of-requests" component={} />
+              <Route path="/my-work" component={} /> */}
+      </Routes>
     </div>
   );
 }
