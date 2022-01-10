@@ -30,10 +30,10 @@ export function ReviewAndSend(props) {
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
           <TableHead>
-            <TableRow className="table-header">
+            {/* <TableRow className="table-header">
               <TableCell>Title</TableCell>
               <TableCell>Value</TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableHead>
           <TableBody>
             {Object.keys(details ?? {})?.map((key) => (
@@ -47,12 +47,14 @@ export function ReviewAndSend(props) {
                 <TableCell>{details[key]}</TableCell>
               </TableRow>
             ))}
-            <TableRow key={extraInfo}>
-              <TableCell component="th" scope="row">
-                Additional Info
-              </TableCell>
-              <TableCell>{extraInfo}</TableCell>
-            </TableRow>
+            {extraInfo !== "" && (
+              <TableRow key={extraInfo}>
+                <TableCell component="th" scope="row">
+                  Additional Info
+                </TableCell>
+                <TableCell>{extraInfo}</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

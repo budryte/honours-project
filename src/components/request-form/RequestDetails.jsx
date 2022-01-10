@@ -222,7 +222,7 @@ export function RequestDetails(props) {
                 });
               }}
             />
-          ) : (
+          ) : supervisorRequired === "No" ? (
             <TextField
               id="outlined-basic"
               label="Account to be charged"
@@ -241,7 +241,7 @@ export function RequestDetails(props) {
                 });
               }}
             />
-          )}
+          ) : undefined}
         </div>
         <div className="buttons">
           <Button
