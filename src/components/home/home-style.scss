@@ -2,20 +2,32 @@
   align-items: center;
   justify-content: center;
   padding: 7% 10%;
+  width: 75%;
+  @media (min-width: 1400px) {
+    width: 50%;
+  }
 }
 
 .page-title {
   color: white;
-  font-size: 4em;
+  font-size: 300%;
   font-family: "Baxter Sans Semibold";
   margin-bottom: 15px;
+  @media (max-width: 800px) {
+    font-size: 2em;
+  }
 }
 
 .card-container {
-  width: 75%;
   background-color: white;
   font-family: "Baxter Sans Regular";
-  padding: 1em 2em 2em 2em;
+  padding: 2em;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {
@@ -23,13 +35,15 @@
   max-width: 250px;
   min-height: 120px;
   max-height: 120px;
+  margin: auto;
   padding: 5px 25px 25px 25px;
-  //   border-color: black;
-  //   border-width: 2em;
-  //   border-radius: 5px;
-  background-color: #d1e2f2;
+  border: #d1e2f2 6px;
+  border-style: solid;
+  //background-color: #d1e2f2;
   color: #464646;
-  margin-bottom: 10px;
+  &:hover {
+    border-color: #a9cfe7;
+  }
 }
 
 .h3 {
