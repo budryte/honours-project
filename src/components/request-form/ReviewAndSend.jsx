@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,8 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import { getAuth } from "firebase/auth";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 async function saveToFirestore(details, extraInfo) {
   //TO-DO: Save to Firestore
@@ -18,11 +22,28 @@ async function saveToFirestore(details, extraInfo) {
     ...details,
     extraInfo,
   });
-  alert("Successfully uploaded");
+  // alert("Successfully uploaded");
 }
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export function ReviewAndSend(props) {
   const { handleChange, details, extraInfo } = props;
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  let navigate = useNavigate();
 
   return (
     <div className="request-form-tab">
@@ -50,7 +71,7 @@ export function ReviewAndSend(props) {
             {extraInfo !== "" && (
               <TableRow key={extraInfo}>
                 <TableCell component="th" scope="row">
-                  Additional Info
+                  Additional Info *
                 </TableCell>
                 <TableCell>{extraInfo}</TableCell>
               </TableRow>
@@ -74,10 +95,48 @@ export function ReviewAndSend(props) {
           onClick={() => {
             //TO-DO: Save to Firestore
             saveToFirestore(details, extraInfo);
+            handleOpen();
           }}
         >
           Send
         </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Confirmation
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Your request has been sent successfully. <br></br>You can now
+              track your request.
+            </Typography>
+            <div className="modal-buttons">
+              <div className="request-form-button">
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    navigate("/track-request");
+                  }}
+                >
+                  Track Request
+                </Button>
+              </div>
+
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  navigate("/home");
+                }}
+              >
+                Home
+              </Button>
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );
