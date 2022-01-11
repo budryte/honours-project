@@ -29,6 +29,37 @@ export function Register() {
   const handleSignup = () => {
     const db = getFirestore();
     const auth = getAuth();
+
+    let createAccount = true;
+    console.log("firstname", firstname);
+
+    if (!password) {
+      setPasswordError("Password is invalid");
+      createAccount = false;
+    }
+    if (firstname === "") {
+      setFirstnameError("Please enter your first name");
+      createAccount = false;
+    }
+    if (lastname === "") {
+      setLastnameError("Please enter your last name");
+      createAccount = false;
+    }
+    if (position === "") {
+      setPositionError("Please select position");
+      createAccount = false;
+    }
+    if (password !== passwordConfirm) {
+      setPasswordError("Passwords don't match");
+      createAccount = false;
+    }
+    if (email === "") {
+      setEmailError("Please enter your email address");
+      createAccount = false;
+    }
+
+    if (!createAccount) return;
+
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -38,24 +69,22 @@ export function Register() {
         });
       })
       .catch((err) => {
-        if (!password) setPasswordError("Password is invalid");
-        if (firstname === "") setFirstnameError("Please enter your first name");
-        if (lastname === "") setLastnameError("Please enter your last name");
-        if (position === "") setPositionError("Please select position");
-        if (password !== passwordConfirm)
-          setPasswordError("Passwords don't match");
-        if (err.code === "auth/email-already-exists")
+        console.log("err: ", err);
+        if (err.code === "auth/email-already-in-use")
           setEmailError("Account on this email already exists");
         if (err.code === "auth/invalid-email")
           setEmailError("Email is invalid");
         if (err.code === "auth/wrong-password")
           setPasswordError("Password is incorrect");
+        if (err.code === "auth/weak-password")
+          setPasswordError("Password should be at least 6 characters");
       });
   };
 
   const handleChange = (event) => {
     setPosition(event.target.value);
   };
+
   return (
     <div className="container">
       <div className="image">
@@ -201,7 +230,7 @@ export function Register() {
         </div>
       </div>
       <div className="footer">
-        <Button variant="contained" size="lg" onClick={() => handleSignup()}>
+        <Button variant="contained" size="lg" onClick={handleSignup}>
           Sign Up
         </Button>
       </div>

@@ -1,7 +1,8 @@
 import "./App.css";
 import { SignInSignUpContainer } from "./containers/SignInSignUpContainer";
-import Home from "./components/home/Home";
 import { NewRequestContainer } from "./containers/NewRequestContainer";
+import Home from "./components/home/Home";
+import TrackRequest from "./components/track-request/TrackRequest";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
@@ -34,11 +35,12 @@ function App() {
         ) : (
           <Route index element={<SignInSignUpContainer />} />
         )}
+        <Route path="home" element={<Home />} />
         <Route path="request" element={<NewRequestContainer />} />
         <Route path="agreement" element={<Agreement />} />
         <Route path="request" element={<NewRequestContainer />} />
-        {/* <Route path="/track" component={} />
-              <Route path="/pending-requests" component={} />
+        <Route path="track-request" component={<TrackRequest />} />
+        {/* <Route path="/pending-requests" component={} />
               <Route path="/my-account" component={} />
               <Route path="/archive" component={} />
               <Route path="/list-of-requests" component={} />
