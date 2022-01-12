@@ -4,9 +4,9 @@
   background-size: cover;
   background-attachment: fixed;
   background-image: url(http://localhost:3000/img/bg4.jpg);
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .Button {
