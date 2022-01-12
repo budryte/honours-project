@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import { RequestDetails } from "../components/request-form/RequestDetails";
 import { AttachFile } from "../components/request-form/AttachFile";
 import { ReviewAndSend } from "../components/request-form/ReviewAndSend";
+import Navbar from "../components/navbar/Navbar";
 
 import "./new-request.scss";
 
@@ -39,39 +40,42 @@ export function NewRequestContainer() {
   };
 
   return (
-    <div className="box">
-      <div className="page-title">New Request Form</div>
-      <div className="card-container">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="disabled tabs example"
-        >
-          <Tab label="Details" />
-          <Tab label="Attach Files" />
-          <Tab label="Review & Send" />
-        </Tabs>
-        <TabPanel value={value} index={0}>
-          <RequestDetails
-            handleChange={handleChange}
-            details={details}
-            setDetails={setDetails}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <AttachFile
-            handleChange={handleChange}
-            extraInfo={extraInfo}
-            setExtraInfo={setExtraInfo}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <ReviewAndSend
-            handleChange={handleChange}
-            extraInfo={extraInfo}
-            details={details}
-          />
-        </TabPanel>
+    <div>
+      <Navbar />
+      <div className="box">
+        <div className="page-title">New Request Form</div>
+        <div className="card-container">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="disabled tabs example"
+          >
+            <Tab label="Details" />
+            <Tab label="Attach Files" />
+            <Tab label="Review & Send" />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <RequestDetails
+              handleChange={handleChange}
+              details={details}
+              setDetails={setDetails}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <AttachFile
+              handleChange={handleChange}
+              extraInfo={extraInfo}
+              setExtraInfo={setExtraInfo}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <ReviewAndSend
+              handleChange={handleChange}
+              extraInfo={extraInfo}
+              details={details}
+            />
+          </TabPanel>
+        </div>
       </div>
     </div>
   );
