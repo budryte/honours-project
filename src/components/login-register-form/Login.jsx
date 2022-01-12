@@ -25,6 +25,13 @@ export function Login() {
     });
   };
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.keyCode === 13) {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="container">
       <div className="image">
@@ -64,6 +71,7 @@ export function Login() {
               setPassword(e.target.value);
             }}
             helperText={passwordError}
+            onKeyPress={handleKeypress}
           />
         </div>
       </div>
