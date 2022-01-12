@@ -10,7 +10,7 @@
 
 .page-title {
   color: white;
-  font-size: 300%;
+  font-size: 4em;
   font-family: "Baxter Sans Semibold";
   margin-bottom: 15px;
   @media (max-width: 800px) {
@@ -33,8 +33,8 @@
 .card {
   min-width: 250px;
   max-width: 250px;
-  min-height: 280px;
-  max-height: 280px;
+  min-height: 230px;
+  max-height: 230px;
   margin: auto;
   padding: 5px 25px 25px 25px;
   border: #d1e2f2 6px;
@@ -43,9 +43,20 @@
   color: #464646;
   &:hover {
     border-color: #a9cfe7;
+    box-shadow: black 2px;
   }
 }
 
 .h3 {
   margin-bottom: 5px;
+}
+
+.animation {
+  height: 100px;
+  width: 150px;
+}
+
+.animation-smaller {
+  height: 100px;
+  width: 80px;
 }
