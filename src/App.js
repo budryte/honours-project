@@ -2,12 +2,13 @@ import "./App.css";
 import { SignInSignUpContainer } from "./containers/SignInSignUpContainer";
 import { NewRequestContainer } from "./containers/NewRequestContainer";
 import Home from "./components/home/Home";
+import Agreement from "./components/request-form/Agreement";
 import TrackRequest from "./components/track-request/TrackRequest";
+import PendingRequests from "./components/pending-requests/PendingRequests";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Agreement from "./components/request-form/Agreement";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -39,9 +40,9 @@ function App() {
         <Route path="request" element={<NewRequestContainer />} />
         <Route path="agreement" element={<Agreement />} />
         <Route path="request" element={<NewRequestContainer />} />
-        <Route path="track-request" component={<TrackRequest />} />
-        {/* <Route path="/pending-requests" component={} />
-              <Route path="/my-account" component={} />
+        <Route path="track-request" element={<TrackRequest />} />
+        <Route path="pending-requests" element={<PendingRequests />} />
+        {/* <Route path="/my-account" component={} />
               <Route path="/archive" component={} />
               <Route path="/list-of-requests" component={} />
               <Route path="/my-work" component={} /> */}
