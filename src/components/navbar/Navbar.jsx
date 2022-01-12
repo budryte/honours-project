@@ -37,38 +37,38 @@ export default function Navbar() {
         <img src={logo} alt="" />
       </div>
       <List className="menu-list">
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="My Account" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="New Request" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="Track Request" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="Pending Requests" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="List of Requests" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="My Work" />
         </ListItem>
 
-        <ListItem button className="menu-item">
+        <ListItem button>
           <ListItemText primary="My Archive" />
         </ListItem>
       </List>
 
       <Divider />
-      <List>
-        <ListItem button className="menu-item">
+      <List className="menu-list">
+        <ListItem button>
           <ListItemText primary="Log Out" />
         </ListItem>
       </List>
