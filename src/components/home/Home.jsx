@@ -17,6 +17,9 @@ export default function Home() {
   let reqRef = useRef();
   let trackRef = useRef();
   let arcRef = useRef();
+  let workRef = useRef();
+  let listRef = useRef();
+  let signRef = useRef();
 
   const handleLogout = () => {
     const auth = getAuth();
@@ -55,18 +58,14 @@ export default function Home() {
                   ref={accRef}
                   autoplay={false}
                   loop={false}
-                  src="https://assets1.lottiefiles.com/packages/lf20_mr1kkmr2.json"
-                  style={{
-                    height: "150px",
-                    width: "250px",
-                  }}
+                  src="https://assets6.lottiefiles.com/datafiles/PJaBnGmD25lDMgV/data.json"
+                  className="animation-smaller"
                 />
                 <h3>My Account</h3>
                 <p>Change your account details</p>
                 <Button variant="outlined">My Account</Button>
               </div>
             </Grid>
-
             {position !== "Technician" && (
               <Grid item xs={6} md={6}>
                 <div
@@ -75,15 +74,12 @@ export default function Home() {
                   onMouseLeave={() => reqRef.current.stop()}
                 >
                   <Player
+                    className="animation"
                     ref={reqRef}
                     autoplay={false}
                     loop={false}
                     keepLastFrame
                     src="https://assets8.lottiefiles.com/packages/lf20_65fiagjg.json"
-                    style={{
-                      height: "150px",
-                      width: "250px",
-                    }}
                   />
                   <h3>New Request</h3>
                   <p>Create and send your new request</p>
@@ -108,25 +104,88 @@ export default function Home() {
                   <Player
                     ref={trackRef}
                     autoplay={false}
-                    loop
-                    src="https://assets7.lottiefiles.com/packages/lf20_xbf1be8x.json"
-                    style={{
-                      height: "150px",
-                      width: "250px",
-                    }}
+                    loop={false}
+                    src="https://assets3.lottiefiles.com/packages/lf20_C1giXF.json"
+                    className="animation"
                   />
                   <h3>Track Requests</h3>
                   <p>Track your request status</p>
-                  <Button variant="outlined">Track Requests</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/track-request");
+                    }}
+                  >
+                    Track Requests
+                  </Button>
                 </div>
               </Grid>
             )}
             {position === "Supervisor" && (
               <Grid item xs={6} md={6}>
-                <div className="card">
+                <div
+                  className="card"
+                  onMouseOver={() => signRef.current.play()}
+                  onMouseLeave={() => signRef.current.stop()}
+                >
+                  <Player
+                    ref={signRef}
+                    autoplay={false}
+                    loop={false}
+                    keepLastFrame
+                    src="https://assets10.lottiefiles.com/packages/lf20_s3u31uyq.json"
+                    className="animation"
+                  />
                   <h3>Pending Requests</h3>
                   <p>Approve your pending requests</p>
-                  <Button variant="outlined">Pending Requests</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/pending-requests");
+                    }}
+                  >
+                    Pending Requests
+                  </Button>
+                </div>
+              </Grid>
+            )}
+            {position === "Technician" && (
+              <Grid item xs={6} md={6}>
+                <div
+                  className="card"
+                  onMouseOver={() => listRef.current.play()}
+                  onMouseLeave={() => listRef.current.stop()}
+                >
+                  <Player
+                    ref={listRef}
+                    autoplay={false}
+                    loop={false}
+                    src="https://assets1.lottiefiles.com/packages/lf20_2LMpmD.json"
+                    className="animation-smaller"
+                  />
+                  <h3>List of Requests</h3>
+                  <p>View the list of requets</p>
+                  <Button variant="outlined">List of Requets</Button>
+                </div>
+              </Grid>
+            )}
+            {position === "Technician" && (
+              <Grid item xs={6} md={6}>
+                <div
+                  className="card"
+                  onMouseOver={() => workRef.current.play()}
+                  onMouseLeave={() => workRef.current.stop()}
+                >
+                  <Player
+                    ref={workRef}
+                    autoplay={false}
+                    loop={false}
+                    src="https://assets8.lottiefiles.com/packages/lf20_9zrznuec.json"
+                    className="animation"
+                  />
+                  <h3>My Work</h3>
+                  <p>View your tasks</p>
+                  <Button variant="outlined">My Work</Button>
                 </div>
               </Grid>
             )}
@@ -141,34 +200,13 @@ export default function Home() {
                   autoplay={false}
                   loop={false}
                   src="https://assets1.lottiefiles.com/packages/lf20_fx7Gm7.json"
-                  style={{
-                    height: "150px",
-                    width: "250px",
-                  }}
+                  className="animation"
                 />
                 <h3>Archive</h3>
                 <p>View archive</p>
                 <Button variant="outlined">Archive</Button>
               </div>
             </Grid>
-            {position === "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div className="card">
-                  <h3>List of Requests</h3>
-                  <p>View the list of requets</p>
-                  <Button variant="outlined">List of Requets</Button>
-                </div>
-              </Grid>
-            )}
-            {position === "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div className="card">
-                  <h3>My Work</h3>
-                  <p>View your tasks</p>
-                  <Button variant="outlined">My Work</Button>
-                </div>
-              </Grid>
-            )}
           </Grid>
           <Button variant="contained" onClick={handleLogout}>
             Sign Out
