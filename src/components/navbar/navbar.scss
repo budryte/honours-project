@@ -1,0 +1,19 @@
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4em;
+  margin-bottom: 2em;
+  img {
+    width: 75%;
+    height: 100%;
+  }
+}
+
+.menu-list {
+  padding-left: 40px;
+}
+
+.menu-drawer {
+  width: 300px;
+}
