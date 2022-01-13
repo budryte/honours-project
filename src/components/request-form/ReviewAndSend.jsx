@@ -5,7 +5,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -48,7 +47,7 @@ export function ReviewAndSend(props) {
   return (
     <div className="request-form-tab">
       <h2>Review Request Details</h2>
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
           <TableHead>
             {/* <TableRow className="table-header">
@@ -71,7 +70,7 @@ export function ReviewAndSend(props) {
             {extraInfo !== "" && (
               <TableRow key={extraInfo}>
                 <TableCell component="th" scope="row">
-                  Additional Info *
+                  Additional Info
                 </TableCell>
                 <TableCell>{extraInfo}</TableCell>
               </TableRow>
