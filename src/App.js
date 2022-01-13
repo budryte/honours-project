@@ -5,11 +5,11 @@ import Home from "./components/home/Home";
 import Agreement from "./components/request-form/Agreement";
 import TrackRequest from "./components/track-request/TrackRequest";
 import PendingRequests from "./components/pending-requests/PendingRequests";
+import ReviewPendingRequest from "./components/pending-requests/ReviewPendingRequest";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 initializeApp(firebaseConfig);
@@ -37,11 +37,14 @@ function App() {
           <Route index element={<SignInSignUpContainer />} />
         )}
         <Route path="home" element={<Home />} />
-        <Route path="request" element={<NewRequestContainer />} />
         <Route path="agreement" element={<Agreement />} />
-        <Route path="request" element={<NewRequestContainer />} />
+        <Route path="new-request" element={<NewRequestContainer />} />
         <Route path="track-request" element={<TrackRequest />} />
         <Route path="pending-requests" element={<PendingRequests />} />
+        <Route
+          path="review-pending-request"
+          element={<ReviewPendingRequest />}
+        />
         {/* <Route path="/my-account" component={} />
               <Route path="/archive" component={} />
               <Route path="/list-of-requests" component={} />

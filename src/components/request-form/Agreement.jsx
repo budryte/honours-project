@@ -23,7 +23,7 @@ export default function Agreement() {
       <Navbar />
       <div className="box">
         <div className="page-title">Guidelines</div>
-        <div className="agreement-container">
+        <div className="white-container">
           <h2>Request for Technical Assistance Guidelines</h2>
           <List>
             <ListItemText className="list-item">
@@ -118,7 +118,7 @@ export default function Agreement() {
               disabled={!agreementChecked}
               variant="outlined"
               onClick={() => {
-                navigate("/request");
+                navigate("/new-request");
               }}
             >
               Create New Request

@@ -31,9 +31,9 @@
 }
 
 .modal-buttons {
-  margin-top: 15px;
+  margin-top: 25px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .modal {
@@ -89,7 +89,7 @@
   font-family: "Baxter Sans Regular";
 }
 
-.agreement-container {
+.white-container {
   background-color: white;
   font-family: "Baxter Sans Regular";
   padding: 2em 4em;
