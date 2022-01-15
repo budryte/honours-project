@@ -6,6 +6,8 @@ import Agreement from "./components/request-form/Agreement";
 import TrackRequest from "./components/track-request/TrackRequest";
 import PendingRequests from "./components/pending-requests/PendingRequests";
 import ReviewPendingRequest from "./components/pending-requests/ReviewPendingRequest";
+import ListofRequests from "./components/list-of-requests/ListOfRequests";
+import PickUpRequest from "./components/list-of-requests/PickUpRequest";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { useState, useEffect } from "react";
@@ -45,9 +47,10 @@ function App() {
           path="review-pending-request"
           element={<ReviewPendingRequest />}
         />
+        <Route path="list-of-requests" element={<ListofRequests />} />
+        <Route path="pick-up-request" element={<PickUpRequest />} />
         {/* <Route path="/my-account" component={} />
               <Route path="/archive" component={} />
-              <Route path="/list-of-requests" component={} />
               <Route path="/my-work" component={} /> */}
       </Routes>
     </div>
