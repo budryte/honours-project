@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useState, useEffect } from "react";
 import { SignInSignUpContainer } from "./containers/SignInSignUpContainer";
 import { NewRequestContainer } from "./containers/NewRequestContainer";
 import Home from "./components/home/Home";
@@ -10,8 +11,7 @@ import ListofRequests from "./components/list-of-requests/ListOfRequests";
 import PickUpRequest from "./components/list-of-requests/PickUpRequest";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 initializeApp(firebaseConfig);
@@ -21,9 +21,9 @@ function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    return onAuthStateChanged(auth, (currectUser) => {
-      if (currectUser) {
-        setUser(currectUser);
+    return onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
       } else {
         setUser("");
       }
