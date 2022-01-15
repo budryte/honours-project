@@ -63,8 +63,8 @@ export function RequestDetails(props) {
       : details?.projectType
   );
   const [priority, setPriority] = useState(details?.priority ?? "");
-  const [supervisorRequired, setSupervisorRequired] = useState(
-    details?.supervisorRequired ?? ""
+  const [approvalRequired, setApprovalRequired] = useState(
+    details?.approvalRequired ?? ""
   );
   const [supervisor, setSupervisor] = useState(details?.supervisor ?? "");
   const [account, setAccount] = useState(details?.account ?? "");
@@ -165,7 +165,7 @@ export function RequestDetails(props) {
             Priority Level *
           </InputLabel>
           <Select
-            className="last-item"
+            className="item"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={priority}
@@ -183,18 +183,37 @@ export function RequestDetails(props) {
             <MenuItem value={"Urgent"}>Urgent</MenuItem>
           </Select>
         </FormControl>
-        <h3 className="heading">Supervisor required? *</h3>
+        <TextField
+          className="item"
+          id="outlined-basic"
+          label="Supervisor"
+          variant="outlined"
+          size="small"
+          required
+          value={supervisor}
+          onChange={(e) => {
+            setSupervisor(e.target.value);
+            setDetails((p) => {
+              delete p.account;
+              return {
+                ...p,
+                supervisor: e.target.value,
+              };
+            });
+          }}
+        />
+        <h3 className="heading">Supervisor approval required? *</h3>
         <FormControl component="fieldset">
           <RadioGroup
             className="radio-group"
             aria-label="gender"
             name="controlled-radio-buttons-group"
-            value={supervisorRequired}
+            value={approvalRequired}
             onChange={(e) => {
-              setSupervisorRequired(e.target.value);
+              setApprovalRequired(e.target.value);
               setDetails((p) => ({
                 ...p,
-                supervisorRequired: e.target.value,
+                approvalRequired: e.target.value,
               }));
             }}
           >
@@ -203,26 +222,7 @@ export function RequestDetails(props) {
           </RadioGroup>
         </FormControl>
         <div>
-          {supervisorRequired === "Yes" ? (
-            <TextField
-              id="outlined-basic"
-              label="Supervisor"
-              variant="outlined"
-              size="small"
-              required
-              value={supervisor}
-              onChange={(e) => {
-                setSupervisor(e.target.value);
-                setDetails((p) => {
-                  delete p.account;
-                  return {
-                    ...p,
-                    supervisor: e.target.value,
-                  };
-                });
-              }}
-            />
-          ) : supervisorRequired === "No" ? (
+          {approvalRequired === "No" ? (
             <TextField
               id="outlined-basic"
               label="Account to be charged"
