@@ -1,18 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
-import { getAuth } from "firebase/auth";
-import { getFirestore, getDoc, doc } from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
 import Navbar from "../navbar/Navbar";
+import { db } from "../../config/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 import "./home-style.scss";
 
 export default function Home() {
-  const [position, setPosition] = useState("");
-
   let navigate = useNavigate();
+  const [position, setPosition] = useState("");
+  const pos = useLiveQuery(() => db.users.toArray());
+
+  useEffect(() => {
+    if (!pos || !pos[0] || !pos[0].position) return;
+    setPosition(pos[0].position);
+  }, [pos]);
 
   let accRef = useRef();
   let reqRef = useRef();
@@ -22,21 +27,9 @@ export default function Home() {
   let listRef = useRef();
   let signRef = useRef();
 
-  useEffect(() => {
-    getPosition();
-  }, []);
-
-  async function getPosition() {
-    const db = getFirestore();
-    const auth = getAuth();
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
-    setPosition(docSnap.data().position);
-  }
-
   return (
     <div>
-      <Navbar position={position} />
+      <Navbar />
       <div className="box">
         <div className="page-title">Technical Request System</div>
         <div className="menu">

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
+import { db } from "../../config/db";
+import { initPosition } from "../../config/constants";
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -13,27 +15,31 @@ export function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password).catch((err) => {
-      console.log(err.code);
-      if (!password) setPasswordError("Password is invalid");
-      if (err.code === "auth/invalid-email") setEmailError("Email is invalid");
-      if (err.code === "auth/user-not-found") setEmailError("User not found");
-      if (err.code === "auth/wrong-password")
-        setPasswordError("Password is incorrect");
-    });
-  };
-
-  const handleKeypress = (e) => {
-    //it triggers by pressing the enter key
-    if (e.keyCode === 13) {
-      handleLogin();
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        try {
+          let position = await initPosition();
+          await db.users.add({ position });
+        } catch (error) {
+          console.log("Dexie Error: ", error);
+        }
+      })
+      .catch((err) => {
+        console.log("Error: ", err.code);
+        if (!password) setPasswordError("Password is invalid");
+        if (err.code === "auth/invalid-email")
+          setEmailError("Email is invalid");
+        if (err.code === "auth/user-not-found") setEmailError("User not found");
+        if (err.code === "auth/wrong-password")
+          setPasswordError("Password is incorrect");
+      });
   };
 
   return (
-    <div className="container">
+    <form className="container" onSubmit={handleLogin}>
       <div className="image">
         <img src={logo} alt="" />
       </div>
@@ -71,15 +77,14 @@ export function Login() {
               setPassword(e.target.value);
             }}
             helperText={passwordError}
-            onKeyPress={handleKeypress}
           />
         </div>
       </div>
       <div className="footer">
-        <Button variant="contained" size="lg" onClick={() => handleLogin()}>
+        <Button variant="contained" size="lg" type="submit">
           Sign In
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

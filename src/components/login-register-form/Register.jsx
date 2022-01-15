@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import logo from "../../images/logo.png";
 import Select from "@mui/material/Select";
+import { db as dexieDB } from "../../config/db";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
@@ -26,12 +27,12 @@ export function Register() {
   const [lastnameError, setLastnameError] = useState("");
   const [positionError, setPositionError] = useState("");
 
-  const handleSignup = () => {
+  const handleSignup = (e) => {
+    e.preventDefault();
     const db = getFirestore();
     const auth = getAuth();
 
     let createAccount = true;
-    console.log("firstname", firstname);
 
     if (!password) {
       setPasswordError("Password is invalid");
@@ -62,11 +63,18 @@ export function Register() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        setDoc(doc(db, "users", auth.currentUser.uid), {
+        return setDoc(doc(db, "users", auth.currentUser.uid), {
           firstname: firstname,
           lastname: lastname,
           position: position,
         });
+      })
+      .then(async () => {
+        try {
+          await dexieDB.users.add({ position });
+        } catch (error) {
+          console.log("Dexie Error: ", error);
+        }
       })
       .catch((err) => {
         console.log("err: ", err);
@@ -86,7 +94,7 @@ export function Register() {
   };
 
   return (
-    <div className="container">
+    <form className="container" onSubmit={handleSignup}>
       <div className="image">
         <img src={logo} alt="" />
       </div>
@@ -230,10 +238,10 @@ export function Register() {
         </div>
       </div>
       <div className="footer">
-        <Button variant="contained" size="lg" onClick={handleSignup}>
+        <Button variant="contained" type="submit" size="lg">
           Sign Up
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
