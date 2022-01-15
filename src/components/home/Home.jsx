@@ -163,7 +163,14 @@ export default function Home() {
                     />
                     <h3>List of Requests</h3>
                     <p>View the list of requets</p>
-                    <Button variant="outlined">List of Requets</Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        navigate("/list-of-requests");
+                      }}
+                    >
+                      List of Requets
+                    </Button>
                   </div>
                 </Grid>
               )}
