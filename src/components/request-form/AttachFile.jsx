@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import { useDropzone } from "react-dropzone";
 import { TextArea } from "semantic-ui-react";
 
 import "./request-form-style.scss";
 
-function Basic(props) {
+function Basic() {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
   const files = acceptedFiles.map((file) => (
