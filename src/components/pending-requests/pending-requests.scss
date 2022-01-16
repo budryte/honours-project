@@ -20,8 +20,8 @@
 
 .modal-style {
   position: absolute;
-  margin-top: 50%;
-  margin-left: 50%;
+  margin-top: 50vh;
+  margin-left: 50vw;
   transform: translate(-50%, -50%);
   width: 300px;
   background-color: white;
@@ -32,8 +32,8 @@
 
 .modal-style-bigger {
   position: absolute;
-  margin-top: 50%;
-  margin-left: 50%;
+  margin-top: 50vh;
+  margin-left: 50vw;
   transform: translate(-50%, -50%);
   width: 400px;
   background-color: white;
