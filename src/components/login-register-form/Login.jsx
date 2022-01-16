@@ -21,8 +21,8 @@ export function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         try {
-          let position = await initPosition();
-          await db.users.add({ position });
+          let { position, firstname, lastname } = await initPosition();
+          await db.users.add({ position, email, firstname, lastname });
         } catch (error) {
           console.log("Dexie Error: ", error);
         }

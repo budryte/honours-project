@@ -67,11 +67,12 @@ export function Register() {
           firstname: firstname,
           lastname: lastname,
           position: position,
+          email: email,
         });
       })
       .then(async () => {
         try {
-          await dexieDB.users.add({ position });
+          await dexieDB.users.add({ position, email, firstname, lastname });
         } catch (error) {
           console.log("Dexie Error: ", error);
         }

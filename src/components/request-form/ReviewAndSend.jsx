@@ -10,18 +10,29 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { getAuth } from "firebase/auth";
-import { collection, addDoc, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db as dexieDB } from "../../config/db";
 
-async function saveToFirestore(details, extraInfo) {
-  //TO-DO: Save to Firestore
+async function saveToFirestore(details, extraInfo, user) {
   const db = getFirestore();
   const auth = getAuth();
   await addDoc(collection(db, "users", auth.currentUser.uid, "requests"), {
     ...details,
     extraInfo,
+    time: serverTimestamp(),
+    id: `RTA${Date.now().toString()}`,
+    email: user.email,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    status: "Pending approval",
   });
-  // alert("Successfully uploaded");
 }
 
 const style = {
@@ -40,6 +51,7 @@ export function ReviewAndSend(props) {
   const { handleChange, details, extraInfo } = props;
 
   const [open, setOpen] = useState(false);
+  const users = useLiveQuery(() => dexieDB.users.toArray());
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   let navigate = useNavigate();
@@ -93,7 +105,7 @@ export function ReviewAndSend(props) {
           variant="contained"
           onClick={() => {
             //TO-DO: Save to Firestore
-            saveToFirestore(details, extraInfo);
+            saveToFirestore(details, extraInfo, users[0]);
             handleOpen();
           }}
         >
