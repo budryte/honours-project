@@ -21,5 +21,10 @@
       "const [ ${1}, set${1/(.*)/${1:/capitalize}/} ] = useState(${2:value});"
     ],
     "description": "useState hook"
+  },
+  "useEffect hook": {
+    "prefix": "eff",
+    "body": ["useEffect(() => {", "  ${0}", "}, [${1}]);"],
+    "description": "useEffect hook"
   }
 }
