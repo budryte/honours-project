@@ -12,12 +12,12 @@ import "./home-style.scss";
 export default function Home() {
   let navigate = useNavigate();
   const [position, setPosition] = useState("");
-  const pos = useLiveQuery(() => db.users.toArray());
+  const users = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
-    if (!pos || !pos[0] || !pos[0].position) return;
-    setPosition(pos[0].position);
-  }, [pos]);
+    if (!users || !users[0] || !users[0].position) return;
+    setPosition(users[0].position);
+  }, [users]);
 
   let accRef = useRef();
   let reqRef = useRef();
