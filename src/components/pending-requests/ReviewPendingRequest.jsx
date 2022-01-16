@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../navbar/Navbar";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "./pending-requests.scss";
 
@@ -28,6 +27,8 @@ export default function ReviewPendingRequest() {
   const handleConfirmationClose = () => setConfirmationOpen(false);
 
   let navigate = useNavigate();
+  const { state } = useLocation();
+  const { time, id, firstname, lastname, email, ...details } = state;
 
   return (
     <div>
@@ -35,24 +36,29 @@ export default function ReviewPendingRequest() {
       <div className="box">
         <div className="page-title">Review Request</div>
         <div className="white-container">
-          <h2>RTA ID</h2>
+          <h2>{id}</h2>
+          <h4>Requested by {`${firstname} ${lastname} | ${email}`}</h4>
           <TableContainer>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
               <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row"></TableCell>
-                  <TableCell>hi</TableCell>
-                  <TableCell>hi</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row"></TableCell>
-                  <TableCell>hi</TableCell>
-                  <TableCell>hi</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row"></TableCell>
-                  <TableCell>hi</TableCell>
-                  <TableCell>hi</TableCell>
+                {Object.keys(details ?? {})?.map((key) => (
+                  <TableRow key={key}>
+                    <TableCell component="th" scope="row">
+                      {(key.charAt(0).toUpperCase() + key.slice(1))
+                        .match(/([A-Z]?[^A-Z]*)/g)
+                        .slice(0, -1)
+                        .join(" ")}
+                    </TableCell>
+                    <TableCell>{details[key]}</TableCell>
+                  </TableRow>
+                ))}
+                <TableRow key={"time"}>
+                  <TableCell component="th" scope="row">
+                    Date Submitted
+                  </TableCell>
+                  <TableCell>
+                    {new Date(time.seconds * 1000).toGMTString()}
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
