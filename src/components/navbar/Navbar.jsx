@@ -62,52 +62,52 @@ export default function Navbar() {
       </div>
       <List>
         <ListItem button onClick={() => navigate("/home")}>
-          <ListItemText primary="Home" />
+          <ListItemText className="menu-item" primary="Home" />
         </ListItem>
 
         <ListItem button>
-          <ListItemText primary="My Account" />
+          <ListItemText className="menu-item" primary="My Account" />
         </ListItem>
 
         {position !== "Technician" && (
           <ListItem button onClick={() => navigate("/agreement")}>
-            <ListItemText primary="New Request" />
+            <ListItemText className="menu-item" primary="New Request" />
           </ListItem>
         )}
 
         {position !== "Technician" && (
           <ListItem button onClick={() => navigate("/track-requests")}>
-            <ListItemText primary="Track Request" />
+            <ListItemText className="menu-item" primary="Track Request" />
           </ListItem>
         )}
 
         {position === "Supervisor" && (
           <ListItem button onClick={() => navigate("/pending-requests")}>
-            <ListItemText primary="Pending Requests" />
+            <ListItemText className="menu-item" primary="Pending Requests" />
           </ListItem>
         )}
 
         {position === "Technician" && (
           <ListItem button>
-            <ListItemText primary="List of Requests" />
+            <ListItemText className="menu-item" primary="List of Requests" />
           </ListItem>
         )}
 
         {position === "Technician" && (
           <ListItem button>
-            <ListItemText primary="My Work" />
+            <ListItemText className="menu-item" primary="My Work" />
           </ListItem>
         )}
 
         <ListItem button>
-          <ListItemText primary="My Archive" />
+          <ListItemText className="menu-item" primary="My Archive" />
         </ListItem>
       </List>
 
       <Divider />
       <List>
         <ListItem button onClick={handleLogout}>
-          <ListItemText style={{ "font-weight": "bold" }} primary="Log Out" />
+          <ListItemText className="menu-item" primary="Log Out" />
         </ListItem>
       </List>
     </Box>

@@ -21,7 +21,17 @@
   padding: 10px 10px 0px 0px;
 }
 
+.MuiSvgIcon-root {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .hamburger {
   padding: 20px 0px 0px 20px;
   color: white;
+}
+
+.menu-item {
+  padding-left: 30px;
 }
