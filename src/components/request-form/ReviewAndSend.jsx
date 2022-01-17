@@ -3,7 +3,6 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -13,6 +12,8 @@ import { getAuth } from "firebase/auth";
 import {
   collection,
   addDoc,
+  doc,
+  setDoc,
   getFirestore,
   serverTimestamp,
 } from "firebase/firestore";
@@ -23,11 +24,12 @@ import { db as dexieDB } from "../../config/db";
 async function saveToFirestore(details, extraInfo, user) {
   const db = getFirestore();
   const auth = getAuth();
-  await addDoc(collection(db, "users", auth.currentUser.uid, "requests"), {
+  const id = `RTA${Date.now().toString()}`;
+  await setDoc(doc(db, "users", auth.currentUser.uid, "requests", id), {
     ...details,
     extraInfo,
     time: serverTimestamp(),
-    id: `RTA${Date.now().toString()}`,
+    id: id,
     email: user.email,
     firstname: user.firstname,
     lastname: user.lastname,
@@ -61,12 +63,6 @@ export function ReviewAndSend(props) {
       <h2>Review Request Details</h2>
       <TableContainer>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
-          <TableHead>
-            {/* <TableRow className="table-header">
-              <TableCell>Title</TableCell>
-              <TableCell>Value</TableCell>
-            </TableRow> */}
-          </TableHead>
           <TableBody>
             {Object.keys(details ?? {})?.map((key) => (
               <TableRow key={key}>

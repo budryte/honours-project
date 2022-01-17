@@ -39,21 +39,23 @@ export function SignInSignUpContainer() {
   };
 
   return (
-    <div className="base-container">
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="disabled tabs example"
-      >
-        <Tab label="Sign In" />
-        <Tab label="Sign Up" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <Login />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Register />
-      </TabPanel>
+    <div className="wrapper">
+      <div className="base-container">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="disabled tabs example"
+        >
+          <Tab label="Sign In" />
+          <Tab label="Sign Up" />
+        </Tabs>
+        <TabPanel value={value} index={0}>
+          <Login />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Register />
+        </TabPanel>
+      </div>
     </div>
   );
 }

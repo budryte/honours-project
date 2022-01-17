@@ -29,13 +29,13 @@ export default function PendingRequests() {
       const querySnapshot = await getDocs(
         query(
           collectionGroup(getFirestore(), "requests"),
-          where("supervisor", "==", currentUserEmail)
-          // where("supervisor", "==", "Pending Approval")
+          where("supervisor", "==", currentUserEmail),
+          where("status", "==", "Pending approval")
         )
       );
       let reqArr = [];
       querySnapshot.forEach((doc) => {
-        reqArr.push({ id: doc.id, data: doc.data() });
+        reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
       });
       setRequests(reqArr);
     })();
@@ -59,7 +59,7 @@ export default function PendingRequests() {
                     <Button
                       onClick={() =>
                         navigate("/review-pending-request", {
-                          state: req.data,
+                          state: { data: req.data, parentId: req.parentId },
                         })
                       }
                     >

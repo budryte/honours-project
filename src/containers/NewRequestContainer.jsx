@@ -44,7 +44,7 @@ export function NewRequestContainer() {
       <Navbar />
       <div className="box">
         <div className="page-title">New Request Form</div>
-        <div className="card-container">
+        <div className="white-container">
           <Tabs
             value={value}
             onChange={handleChange}
