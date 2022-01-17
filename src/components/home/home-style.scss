@@ -1,7 +1,7 @@
 .box {
   align-items: center;
   justify-content: center;
-  padding: 7% 10%;
+  padding: 3% 10%;
   width: 75%;
   @media (min-width: 1400px) {
     width: 50%;
@@ -18,16 +18,10 @@
   }
 }
 
-.card-container {
+.white-container {
   background-color: white;
   font-family: "Baxter Sans Regular";
-  padding: 2em;
-}
-
-.menu {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 2em 3em;
 }
 
 .card {
