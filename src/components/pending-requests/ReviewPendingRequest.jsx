@@ -11,12 +11,35 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import { useNavigate, useLocation } from "react-router-dom";
+import {
+  doc,
+  updateDoc,
+  getFirestore,
+  collectionGroup,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 import "./pending-requests.scss";
 
+async function addFields(grant, account, parentId, id) {
+  const db = getFirestore();
+  const auth = getAuth();
+  console.log(parentId);
+  const requestRef = doc(db, "users", parentId, "requests", id);
+  //console.log(parentId);
+  await updateDoc(requestRef, {
+    grant: grant,
+    account: account,
+    status: "Waiting on technician",
+  });
+}
+
 export default function ReviewPendingRequest() {
-  const [account, setAccount] = useState("");
   const [grant, setGrant] = useState("");
+  const [account, setAccount] = useState("");
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -28,7 +51,8 @@ export default function ReviewPendingRequest() {
 
   let navigate = useNavigate();
   const { state } = useLocation();
-  const { time, id, firstname, lastname, email, ...details } = state;
+  const { time, id, firstname, lastname, email, ...details } = state.data;
+  const { parentId } = state;
 
   return (
     <div>
@@ -98,11 +122,14 @@ export default function ReviewPendingRequest() {
                 <TextField
                   className="form-group"
                   id="outlined-basic"
-                  label="Account"
+                  label="Account to be charged"
                   variant="outlined"
-                  required
                   size="small"
+                  required
                   value={account}
+                  onChange={(e) => {
+                    setAccount(e.target.value);
+                  }}
                 />
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   Enter student grant:
@@ -112,9 +139,12 @@ export default function ReviewPendingRequest() {
                   id="outlined-basic"
                   label="Grant"
                   variant="outlined"
-                  required
                   size="small"
+                  required
                   value={grant}
+                  onChange={(e) => {
+                    setGrant(e.target.value);
+                  }}
                 />
                 <div className="modal-buttons">
                   <div className="request-form-button">
@@ -132,6 +162,7 @@ export default function ReviewPendingRequest() {
                     variant="outlined"
                     color="success"
                     onClick={() => {
+                      addFields(grant, account, parentId, id);
                       handleClose();
                       handleConfirmationOpen();
                     }}
