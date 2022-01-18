@@ -20,6 +20,7 @@ export default function PendingRequests() {
   let navigate = useNavigate();
   const users = useLiveQuery(() => dexieDB.users.toArray());
   const [requests, setRequests] = useState([]);
+  const [requestsTech, setRequestsTech] = useState([]);
 
   useEffect(() => {
     if (!users || !users[0] || !users[0].email) return;
@@ -33,11 +34,23 @@ export default function PendingRequests() {
           where("status", "==", "Pending approval")
         )
       );
-      let reqArr = [];
+      let studentReq = [];
+      let technicianReq = [];
       querySnapshot.forEach((doc) => {
-        reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
+        if (doc.data().technicianInCharge !== undefined) {
+          technicianReq.push({
+            parentId: doc.ref.parent.parent.id,
+            data: doc.data(),
+          });
+        } else {
+          studentReq.push({
+            parentId: doc.ref.parent.parent.id,
+            data: doc.data(),
+          });
+        }
       });
-      setRequests(reqArr);
+      setRequests(studentReq);
+      setRequestsTech(technicianReq);
     })();
   }, [users]);
 
@@ -72,13 +85,31 @@ export default function PendingRequests() {
           ) : (
             <p>There are no pending requests.</p>
           )}
-
           <h2>From technicians</h2>
-          {/* todo: if pending request exists, then show list */}
-          {/* <List>
-            <ListItem></ListItem>
-          </List> */}
-          <p>There are no pending requests.</p>
+          {requestsTech.length > 0 ? (
+            <List>
+              {requestsTech.map((req) => (
+                <ListItem key={req.data.id}>
+                  <div className="pending-request-list-item">
+                    <p>
+                      <b>{req.data.id}</b>
+                    </p>
+                    <Button
+                      onClick={() =>
+                        navigate("/review-pending-request", {
+                          state: { data: req.data, parentId: req.parentId },
+                        })
+                      }
+                    >
+                      Review
+                    </Button>
+                  </div>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <p>There are no pending requests.</p>
+          )}
         </div>
       </div>
     </div>
