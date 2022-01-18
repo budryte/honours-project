@@ -32,6 +32,19 @@ async function addFields(estimatedTime, parentId, id) {
   });
 }
 
+async function sendToSupervisor(parentId, id) {
+  const fireStore = getFirestore();
+  const auth = getAuth();
+  console.log(parentId);
+  console.log(auth.currentUser.email);
+  const requestRef = doc(fireStore, "users", parentId, "requests", id);
+  await updateDoc(requestRef, {
+    approvalRequired: "Yes",
+    technicianInCharge: auth.currentUser.email,
+    status: "Pending approval",
+  });
+}
+
 export default function PickUpRequest() {
   const [supervisor, setSupervisor] = useState("");
   const [estimatedTime, setEstimatedTime] = useState(null);
@@ -198,11 +211,11 @@ export default function PickUpRequest() {
                 <TextField
                   className="form-group"
                   id="outlined-basic"
-                  label="Suepervisor's email"
+                  label="Supervisor's email"
                   variant="outlined"
                   required
                   size="small"
-                  value={supervisor}
+                  value={details.supervisor}
                 />
                 <div className="modal-buttons">
                   <div className="request-form-button">
@@ -220,7 +233,8 @@ export default function PickUpRequest() {
                     variant="outlined"
                     color="success"
                     onClick={() => {
-                      handleClose();
+                      sendToSupervisor(parentId, id);
+                      handleApprovalClose();
                     }}
                   >
                     Send
