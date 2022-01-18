@@ -19,7 +19,7 @@ import { getAuth } from "firebase/auth";
 
 import "./list-of-requests.scss";
 
-async function addFields(estimatedTime, parentId, id) {
+async function pickUpRequest(estimatedTime, parentId, id) {
   const fireStore = getFirestore();
   const auth = getAuth();
   console.log(parentId);
@@ -186,7 +186,7 @@ export default function PickUpRequest() {
                     variant="outlined"
                     color="success"
                     onClick={() => {
-                      addFields(estimatedTime, parentId, id);
+                      pickUpRequest(estimatedTime, parentId, id);
                       handleClose();
                     }}
                   >
