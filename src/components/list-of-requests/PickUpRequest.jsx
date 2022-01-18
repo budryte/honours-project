@@ -13,12 +13,28 @@ import Modal from "@mui/material/Modal";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { doc, updateDoc, getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 import "./list-of-requests.scss";
 
+async function addFields(estimatedTime, parentId, id) {
+  const fireStore = getFirestore();
+  const auth = getAuth();
+  console.log(parentId);
+  console.log(auth.currentUser.email);
+  const requestRef = doc(fireStore, "users", parentId, "requests", id);
+  await updateDoc(requestRef, {
+    estimatedTime: estimatedTime,
+    technicianInCharge: auth.currentUser.email,
+    status: "In progress",
+  });
+}
+
 export default function PickUpRequest() {
   const [supervisor, setSupervisor] = useState("");
+  const [estimatedTime, setEstimatedTime] = useState(null);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -28,9 +44,18 @@ export default function PickUpRequest() {
   const handleApprovalOpen = () => setApprovalOpen(true);
   const handleApprovalClose = () => setApprovalOpen(false);
 
-  const [estimatedTime, setEstimatedTime] = useState(null);
-
   let navigate = useNavigate();
+  const { state } = useLocation();
+  const {
+    time,
+    estimatedTime: completionTime,
+    id,
+    firstname,
+    lastname,
+    email,
+    ...details
+  } = state.data;
+  const { parentId } = state;
 
   return (
     <div>
@@ -38,20 +63,44 @@ export default function PickUpRequest() {
       <div className="box">
         <div className="page-title">Review Request</div>
         <div className="white-container">
-          <h2>RTA ID</h2>
+          <h2>{id}</h2>
+          <h4>
+            Requested by {firstname} {lastname}
+            <br></br>
+            {email}
+          </h4>
           <TableContainer>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
               <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row"></TableCell>
-                  <TableCell>hi</TableCell>
-                  <TableCell>hi</TableCell>
+                {Object.keys(details ?? {})?.map((key) => (
+                  <TableRow key={key}>
+                    <TableCell component="th" scope="row">
+                      {(key.charAt(0).toUpperCase() + key.slice(1))
+                        .match(/([A-Z]?[^A-Z]*)/g)
+                        .slice(0, -1)
+                        .join(" ")}
+                    </TableCell>
+                    <TableCell>{details[key]}</TableCell>
+                  </TableRow>
+                ))}
+                <TableRow key={"time"}>
+                  <TableCell component="th" scope="row">
+                    Date Submitted
+                  </TableCell>
+                  <TableCell>
+                    {new Date(time.seconds * 1000).toLocaleString()}
+                  </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row"></TableCell>
-                  <TableCell>hi</TableCell>
-                  <TableCell>hi</TableCell>
-                </TableRow>
+                {details.status === "In progress" ? (
+                  <TableRow key={"completionTime"}>
+                    <TableCell component="th" scope="row">
+                      Date finished
+                    </TableCell>
+                    <TableCell>
+                      {new Date(completionTime.seconds * 1000).toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ) : undefined}
               </TableBody>
             </Table>
           </TableContainer>
@@ -60,10 +109,20 @@ export default function PickUpRequest() {
               <Button
                 variant="contained"
                 onClick={() => {
+                  navigate("/list-of-requests");
+                }}
+              >
+                Back
+              </Button>
+            </div>
+            <div className="request-form-button">
+              <Button
+                variant="contained"
+                onClick={() => {
                   handleApprovalOpen();
                 }}
               >
-                Get approval
+                Send to Supervisor
               </Button>
             </div>
             <Button
@@ -72,7 +131,7 @@ export default function PickUpRequest() {
                 handleOpen();
               }}
             >
-              Pick up request
+              Pick Up Request
             </Button>
             <Modal
               open={open}
@@ -87,15 +146,6 @@ export default function PickUpRequest() {
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                   Enter estimated time of completion:
                 </Typography>
-                {/* <TextField
-                  className="form-group"
-                  id="outlined-basic"
-                  label="Estimated time"
-                  variant="outlined"
-                  required
-                  size="small"
-                  value={estimatedTime}
-                /> */}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="Completion time"
@@ -123,10 +173,11 @@ export default function PickUpRequest() {
                     variant="outlined"
                     color="success"
                     onClick={() => {
+                      addFields(estimatedTime, parentId, id);
                       handleClose();
                     }}
                   >
-                    Send
+                    Save
                   </Button>
                 </div>
               </Box>
@@ -147,7 +198,7 @@ export default function PickUpRequest() {
                 <TextField
                   className="form-group"
                   id="outlined-basic"
-                  label="Suepervisor"
+                  label="Suepervisor's email"
                   variant="outlined"
                   required
                   size="small"
@@ -159,7 +210,7 @@ export default function PickUpRequest() {
                       variant="outlined"
                       color="error"
                       onClick={() => {
-                        handleClose();
+                        handleApprovalClose();
                       }}
                     >
                       Cancel
