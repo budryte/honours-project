@@ -11,22 +11,12 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  doc,
-  updateDoc,
-  getFirestore,
-  collectionGroup,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { doc, updateDoc, getFirestore } from "firebase/firestore";
 
 import "./pending-requests.scss";
 
 async function addFields(grant, account, parentId, id) {
   const db = getFirestore();
-  const auth = getAuth();
   console.log(parentId);
   const requestRef = doc(db, "users", parentId, "requests", id);
   //console.log(parentId);
@@ -61,7 +51,11 @@ export default function ReviewPendingRequest() {
         <div className="page-title">Review Request</div>
         <div className="white-container">
           <h2>{id}</h2>
-          <h4>Requested by {`${firstname} ${lastname} | ${email}`}</h4>
+          <h4>
+            Requested by {firstname} {lastname}
+            <br></br>
+            {email}
+          </h4>
           <TableContainer>
             <Table sx={{ minWidth: 450 }} aria-label="simple table">
               <TableBody>
