@@ -51,8 +51,24 @@ export function NewRequestContainer() {
             aria-label="disabled tabs example"
           >
             <Tab label="Details" />
-            <Tab label="Attach Files" />
-            <Tab label="Review & Send" />
+            <Tab
+              label="Attach Files"
+              disabled={
+                details === null ||
+                details.discipline === undefined ||
+                (details.discipline === "Other" &&
+                  details.otherDiscipline === undefined) ||
+                details.projectType === undefined ||
+                (details.projectType === "Other" &&
+                  details.otherProjectType === undefined) ||
+                details.priority === undefined ||
+                details.supervisor === undefined ||
+                details.approvalRequired === undefined ||
+                (details.approvalRequired === "No" &&
+                  details.account === undefined)
+              }
+            />
+            <Tab label="Review & Send" disabled={extraInfo === ""} />
           </Tabs>
           <TabPanel value={value} index={0}>
             <RequestDetails
