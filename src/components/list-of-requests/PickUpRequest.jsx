@@ -46,7 +46,6 @@ async function sendToSupervisor(parentId, id) {
 }
 
 export default function PickUpRequest() {
-  const [supervisor, setSupervisor] = useState("");
   const [estimatedTime, setEstimatedTime] = useState(null);
 
   const [open, setOpen] = useState(false);
@@ -185,6 +184,7 @@ export default function PickUpRequest() {
                   <Button
                     variant="outlined"
                     color="success"
+                    disabled={estimatedTime === null}
                     onClick={() => {
                       pickUpRequest(estimatedTime, parentId, id);
                       handleClose();
