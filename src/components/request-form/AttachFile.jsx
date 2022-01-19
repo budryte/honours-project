@@ -38,7 +38,7 @@ export function AttachFile(props) {
       <h2>Attach Files</h2>
       <Basic />
       <div>
-        <h3>Additional Information</h3>
+        <h3>Additional Information *</h3>
         <TextArea
           className="extra-info"
           placeholder="Please include any additional information"
@@ -59,6 +59,7 @@ export function AttachFile(props) {
         </div>
         <Button
           variant="contained"
+          disabled={extraInfo === ""}
           onClick={() => {
             handleChange(null, 2);
           }}

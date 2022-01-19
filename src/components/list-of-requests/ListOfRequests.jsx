@@ -7,7 +7,6 @@ import ListItem from "@mui/material/ListItem";
 import {
   collectionGroup,
   query,
-  where,
   getDocs,
   getFirestore,
 } from "firebase/firestore";

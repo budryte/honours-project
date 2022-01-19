@@ -65,20 +65,29 @@ export default function PendingRequests() {
             <List>
               {requests.map((req) => (
                 <ListItem key={req.data.id}>
-                  <div className="pending-request-list-item">
-                    <p>
-                      <b>{req.data.id}</b>
-                    </p>
-                    <Button
-                      onClick={() =>
-                        navigate("/review-pending-request", {
-                          state: { data: req.data, parentId: req.parentId },
-                        })
-                      }
-                    >
-                      Review
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={() =>
+                      navigate("/review-pending-request", {
+                        state: { data: req.data, parentId: req.parentId },
+                      })
+                    }
+                    className="list-of-request-button"
+                  >
+                    <div className="pending-request-list-item">
+                      <div>
+                        <p>
+                          <b className="id">{req.data.id} </b>
+                          {"Date: "}
+                          {new Date(
+                            req.data.time.seconds * 1000
+                          ).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p>
+                        <b>{req.data.status}</b>
+                      </p>
+                    </div>
+                  </Button>
                 </ListItem>
               ))}
             </List>
@@ -90,20 +99,29 @@ export default function PendingRequests() {
             <List>
               {requestsTech.map((req) => (
                 <ListItem key={req.data.id}>
-                  <div className="pending-request-list-item">
-                    <p>
-                      <b>{req.data.id}</b>
-                    </p>
-                    <Button
-                      onClick={() =>
-                        navigate("/review-pending-request", {
-                          state: { data: req.data, parentId: req.parentId },
-                        })
-                      }
-                    >
-                      Review
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={() =>
+                      navigate("/review-pending-request", {
+                        state: { data: req.data, parentId: req.parentId },
+                      })
+                    }
+                    className="list-of-request-button"
+                  >
+                    <div className="pending-request-list-item">
+                      <div>
+                        <p>
+                          <b className="id">{req.data.id} </b>
+                          {"Date: "}
+                          {new Date(
+                            req.data.time.seconds * 1000
+                          ).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p>
+                        <b>{req.data.status}</b>
+                      </p>
+                    </div>
+                  </Button>
                 </ListItem>
               ))}
             </List>

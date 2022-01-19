@@ -31,7 +31,6 @@ const projectTypeValues = [
 
 export function RequestDetails(props) {
   const { details, setDetails, handleChange } = props;
-
   const [discipline, setDiscipline] = useState(
     details?.discipline === undefined
       ? ""
@@ -191,13 +190,10 @@ export function RequestDetails(props) {
           value={supervisor}
           onChange={(e) => {
             setSupervisor(e.target.value);
-            setDetails((p) => {
-              delete p.account;
-              return {
-                ...p,
-                supervisor: e.target.value,
-              };
-            });
+            setDetails((p) => ({
+              ...p,
+              supervisor: e.target.value,
+            }));
           }}
         />
         <h3 className="heading">Supervisor approval required? *</h3>
@@ -230,13 +226,10 @@ export function RequestDetails(props) {
               value={account}
               onChange={(e) => {
                 setAccount(e.target.value);
-                setDetails((p) => {
-                  delete p.supervisor;
-                  return {
-                    ...p,
-                    account: e.target.value,
-                  };
-                });
+                setDetails((p) => ({
+                  ...p,
+                  account: e.target.value,
+                }));
               }}
             />
           ) : undefined}
@@ -244,8 +237,17 @@ export function RequestDetails(props) {
         <div className="buttons">
           <Button
             variant="contained"
+            disabled={
+              discipline === "" ||
+              (discipline === "Other" && otherDiscipline === "") ||
+              projectType === "" ||
+              (projectType === "Other" && otherProjectType === "") ||
+              priority === "" ||
+              supervisor === "" ||
+              approvalRequired === "" ||
+              (approvalRequired === "No" && account === "")
+            }
             onClick={() => {
-              //TO-DO: Error Handling
               handleChange(null, 1);
             }}
           >

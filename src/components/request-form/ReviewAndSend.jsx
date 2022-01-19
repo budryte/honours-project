@@ -48,7 +48,6 @@ export function ReviewAndSend(props) {
   const [open, setOpen] = useState(false);
   const users = useLiveQuery(() => dexieDB.users.toArray());
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   let navigate = useNavigate();
 
   return (
@@ -93,7 +92,6 @@ export function ReviewAndSend(props) {
         <Button
           variant="contained"
           onClick={() => {
-            //TO-DO: Save to Firestore
             saveToFirestore(details, extraInfo, users[0]);
             handleOpen();
           }}
@@ -102,7 +100,9 @@ export function ReviewAndSend(props) {
         </Button>
         <Modal
           open={open}
-          onClose={handleClose}
+          onClose={() => {
+            navigate("/home");
+          }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -125,15 +125,6 @@ export function ReviewAndSend(props) {
                   Track Request
                 </Button>
               </div>
-
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  navigate("/home");
-                }}
-              >
-                Home
-              </Button>
             </div>
           </Box>
         </Modal>

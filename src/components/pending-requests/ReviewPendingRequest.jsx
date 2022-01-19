@@ -19,7 +19,6 @@ async function addFields(grant, account, parentId, id) {
   const db = getFirestore();
   console.log(parentId);
   const requestRef = doc(db, "users", parentId, "requests", id);
-  //console.log(parentId);
   await updateDoc(requestRef, {
     grant: grant,
     account: account,
@@ -37,7 +36,6 @@ export default function ReviewPendingRequest() {
 
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const handleConfirmationOpen = () => setConfirmationOpen(true);
-  const handleConfirmationClose = () => setConfirmationOpen(false);
 
   let navigate = useNavigate();
   const { state } = useLocation();
@@ -155,20 +153,23 @@ export default function ReviewPendingRequest() {
                   <Button
                     variant="outlined"
                     color="success"
+                    disabled={grant === "" || account === ""}
                     onClick={() => {
                       addFields(grant, account, parentId, id);
                       handleClose();
                       handleConfirmationOpen();
                     }}
                   >
-                    Send
+                    Sign
                   </Button>
                 </div>
               </Box>
             </Modal>
             <Modal
               open={confirmationOpen}
-              onClose={handleConfirmationClose}
+              onClose={() => {
+                navigate("/home");
+              }}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
@@ -191,15 +192,6 @@ export default function ReviewPendingRequest() {
                       Track Request
                     </Button>
                   </div>
-
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      navigate("/home");
-                    }}
-                  >
-                    Home
-                  </Button>
                 </div>
               </Box>
             </Modal>
