@@ -9,6 +9,8 @@ import PendingRequests from "./components/pending-requests/PendingRequests";
 import ReviewPendingRequest from "./components/pending-requests/ReviewPendingRequest";
 import ListofRequests from "./components/list-of-requests/ListOfRequests";
 import PickUpRequest from "./components/list-of-requests/PickUpRequest";
+import MyWork from "./components/technician-work/MyWork";
+import Archive from "./components/archive/Archive";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { Routes, Route } from "react-router-dom";
@@ -49,9 +51,8 @@ function App() {
         />
         <Route path="list-of-requests" element={<ListofRequests />} />
         <Route path="pick-up-request" element={<PickUpRequest />} />
-        {/* <Route path="/my-account" component={} />
-              <Route path="/archive" component={} />
-              <Route path="/my-work" component={} /> */}
+        <Route path="my-work" element={<MyWork />} />
+        <Route path="archive" element={<Archive />} />
       </Routes>
     </div>
   );
