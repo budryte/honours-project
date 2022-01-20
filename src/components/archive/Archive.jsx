@@ -70,7 +70,7 @@ export default function Archive() {
                 <ListItem key={req.data.id}>
                   <Button
                     onClick={() =>
-                      navigate("/pick-up-request", {
+                      navigate("/review-archived-request", {
                         state: { data: req.data, parentId: req.parentId },
                       })
                     }

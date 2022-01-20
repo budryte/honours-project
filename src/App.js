@@ -11,6 +11,7 @@ import ListofRequests from "./components/list-of-requests/ListOfRequests";
 import PickUpRequest from "./components/list-of-requests/PickUpRequest";
 import MyWork from "./components/technician-work/MyWork";
 import Archive from "./components/archive/Archive";
+import ReviewArchivedRequest from "./components/archive/ReviewArchivedRequest";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { Routes, Route } from "react-router-dom";
@@ -53,6 +54,10 @@ function App() {
         <Route path="pick-up-request" element={<PickUpRequest />} />
         <Route path="my-work" element={<MyWork />} />
         <Route path="archive" element={<Archive />} />
+        <Route
+          path="review-archived-request"
+          element={<ReviewArchivedRequest />}
+        />
       </Routes>
     </div>
   );
