@@ -182,7 +182,14 @@ export default function Home() {
                   />
                   <h3>My Work</h3>
                   <p>View your tasks</p>
-                  <Button variant="outlined">My Work</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/my-work");
+                    }}
+                  >
+                    My Work
+                  </Button>
                 </div>
               </Grid>
             )}
@@ -201,7 +208,14 @@ export default function Home() {
                 />
                 <h3>Archive</h3>
                 <p>View archive</p>
-                <Button variant="outlined">Archive</Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    navigate("/archive");
+                  }}
+                >
+                  Archive
+                </Button>
               </div>
             </Grid>
           </Grid>

@@ -88,19 +88,19 @@ export default function Navbar() {
         )}
 
         {position === "Technician" && (
-          <ListItem button>
+          <ListItem button onClick={() => navigate("/list-of-requests")}>
             <ListItemText className="menu-item" primary="List of Requests" />
           </ListItem>
         )}
 
         {position === "Technician" && (
-          <ListItem button>
+          <ListItem button onClick={() => navigate("/my-work")}>
             <ListItemText className="menu-item" primary="My Work" />
           </ListItem>
         )}
 
-        <ListItem button>
-          <ListItemText className="menu-item" primary="My Archive" />
+        <ListItem button onClick={() => navigate("/archive")}>
+          <ListItemText className="menu-item" primary="Archive" />
         </ListItem>
       </List>
 
