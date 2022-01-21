@@ -186,7 +186,7 @@ export default function ReviewPendingRequest() {
                     <Button
                       variant="outlined"
                       onClick={() => {
-                        navigate("/track-request");
+                        navigate("/track-requests");
                       }}
                     >
                       Track Request

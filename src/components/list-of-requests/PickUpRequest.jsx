@@ -127,24 +127,28 @@ export default function PickUpRequest() {
                 Back
               </Button>
             </div>
-            <div className="request-form-button">
+            {details.status === "Waiting on technician" ? (
+              <div className="request-form-button">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleApprovalOpen();
+                  }}
+                >
+                  Send to Supervisor
+                </Button>
+              </div>
+            ) : undefined}
+            {details.status === "Waiting on technician" ? (
               <Button
                 variant="contained"
                 onClick={() => {
-                  handleApprovalOpen();
+                  handleOpen();
                 }}
               >
-                Send to Supervisor
+                Pick Up Request
               </Button>
-            </div>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpen();
-              }}
-            >
-              Pick Up Request
-            </Button>
+            ) : undefined}
             <Modal
               open={open}
               onClose={handleClose}

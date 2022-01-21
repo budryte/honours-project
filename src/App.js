@@ -5,6 +5,7 @@ import { NewRequestContainer } from "./containers/NewRequestContainer";
 import Home from "./components/home/Home";
 import Agreement from "./components/request-form/Agreement";
 import TrackRequest from "./components/track-request/TrackRequest";
+import ReviewRequest from "./components/track-request/ReviewRequest";
 import PendingRequests from "./components/pending-requests/PendingRequests";
 import ReviewPendingRequest from "./components/pending-requests/ReviewPendingRequest";
 import ListofRequests from "./components/list-of-requests/ListOfRequests";
@@ -44,7 +45,8 @@ function App() {
         <Route path="home" element={<Home />} />
         <Route path="agreement" element={<Agreement />} />
         <Route path="new-request" element={<NewRequestContainer />} />
-        <Route path="track-request" element={<TrackRequest />} />
+        <Route path="track-requests" element={<TrackRequest />} />
+        <Route path="review-request" element={<ReviewRequest />} />
         <Route path="pending-requests" element={<PendingRequests />} />
         <Route
           path="review-pending-request"

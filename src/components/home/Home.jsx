@@ -103,7 +103,7 @@ export default function Home() {
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      navigate("/track-request");
+                      navigate("/track-requests");
                     }}
                   >
                     Track Requests
@@ -154,7 +154,7 @@ export default function Home() {
                     className="animation-smaller"
                   />
                   <h3>List of Requests</h3>
-                  <p>View the list of requets</p>
+                  <p>View the list of requests</p>
                   <Button
                     variant="outlined"
                     onClick={() => {
