@@ -7,6 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import {
   collectionGroup,
   query,
+  where,
   getDocs,
   getFirestore,
 } from "firebase/firestore";
@@ -23,7 +24,10 @@ export default function ListofRequests() {
   useEffect(() => {
     (async () => {
       const querySnapshot = await getDocs(
-        query(collectionGroup(getFirestore(), "requests"))
+        query(
+          collectionGroup(getFirestore(), "requests"),
+          where("status", "!=", "Completed")
+        )
       );
       let reqArr = [];
       querySnapshot.forEach((doc) => {
