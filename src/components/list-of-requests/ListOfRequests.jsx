@@ -59,7 +59,7 @@ export default function ListofRequests() {
                       <div>
                         <p>
                           <b className="id">{req.data.id} </b>
-                          {"Date: "}
+                          {"Submitted: "}
                           {new Date(
                             req.data.time.seconds * 1000
                           ).toLocaleDateString()}
