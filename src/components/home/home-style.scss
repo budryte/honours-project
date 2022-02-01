@@ -21,7 +21,7 @@
 .white-container {
   background-color: white;
   font-family: "Baxter Sans Regular";
-  padding: 2em 3em;
+  padding: 2em;
 }
 
 .card {
@@ -37,7 +37,7 @@
   color: #464646;
   &:hover {
     border-color: #a9cfe7;
-    box-shadow: black 2px;
+    //box-shadow: black 2px;
   }
 }
 
