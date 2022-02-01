@@ -8,8 +8,6 @@ import { AttachFile } from "../components/request-form/AttachFile";
 import { ReviewAndSend } from "../components/request-form/ReviewAndSend";
 import Navbar from "../components/navbar/Navbar";
 
-import "./new-request.scss";
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

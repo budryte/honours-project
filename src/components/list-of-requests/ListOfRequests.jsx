@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import { Button, List, ListItem } from "@mui/material";
 import {
   collectionGroup,
   query,
@@ -53,6 +51,7 @@ export default function ListofRequests() {
                         state: { data: req.data, parentId: req.parentId },
                       })
                     }
+                    variant="outlined"
                     className="list-of-request-button"
                   >
                     <div className="list-of-request-item">
@@ -74,7 +73,7 @@ export default function ListofRequests() {
               ))}
             </List>
           ) : (
-            <p>There are no pending requests.</p>
+            <p>There are no requests in the queue.</p>
           )}
         </div>
       </div>
