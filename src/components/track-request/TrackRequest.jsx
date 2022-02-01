@@ -67,6 +67,7 @@ export default function TrackRequest() {
                         state: { data: req.data, parentId: req.parentId },
                       })
                     }
+                    variant="outlined"
                     className="list-of-request-button"
                   >
                     <div className="list-of-request-item">

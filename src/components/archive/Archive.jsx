@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import { Button, List, ListItem } from "@mui/material";
 import {
   collectionGroup,
   where,
@@ -74,13 +72,14 @@ export default function Archive() {
                         state: { data: req.data, parentId: req.parentId },
                       })
                     }
+                    variant="outlined"
                     className="list-of-request-button"
                   >
                     <div className="list-of-request-item">
                       <div>
                         <p>
                           <b className="id">{req.data.id} </b>
-                          {"Date: "}
+                          {"Submitted: "}
                           {new Date(
                             req.data.time.seconds * 1000
                           ).toLocaleDateString()}
