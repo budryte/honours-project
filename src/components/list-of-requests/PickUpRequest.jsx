@@ -3,6 +3,7 @@ import Navbar from "../navbar/Navbar";
 import BackButton from "../small-components/BackButon";
 import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
+import MaterialsTable from "../small-components/MaterialsTable";
 import {
   Button,
   Box,
@@ -212,6 +213,7 @@ export default function PickUpRequest() {
                   </ListItem>
                 ) : undefined}
               </List>
+              {status === "In progress" ? <MaterialsTable /> : undefined}
               <div className="buttons">
                 {status === "Waiting on technician" ? (
                   <div className="request-form-button">
