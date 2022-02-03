@@ -34,6 +34,7 @@ export default function MainRequestDetails() {
                   key !== "account" &&
                   key !== "grant" &&
                   key !== "approvalRequired" &&
+                  key !== "materials" &&
                   key !== "supervisor"
               )
               .map((key) => (
