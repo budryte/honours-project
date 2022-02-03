@@ -213,7 +213,9 @@ export default function PickUpRequest() {
                   </ListItem>
                 ) : undefined}
               </List>
-              {status === "In progress" ? <MaterialsTable /> : undefined}
+              {status === "In progress" ? (
+                <MaterialsTable parentId={parentId} />
+              ) : undefined}
               <div className="buttons">
                 {status === "Waiting on technician" ? (
                   <div className="request-form-button">
