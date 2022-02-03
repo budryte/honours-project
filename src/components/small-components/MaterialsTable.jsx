@@ -16,14 +16,31 @@ import {
   TextField,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { doc, updateDoc, getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+  doc,
+  updateDoc,
+  getFirestore,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 
-async function addNewMaterial() {}
+function addNewMaterial(requestID, parentId, material, quantity, price) {
+  const fireStore = getFirestore();
+  const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
+  return updateDoc(requestRef, {
+    materials: arrayUnion({ material, quantity, price }),
+  });
+}
 
-async function removeMaterial() {}
+function removeMaterial(requestID, parentId, material, quantity, price) {
+  const fireStore = getFirestore();
+  const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
+  return updateDoc(requestRef, {
+    materials: arrayRemove({ material, quantity, price }),
+  });
+}
 
-export default function MaterialsTable() {
+export default function MaterialsTable(props) {
   const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(true);
   const handleAddClose = () => setAddOpen(false);
@@ -37,7 +54,10 @@ export default function MaterialsTable() {
   const [price, setPrice] = useState(null);
 
   const { state } = useLocation();
-  const { time, id, firstname, lastname, email, ...details } = state.data;
+  const { id: requestID } = state.data;
+
+  const [matArr, setMatArr] = useState(state.data.materials);
+
   return (
     <div>
       <h3>Ordered Materials</h3>
@@ -54,43 +74,37 @@ export default function MaterialsTable() {
               <TableCell>
                 <b>Price</b>
               </TableCell>
-              <TableCell></TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(details ?? {})
-              ?.filter(
-                (key) =>
-                  key !== "estimatedTime" &&
-                  key !== "status" &&
-                  key !== "technicianInCharge" &&
-                  key !== "account" &&
-                  key !== "grant" &&
-                  key !== "approvalRequired" &&
-                  key !== "supervisor"
-              )
-              .map((key) => (
-                <TableRow key={key}>
-                  <TableCell component="th" scope="row">
-                    {(key.charAt(0).toUpperCase() + key.slice(1))
-                      .match(/([A-Z]?[^A-Z]*)/g)
-                      .slice(0, -1)
-                      .join(" ")}
-                  </TableCell>
-                  <TableCell>{details[key]}</TableCell>
-                  <TableCell>{details[key]}</TableCell>
-                  <TableCell>
-                    <IconButton>
-                      <DeleteOutlineIcon
-                        className="bin"
-                        onClick={() => {
-                          handleRemoveOpen();
-                        }}
-                      />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {matArr?.map((mat) => (
+              <TableRow key={mat.material}>
+                <TableCell component="th" scope="row">
+                  {(
+                    mat.material.charAt(0).toUpperCase() + mat.material.slice(1)
+                  )
+                    .match(/([A-Z]?[^A-Z]*)/g)
+                    .slice(0, -1)
+                    .join(" ")}
+                </TableCell>
+                <TableCell>{mat.quantity}</TableCell>
+                <TableCell>{mat.price}</TableCell>
+                <TableCell>
+                  <IconButton>
+                    <DeleteOutlineIcon
+                      className="bin"
+                      onClick={() => {
+                        setMaterial(mat.material);
+                        setQuantity(mat.quantity);
+                        setPrice(mat.price);
+                        handleRemoveOpen();
+                      }}
+                    />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
             <TableRow>
               <TableCell paddingNone>
                 <div className="add-row">
@@ -186,8 +200,26 @@ export default function MaterialsTable() {
               variant="outlined"
               color="success"
               onClick={() => {
-                addNewMaterial(material, quantity, price);
-                handleAddClose();
+                addNewMaterial(
+                  requestID,
+                  props.parentId,
+                  material,
+                  quantity,
+                  price
+                )
+                  .then(() => {
+                    setMatArr((p) => [...p, { material, quantity, price }]);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    // Could not save material to Firestore
+                  })
+                  .finally(() => {
+                    setMaterial(null);
+                    setQuantity(null);
+                    setPrice(null);
+                    handleAddClose();
+                  });
               }}
             >
               Save
@@ -226,8 +258,39 @@ export default function MaterialsTable() {
               variant="outlined"
               color="success"
               onClick={() => {
-                removeMaterial();
-                handleRemoveClose();
+                removeMaterial(
+                  requestID,
+                  props.parentId,
+                  material,
+                  quantity,
+                  price
+                )
+                  .then(() => {
+                    setMatArr((p) => {
+                      let pp = [...p];
+                      for (let i = 0; i < pp.length; i++) {
+                        if (
+                          pp[i].material === material &&
+                          pp[i].quantity === quantity &&
+                          pp[i].price === price
+                        ) {
+                          pp.splice(i, 1);
+                          break;
+                        }
+                      }
+                      return pp;
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    // Could not remove material from Firestore
+                  })
+                  .finally(() => {
+                    setMaterial(null);
+                    setQuantity(null);
+                    setPrice(null);
+                    handleRemoveClose();
+                  });
               }}
             >
               OK
