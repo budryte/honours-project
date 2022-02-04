@@ -75,6 +75,14 @@ export default function MaterialsTable(props) {
   const { id: requestID } = state.data;
 
   const [matArr, setMatArr] = useState(state.data.materials);
+  const [total, setTotal] = useState(
+    matArr.reduce((acc, mat) => acc + parseFloat(mat.price), 0)
+  );
+
+  function calculateTotal() {
+    console.log(total);
+    setTotal(matArr.reduce((acc, mat) => acc + parseFloat(mat.price), 0));
+  }
 
   return (
     <div>
@@ -142,23 +150,28 @@ export default function MaterialsTable(props) {
               ))}
               {pos === "Technician" ? (
                 <TableRow>
-                  <TableCell paddingNone>
-                    <div className="add-row">
-                      <IconButton>
-                        <AddIcon
-                          fontSize="large"
-                          onClick={() => {
-                            handleAddOpen();
-                          }}
-                        />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
+                  <IconButton>
+                    <AddIcon
+                      fontSize="large"
+                      onClick={() => {
+                        handleAddOpen();
+                      }}
+                    />
+                  </IconButton>
                 </TableRow>
               ) : undefined}
+              <TableRow>
+                <TableCell rowSpan={3} />
+                <TableCell align="right" colSpan={2}>
+                  <b>Items:</b>
+                </TableCell>
+                <TableCell align="left">{matArr.length}</TableCell>
+              </TableRow>
+              <TableCell />
+              <TableCell align="right">
+                <b>Total:</b>
+              </TableCell>
+              <TableCell align="left">£{total}</TableCell>
             </TableBody>
           </Table>
         </TableContainer>
@@ -249,6 +262,7 @@ export default function MaterialsTable(props) {
                   .then(() => {
                     setMatArr((p) => [...p, { material, quantity, price }]);
                   })
+                  .then(() => calculateTotal())
                   .catch((err) => {
                     console.log(err);
                     // Could not save material to Firestore
@@ -320,6 +334,7 @@ export default function MaterialsTable(props) {
                       return pp;
                     });
                   })
+                  .then(() => calculateTotal())
                   .catch((err) => {
                     console.log(err);
                     // Could not remove material from Firestore
@@ -446,6 +461,7 @@ export default function MaterialsTable(props) {
                       return pp;
                     });
                   })
+                  .then(() => calculateTotal())
                   .catch((err) => {
                     console.log(err);
                     // Could not update material to Firestore
