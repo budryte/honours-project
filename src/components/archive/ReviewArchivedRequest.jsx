@@ -4,6 +4,7 @@ import BackButton from "../small-components/BackButon";
 import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
 import TechnicianDetails from "../small-components/TechnicianDetails";
+import MaterialsTable from "../small-components/MaterialsTable";
 import { Grid } from "@mui/material";
 
 export default function ReviewArchivedRequest() {
@@ -23,6 +24,7 @@ export default function ReviewArchivedRequest() {
               <MainRequestDetails />
               <SupervisorDetails />
               <TechnicianDetails />
+              <MaterialsTable />
             </Grid>
           </Grid>
         </div>
