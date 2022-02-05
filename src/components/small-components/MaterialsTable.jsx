@@ -76,12 +76,12 @@ export default function MaterialsTable(props) {
 
   const [matArr, setMatArr] = useState(state.data.materials);
   const [total, setTotal] = useState(
-    matArr.reduce((acc, mat) => acc + parseFloat(mat.price), 0)
+    matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0
   );
 
   function calculateTotal() {
     console.log(total);
-    setTotal(matArr.reduce((acc, mat) => acc + parseFloat(mat.price), 0));
+    setTotal(matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0);
   }
 
   return (
@@ -162,16 +162,12 @@ export default function MaterialsTable(props) {
               ) : undefined}
               <TableRow>
                 <TableCell rowSpan={3} />
-                <TableCell align="right" colSpan={2}>
-                  <b>Items:</b>
+                <TableCell align="right" colSpan={1}>
+                  <b>Total:</b>
                 </TableCell>
-                <TableCell align="left">{matArr.length}</TableCell>
+                <TableCell align="left">£{total}</TableCell>
+                {pos === "Technician" && <TableCell />}
               </TableRow>
-              <TableCell />
-              <TableCell align="right">
-                <b>Total:</b>
-              </TableCell>
-              <TableCell align="left">£{total}</TableCell>
             </TableBody>
           </Table>
         </TableContainer>
