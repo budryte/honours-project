@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { TextArea } from "semantic-ui-react";
 
@@ -31,12 +31,25 @@ function Basic() {
 }
 
 export function AttachFile(props) {
-  const { handleChange, extraInfo, setExtraInfo } = props;
+  const {
+    handleChange,
+    extraInfo,
+    setExtraInfo,
+    linkToFolder,
+    setLinkToFolder,
+  } = props;
 
   return (
     <div className="request-form-tab">
-      <h2>Attach Files</h2>
-      <Basic />
+      <h2>Nature of Request</h2>
+      {/* <Basic /> */}
+      <h3>OneDrive Link *</h3>
+      <TextArea
+        className="link"
+        placeholder="Insert a link to the OneDrive folder"
+        value={linkToFolder}
+        onChange={(e) => setLinkToFolder(e.target.value)}
+      />
       <div>
         <h3>Additional Information *</h3>
         <TextArea
