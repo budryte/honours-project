@@ -14,13 +14,14 @@ import { useNavigate } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
 
-async function saveToFirestore(details, extraInfo, user) {
+async function saveToFirestore(details, extraInfo, linkToFolder, user) {
   const db = getFirestore();
   const auth = getAuth();
   const id = `RTA${Date.now().toString()}`;
   await setDoc(doc(db, "users", auth.currentUser.uid, "requests", id), {
     ...details,
     extraInfo,
+    linkToFolder,
     time: serverTimestamp(),
     id: id,
     email: user.email,
@@ -43,7 +44,7 @@ const style = {
 };
 
 export function ReviewAndSend(props) {
-  const { handleChange, details, extraInfo } = props;
+  const { handleChange, details, extraInfo, linkToFolder } = props;
 
   const [open, setOpen] = useState(false);
   const users = useLiveQuery(() => dexieDB.users.toArray());
@@ -67,10 +68,18 @@ export function ReviewAndSend(props) {
                 <TableCell>{details[key]}</TableCell>
               </TableRow>
             ))}
+            {linkToFolder !== "" && (
+              <TableRow key={linkToFolder}>
+                <TableCell component="th" scope="row">
+                  Link
+                </TableCell>
+                <TableCell>{linkToFolder}</TableCell>
+              </TableRow>
+            )}
             {extraInfo !== "" && (
               <TableRow key={extraInfo}>
                 <TableCell component="th" scope="row">
-                  Additional Info
+                  Additional Information
                 </TableCell>
                 <TableCell>{extraInfo}</TableCell>
               </TableRow>
@@ -92,7 +101,7 @@ export function ReviewAndSend(props) {
         <Button
           variant="contained"
           onClick={() => {
-            saveToFirestore(details, extraInfo, users[0]);
+            saveToFirestore(details, extraInfo, linkToFolder, users[0]);
             handleOpen();
           }}
         >

@@ -32,6 +32,7 @@ export function NewRequestContainer() {
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState(null);
   const [extraInfo, setExtraInfo] = useState("");
+  const [linkToFolder, setLinkToFolder] = useState(null);
 
   const handleChange = (_, newValue) => {
     setValue(newValue);
@@ -80,12 +81,15 @@ export function NewRequestContainer() {
               handleChange={handleChange}
               extraInfo={extraInfo}
               setExtraInfo={setExtraInfo}
+              linkToFolder={linkToFolder}
+              setLinkToFolder={setLinkToFolder}
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <ReviewAndSend
               handleChange={handleChange}
               extraInfo={extraInfo}
+              linkToFolder={linkToFolder}
               details={details}
             />
           </TabPanel>
