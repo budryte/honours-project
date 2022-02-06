@@ -18,7 +18,7 @@
   "useState hook": {
     "prefix": "cst",
     "body": [
-      "const [ ${1}, set${1/(.*)/${1:/capitalize}/} ] = useState(${2:value});"
+      "const [${1}, set${1/(.*)/${1:/capitalize}/}] = useState(${2:value});"
     ],
     "description": "useState hook"
   },
