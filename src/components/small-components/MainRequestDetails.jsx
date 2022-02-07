@@ -5,12 +5,14 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Link,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 export default function MainRequestDetails() {
   const { state } = useLocation();
-  const { time, id, firstname, lastname, email, ...details } = state.data;
+  const { time, id, firstname, lastname, email, linkToFolder, ...details } =
+    state.data;
   return (
     <div>
       <h1>{id}</h1>
@@ -48,6 +50,14 @@ export default function MainRequestDetails() {
                   <TableCell>{details[key]}</TableCell>
                 </TableRow>
               ))}
+            {linkToFolder !== undefined ? (
+              <TableRow>
+                <TableCell>Link To Folder</TableCell>
+                <TableCell>
+                  <Link href={linkToFolder}>{linkToFolder}</Link>
+                </TableCell>
+              </TableRow>
+            ) : undefined}
           </TableBody>
         </Table>
       </TableContainer>
