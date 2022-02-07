@@ -65,7 +65,7 @@ export default function Navbar() {
           <ListItemText className="menu-item" primary="Home" />
         </ListItem>
 
-        <ListItem button>
+        <ListItem button onClick={() => navigate("/my-account")}>
           <ListItemText className="menu-item" primary="My Account" />
         </ListItem>
 

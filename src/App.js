@@ -13,6 +13,7 @@ import PickUpRequest from "./components/list-of-requests/PickUpRequest";
 import MyWork from "./components/technician-work/MyWork";
 import Archive from "./components/archive/Archive";
 import ReviewArchivedRequest from "./components/archive/ReviewArchivedRequest";
+import Account from "./components/my-account/Account";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { Routes, Route } from "react-router-dom";
@@ -43,6 +44,7 @@ function App() {
           <Route index element={<SignInSignUpContainer />} />
         )}
         <Route path="home" element={<Home />} />
+        <Route path="my-account" element={<Account />} />
         <Route path="agreement" element={<Agreement />} />
         <Route path="new-request" element={<NewRequestContainer />} />
         <Route path="track-requests" element={<TrackRequest />} />

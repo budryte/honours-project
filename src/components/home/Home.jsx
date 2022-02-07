@@ -53,7 +53,14 @@ export default function Home() {
                 />
                 <h3>My Account</h3>
                 <p>Change your account details</p>
-                <Button variant="outlined">My Account</Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    navigate("/my-account");
+                  }}
+                >
+                  My Account
+                </Button>
               </div>
             </Grid>
             {position !== "Technician" && (
