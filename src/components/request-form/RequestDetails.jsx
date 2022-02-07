@@ -68,7 +68,7 @@ export function RequestDetails(props) {
 
   return (
     <div className="request-form-tab">
-      <h2>Fill in Request Details</h2>
+      <h2>Request Details</h2>
       <div className="form">
         <FormControl fullWidth size="small">
           <InputLabel id="demo-simple-select-label">Discipline *</InputLabel>
