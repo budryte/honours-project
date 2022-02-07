@@ -7,7 +7,7 @@ export default function SupervisorDetails() {
   const { grant, account, approvalRequired, supervisor } = state.data;
   return (
     <div>
-      <h3>Additional Information</h3>
+      <h3>Other Details</h3>
       <List>
         <ListItem disablePadding>
           <ListItemText>
@@ -33,7 +33,7 @@ export default function SupervisorDetails() {
         {account !== undefined ? (
           <ListItem disablePadding>
             <ListItemText>
-              <b>Account: </b>
+              <b>Account to be charged: </b>
               {account}
             </ListItemText>
           </ListItem>
