@@ -27,14 +27,6 @@ import {
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
 
-function addNewMaterial(requestID, parentId, material, quantity, price) {
-  const fireStore = getFirestore();
-  const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
-  return updateDoc(requestRef, {
-    materials: arrayUnion({ material, quantity, price }),
-  });
-}
-
 function removeMaterial(requestID, parentId, material, quantity, price) {
   const fireStore = getFirestore();
   const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
@@ -53,7 +45,15 @@ export default function MaterialsTable(props) {
 
   const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(true);
-  const handleAddClose = () => setAddOpen(false);
+  const handleAddClose = () => {
+    setAddOpen(false);
+    setMaterialError(null);
+    setQtyError(null);
+    setPriceError(null);
+    setMaterial(null);
+    setQuantity(null);
+    setPrice(null);
+  };
 
   const [removeOpen, setRemoveOpen] = useState(false);
   const handleRemoveOpen = () => setRemoveOpen(true);
@@ -61,11 +61,23 @@ export default function MaterialsTable(props) {
 
   const [editOpen, setEditOpen] = useState(false);
   const handleEditOpen = () => setEditOpen(true);
-  const handleEditClose = () => setEditOpen(false);
+  const handleEditClose = () => {
+    setEditOpen(false);
+    setMaterialError(null);
+    setQtyError(null);
+    setPriceError(null);
+    setMaterial(null);
+    setQuantity(null);
+    setPrice(null);
+  };
 
   const [material, setMaterial] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [price, setPrice] = useState(null);
+
+  const [materialError, setMaterialError] = useState(null);
+  const [qtyError, setQtyError] = useState(null);
+  const [priceError, setPriceError] = useState(null);
 
   const [tempMat, setTempMat] = useState(null);
   const [tempQty, setTempQty] = useState(null);
@@ -80,8 +92,46 @@ export default function MaterialsTable(props) {
   );
 
   function calculateTotal() {
-    console.log(total);
     setTotal(matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0);
+  }
+
+  useEffect(() => calculateTotal(), [matArr]);
+
+  function checkMaterial() {
+    let toAdd = true;
+
+    if (!material) {
+      setMaterialError("Please enter material");
+      toAdd = false;
+    }
+    if (!quantity) {
+      setQtyError("Please enter quantity");
+      toAdd = false;
+    }
+    if (!price) {
+      setPriceError("Please enter price");
+      toAdd = false;
+    }
+    if (!/^(\d*[.])?\d+$/.test(price)) {
+      setPriceError("Please enter numerical values only");
+      toAdd = false;
+    }
+
+    return toAdd;
+  }
+
+  function addNewMaterial() {
+    const fireStore = getFirestore();
+    const requestRef = doc(
+      fireStore,
+      "users",
+      props.parentId,
+      "requests",
+      requestID
+    );
+    return updateDoc(requestRef, {
+      materials: arrayUnion({ material, quantity, price }),
+    });
   }
 
   return (
@@ -184,13 +234,16 @@ export default function MaterialsTable(props) {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal-style">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ mt: 2, mb: 3 }}
+          >
             Add New Material
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Material:
-          </Typography>
           <TextField
+            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Material"
@@ -198,14 +251,15 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={material}
+            error={materialError !== null}
             onChange={(e) => {
+              setMaterialError(null);
               setMaterial(e.target.value);
             }}
+            helperText={materialError}
           />
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Quantity:
-          </Typography>
           <TextField
+            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Quantity"
@@ -213,14 +267,15 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={quantity}
+            error={qtyError !== null}
             onChange={(e) => {
+              setQtyError(null);
               setQuantity(e.target.value);
             }}
+            helperText={qtyError}
           />
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Price:
-          </Typography>
           <TextField
+            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Price"
@@ -228,9 +283,12 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={price}
+            error={priceError !== null}
             onChange={(e) => {
+              setPriceError(null);
               setPrice(e.target.value);
             }}
+            helperText={priceError}
           />
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -248,27 +306,19 @@ export default function MaterialsTable(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                addNewMaterial(
-                  requestID,
-                  props.parentId,
-                  material,
-                  quantity,
-                  price
-                )
-                  .then(() => {
-                    setMatArr((p) => [...p, { material, quantity, price }]);
-                  })
-                  .then(() => calculateTotal())
-                  .catch((err) => {
-                    console.log(err);
-                    // Could not save material to Firestore
-                  })
-                  .finally(() => {
-                    setMaterial(null);
-                    setQuantity(null);
-                    setPrice(null);
-                    handleAddClose();
-                  });
+                if (checkMaterial()) {
+                  addNewMaterial()
+                    .then(() => {
+                      setMatArr((p) => [...p, { material, quantity, price }]);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      // Could not save material to Firestore
+                    })
+                    .finally(() => {
+                      handleAddClose();
+                    });
+                }
               }}
             >
               Save
