@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../navbar/Navbar";
-import BackButton from "../small-components/BackButon";
+import BackButton from "../small-components/BackButton";
 import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
 import TechnicianDetails from "../small-components/TechnicianDetails";

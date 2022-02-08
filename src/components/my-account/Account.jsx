@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
-import BackButton from "../small-components/BackButon";
+import BackButton from "../small-components/BackButton";
 import {
   Grid,
   Button,
