@@ -27,14 +27,6 @@ import {
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
 
-function removeMaterial(requestID, parentId, material, quantity, price) {
-  const fireStore = getFirestore();
-  const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
-  return updateDoc(requestRef, {
-    materials: arrayRemove({ material, quantity, price }),
-  });
-}
-
 export default function MaterialsTable(props) {
   const [pos, setPos] = useState(null);
   const users = useLiveQuery(() => dexieDB.users.toArray());
@@ -111,8 +103,7 @@ export default function MaterialsTable(props) {
     if (!price) {
       setPriceError("Please enter price");
       toAdd = false;
-    }
-    if (!/^(\d*[.])?\d+$/.test(price)) {
+    } else if (!/^(\d*[.])?\d+$/.test(price)) {
       setPriceError("Please enter numerical values only");
       toAdd = false;
     }
@@ -131,6 +122,20 @@ export default function MaterialsTable(props) {
     );
     return updateDoc(requestRef, {
       materials: arrayUnion({ material, quantity, price }),
+    });
+  }
+
+  function removeMaterial() {
+    const fireStore = getFirestore();
+    const requestRef = doc(
+      fireStore,
+      "users",
+      props.parentId,
+      "requests",
+      requestID
+    );
+    return updateDoc(requestRef, {
+      materials: arrayRemove({ material, quantity, price }),
     });
   }
 
@@ -242,8 +247,10 @@ export default function MaterialsTable(props) {
           >
             Add New Material
           </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Enter Material:
+          </Typography>
           <TextField
-            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Material"
@@ -258,8 +265,10 @@ export default function MaterialsTable(props) {
             }}
             helperText={materialError}
           />
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Enter Quanity:
+          </Typography>
           <TextField
-            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Quantity"
@@ -274,8 +283,10 @@ export default function MaterialsTable(props) {
             }}
             helperText={qtyError}
           />
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Enter Price:
+          </Typography>
           <TextField
-            sx={{ mb: 2 }}
             className="form-group"
             id="outlined-basic"
             label="Price"
@@ -336,7 +347,7 @@ export default function MaterialsTable(props) {
       >
         <Box className="modal-style">
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Remove item
+            Remove Item
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Would you like to remove material from the list?
@@ -357,13 +368,7 @@ export default function MaterialsTable(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                removeMaterial(
-                  requestID,
-                  props.parentId,
-                  material,
-                  quantity,
-                  price
-                )
+                removeMaterial()
                   .then(() => {
                     setMatArr((p) => {
                       let pp = [...p];
@@ -386,9 +391,6 @@ export default function MaterialsTable(props) {
                     // Could not remove material from Firestore
                   })
                   .finally(() => {
-                    setMaterial(null);
-                    setQuantity(null);
-                    setPrice(null);
                     handleRemoveClose();
                   });
               }}
@@ -421,9 +423,12 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={material}
+            error={materialError !== null}
             onChange={(e) => {
+              setMaterialError(null);
               setMaterial(e.target.value);
             }}
+            helperText={materialError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Quantity:
@@ -436,9 +441,12 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={quantity}
+            error={qtyError !== null}
             onChange={(e) => {
+              setQtyError(null);
               setQuantity(e.target.value);
             }}
+            helperText={qtyError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Price:
@@ -451,9 +459,12 @@ export default function MaterialsTable(props) {
             required
             size="small"
             value={price}
+            error={priceError !== null}
             onChange={(e) => {
+              setPriceError(null);
               setPrice(e.target.value);
             }}
+            helperText={priceError}
           />
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -471,53 +482,38 @@ export default function MaterialsTable(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                removeMaterial(
-                  requestID,
-                  props.parentId,
-                  tempMat,
-                  tempQty,
-                  tempPrice
-                )
-                  .then(() =>
-                    addNewMaterial(
-                      requestID,
-                      props.parentId,
-                      material,
-                      quantity,
-                      price
-                    )
-                  )
-                  .then(() => {
-                    setMatArr((p) => {
-                      let pp = [...p];
-                      for (let i = 0; i < pp.length; i++) {
-                        if (
-                          pp[i].material === tempMat &&
-                          pp[i].quantity === tempQty &&
-                          pp[i].price === tempPrice
-                        ) {
-                          pp.splice(i, 1, {
-                            material,
-                            quantity,
-                            price,
-                          });
-                          break;
+                if (checkMaterial()) {
+                  removeMaterial()
+                    .then(() => addNewMaterial())
+                    .then(() => {
+                      setMatArr((p) => {
+                        let pp = [...p];
+                        for (let i = 0; i < pp.length; i++) {
+                          if (
+                            pp[i].material === tempMat &&
+                            pp[i].quantity === tempQty &&
+                            pp[i].price === tempPrice
+                          ) {
+                            pp.splice(i, 1, {
+                              material,
+                              quantity,
+                              price,
+                            });
+                            break;
+                          }
                         }
-                      }
-                      return pp;
+                        return pp;
+                      });
+                    })
+                    .then(() => calculateTotal())
+                    .catch((err) => {
+                      console.log(err);
+                      // Could not update material to Firestore
+                    })
+                    .finally(() => {
+                      handleEditClose();
                     });
-                  })
-                  .then(() => calculateTotal())
-                  .catch((err) => {
-                    console.log(err);
-                    // Could not update material to Firestore
-                  })
-                  .finally(() => {
-                    setMaterial(null);
-                    setQuantity(null);
-                    setPrice(null);
-                    handleEditClose();
-                  });
+                }
               }}
             >
               Save
