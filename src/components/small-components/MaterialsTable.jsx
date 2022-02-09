@@ -30,6 +30,7 @@ import { db as dexieDB } from "../../config/db";
 export default function MaterialsTable(props) {
   const [pos, setPos] = useState(null);
   const users = useLiveQuery(() => dexieDB.users.toArray());
+
   useEffect(() => {
     if (!users || !users[0] || !users[0].email) return;
     setPos(users[0].position);
@@ -83,11 +84,11 @@ export default function MaterialsTable(props) {
     matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0
   );
 
+  useEffect(() => calculateTotal(), [matArr]);
+
   function calculateTotal() {
     setTotal(matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0);
   }
-
-  useEffect(() => calculateTotal(), [matArr]);
 
   function checkMaterial() {
     let toAdd = true;
@@ -125,7 +126,7 @@ export default function MaterialsTable(props) {
     });
   }
 
-  function removeMaterial() {
+  function removeMaterial(mat, qty, cost) {
     const fireStore = getFirestore();
     const requestRef = doc(
       fireStore,
@@ -135,7 +136,7 @@ export default function MaterialsTable(props) {
       requestID
     );
     return updateDoc(requestRef, {
-      materials: arrayRemove({ material, quantity, price }),
+      materials: arrayRemove({ material: mat, quantity: qty, price: cost }),
     });
   }
 
@@ -172,7 +173,7 @@ export default function MaterialsTable(props) {
                       .join(" ")}
                   </TableCell>
                   <TableCell>{mat.quantity}</TableCell>
-                  <TableCell>{mat.price}</TableCell>
+                  <TableCell>£{mat.price}</TableCell>
                   {pos === "Technician" ? (
                     <TableCell>
                       <IconButton>
@@ -220,7 +221,7 @@ export default function MaterialsTable(props) {
                 <TableCell align="right" colSpan={1}>
                   <b>Total:</b>
                 </TableCell>
-                <TableCell align="left">£{total}</TableCell>
+                <TableCell align="left">£{total.toFixed(2)}</TableCell>
                 {pos === "Technician" && <TableCell />}
               </TableRow>
             </TableBody>
@@ -284,7 +285,7 @@ export default function MaterialsTable(props) {
             helperText={qtyError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Price:
+            Enter Price (£):
           </Typography>
           <TextField
             className="form-group"
@@ -368,7 +369,7 @@ export default function MaterialsTable(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                removeMaterial()
+                removeMaterial(material, quantity, price)
                   .then(() => {
                     setMatArr((p) => {
                       let pp = [...p];
@@ -449,7 +450,7 @@ export default function MaterialsTable(props) {
             helperText={qtyError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Price:
+            Price (£):
           </Typography>
           <TextField
             className="form-group"
@@ -483,7 +484,7 @@ export default function MaterialsTable(props) {
               color="success"
               onClick={() => {
                 if (checkMaterial()) {
-                  removeMaterial()
+                  removeMaterial(tempMat, tempQty, tempPrice)
                     .then(() => addNewMaterial())
                     .then(() => {
                       setMatArr((p) => {
@@ -505,7 +506,6 @@ export default function MaterialsTable(props) {
                         return pp;
                       });
                     })
-                    .then(() => calculateTotal())
                     .catch((err) => {
                       console.log(err);
                       // Could not update material to Firestore

@@ -33,8 +33,6 @@ import "./list-of-requests.scss";
 async function pickUpRequest(estimatedTime, parentId, id) {
   const fireStore = getFirestore();
   const auth = getAuth();
-  console.log(parentId);
-  console.log(auth.currentUser.email);
   const requestRef = doc(fireStore, "users", parentId, "requests", id);
   await updateDoc(requestRef, {
     estimatedTime: estimatedTime,
@@ -45,9 +43,6 @@ async function pickUpRequest(estimatedTime, parentId, id) {
 
 async function changeEstimatedCompletion(estimatedTime, parentId, id) {
   const fireStore = getFirestore();
-  const auth = getAuth();
-  console.log(parentId);
-  console.log(auth.currentUser.email);
   const requestRef = doc(fireStore, "users", parentId, "requests", id);
   await updateDoc(requestRef, {
     estimatedTime: estimatedTime,
@@ -56,9 +51,6 @@ async function changeEstimatedCompletion(estimatedTime, parentId, id) {
 
 async function changeTechnicianInCharge(technicianInCharge, parentId, id) {
   const fireStore = getFirestore();
-  const auth = getAuth();
-  console.log(parentId);
-  console.log(auth.currentUser.email);
   const requestRef = doc(fireStore, "users", parentId, "requests", id);
   await updateDoc(requestRef, {
     technicianInCharge: technicianInCharge,
@@ -67,9 +59,6 @@ async function changeTechnicianInCharge(technicianInCharge, parentId, id) {
 
 async function changeStatus(status, parentId, id) {
   const fireStore = getFirestore();
-  const auth = getAuth();
-  console.log(parentId);
-  console.log(auth.currentUser.email);
   const requestRef = doc(fireStore, "users", parentId, "requests", id);
   await updateDoc(requestRef, {
     status: status,
@@ -79,8 +68,6 @@ async function changeStatus(status, parentId, id) {
 async function sendToSupervisor(parentId, id) {
   const fireStore = getFirestore();
   const auth = getAuth();
-  console.log(parentId);
-  console.log(auth.currentUser.email);
   const requestRef = doc(fireStore, "users", parentId, "requests", id);
   await updateDoc(requestRef, {
     approvalRequired: "Yes",
@@ -111,7 +98,10 @@ export default function PickUpRequest() {
 
   const [technicianOpen, setTechnicianOpen] = useState(false);
   const handleTechnicianOpen = () => setTechnicianOpen(true);
-  const handleTechnicianClose = () => setTechnicianOpen(false);
+  const handleTechnicianClose = () => {
+    setTechnicianOpen(false);
+    setTICError(null);
+  };
 
   const [estimatedCompletion, setEstimatedCompletionOpen] = useState(false);
   const handleEstimatedCompletionOpen = () => setEstimatedCompletionOpen(true);
@@ -128,12 +118,31 @@ export default function PickUpRequest() {
   const [estimatedTime, setEstimatedTime] = useState(
     new Date(state.data.estimatedTime?.seconds * 1000 ?? null)
   );
-  const [tempTIC, setTempTIC] = useState(state.data.technicianInCharge);
+
+  const [TICError, setTICError] = useState(null);
+  const [dateError, setDateError] = useState(null);
+
+  const [tempTIC, setTempTIC] = useState(null);
   const [tempStatus, setTempStatus] = useState(state.data.status);
   const [tempEstimatedTime, setTempEstimatedTime] = useState(
     new Date(state.data.estimatedTime?.seconds * 1000 ?? null)
   );
 
+  function checkDetails() {
+    let change = true;
+
+    console.log(tempTIC);
+
+    if (!tempTIC) {
+      setTICError("Please enter tecnician's email address");
+      change = false;
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(tempTIC)) {
+      setTICError("Please enter a valid email address");
+      change = false;
+    }
+
+    return change;
+  }
   return (
     <div>
       <Navbar />
@@ -260,6 +269,7 @@ export default function PickUpRequest() {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
+              minDate={new Date()}
               label="Completion time"
               size="small"
               value={estimatedTime}
@@ -361,6 +371,7 @@ export default function PickUpRequest() {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
+              minDate={new Date()}
               label="Completion date"
               size="small"
               value={tempEstimatedTime}
@@ -457,7 +468,7 @@ export default function PickUpRequest() {
       {/* Change technician in charge */}
       <Modal
         open={technicianOpen}
-        onClose={handleTechnicianOpen}
+        onClose={handleTechnicianClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -466,19 +477,21 @@ export default function PickUpRequest() {
             Change Technician
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter another technician's email:
+            Enter another technician's email address:
           </Typography>
           <TextField
-            className="item"
             id="outlined-basic"
-            label="Technician"
+            label="Email address"
             variant="outlined"
             size="small"
             required
             value={tempTIC}
+            error={TICError !== null}
             onChange={(e) => {
+              setTICError(null);
               setTempTIC(e.target.value);
             }}
+            helperText={TICError}
           />
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -496,9 +509,12 @@ export default function PickUpRequest() {
               variant="outlined"
               color="success"
               onClick={() => {
-                setTechnicianInCharge(tempTIC);
-                changeTechnicianInCharge(tempTIC, parentId, id);
-                handleTechnicianClose();
+                if (checkDetails()) {
+                  setTechnicianInCharge(tempTIC);
+                  changeTechnicianInCharge(tempTIC, parentId, id);
+                  setTempTIC(null);
+                  handleTechnicianClose();
+                }
               }}
             >
               Save
