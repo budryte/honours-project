@@ -11,8 +11,14 @@ import { useLocation } from "react-router-dom";
 
 export default function MainRequestDetails() {
   const { state } = useLocation();
-  const { time, id, firstname, lastname, email, linkToFolder, ...details } =
-    state.data;
+  const { time, id, firstname, lastname, email, linkToFolder } = state.data;
+
+  const requestDetails = {
+    projectType: state.data.projectType,
+    discipline: state.data.discipline,
+    priority: state.data.priority,
+    natureOfRequest: state.data.extraInfo,
+  };
   return (
     <div>
       <h1>{id}</h1>
@@ -27,29 +33,17 @@ export default function MainRequestDetails() {
       <TableContainer>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
           <TableBody>
-            {Object.keys(details ?? {})
-              ?.filter(
-                (key) =>
-                  key !== "estimatedTime" &&
-                  key !== "status" &&
-                  key !== "technicianInCharge" &&
-                  key !== "account" &&
-                  key !== "grant" &&
-                  key !== "approvalRequired" &&
-                  key !== "materials" &&
-                  key !== "supervisor"
-              )
-              .map((key) => (
-                <TableRow key={key}>
-                  <TableCell component="th" scope="row">
-                    {(key.charAt(0).toUpperCase() + key.slice(1))
-                      .match(/([A-Z]?[^A-Z]*)/g)
-                      .slice(0, -1)
-                      .join(" ")}
-                  </TableCell>
-                  <TableCell>{details[key]}</TableCell>
-                </TableRow>
-              ))}
+            {Object.keys(requestDetails ?? {}).map((key) => (
+              <TableRow key={key}>
+                <TableCell component="th" scope="row">
+                  {(key.charAt(0).toUpperCase() + key.slice(1))
+                    .match(/([A-Z]?[^A-Z]*)/g)
+                    .slice(0, -1)
+                    .join(" ")}
+                </TableCell>
+                <TableCell>{requestDetails[key]}</TableCell>
+              </TableRow>
+            ))}
             {linkToFolder !== undefined ? (
               <TableRow>
                 <TableCell>Link To Folder</TableCell>
