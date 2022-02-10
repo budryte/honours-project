@@ -120,8 +120,6 @@ export default function PickUpRequest() {
   );
 
   const [TICError, setTICError] = useState(null);
-  const [dateError, setDateError] = useState(null);
-
   const [tempTIC, setTempTIC] = useState(null);
   const [tempStatus, setTempStatus] = useState(state.data.status);
   const [tempEstimatedTime, setTempEstimatedTime] = useState(

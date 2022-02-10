@@ -351,7 +351,7 @@ export default function MaterialsTable(props) {
             Remove Item
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Would you like to remove material from the list?
+            Would you like to remove this item from the list?
           </Typography>
           <div className="modal-buttons">
             <div className="request-form-button">
