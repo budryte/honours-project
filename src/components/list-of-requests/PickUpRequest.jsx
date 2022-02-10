@@ -4,6 +4,7 @@ import BackButton from "../small-components/BackButton";
 import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
 import MaterialsTable from "../small-components/MaterialsTable";
+import CommentsTable from "../small-components/CommentsTable";
 import {
   Button,
   Box,
@@ -223,6 +224,7 @@ export default function PickUpRequest() {
               {status === "In progress" ? (
                 <MaterialsTable parentId={parentId} />
               ) : undefined}
+              <CommentsTable parentId={parentId} />
               <div className="buttons">
                 {status === "Waiting on technician" ? (
                   <div className="request-form-button">
