@@ -50,7 +50,15 @@ export default function MaterialsTable(props) {
 
   const [removeOpen, setRemoveOpen] = useState(false);
   const handleRemoveOpen = () => setRemoveOpen(true);
-  const handleRemoveClose = () => setRemoveOpen(false);
+  const handleRemoveClose = () => {
+    setRemoveOpen(false);
+    setMaterialError(null);
+    setQtyError(null);
+    setPriceError(null);
+    setMaterial(null);
+    setQuantity(null);
+    setPrice(null);
+  };
 
   const [editOpen, setEditOpen] = useState(false);
   const handleEditOpen = () => setEditOpen(true);
