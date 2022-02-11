@@ -47,6 +47,9 @@ export default function CommentsTable(props) {
   const [commentError, setCommentError] = useState(null);
   const [commentDate, setCommentDate] = useState(null);
 
+  const [tempComment, setTempComment] = useState(null);
+  const [tempCommentDate, setTempCommentDate] = useState(null);
+
   function addComment() {
     const fireStore = getFirestore();
     const requestRef = doc(
@@ -64,7 +67,7 @@ export default function CommentsTable(props) {
     });
   }
 
-  function removeComment() {
+  function removeComment(com, comDate) {
     const fireStore = getFirestore();
     const requestRef = doc(
       fireStore,
@@ -74,7 +77,7 @@ export default function CommentsTable(props) {
       requestID
     );
     return updateDoc(requestRef, {
-      comments: arrayRemove({ comment, commentDate }),
+      comments: arrayRemove({ comment: com, commentDate: comDate }),
     });
   }
 
@@ -88,7 +91,11 @@ export default function CommentsTable(props) {
 
   const [removeOpen, setRemoveOpen] = useState(false);
   const handleRemoveOpen = () => setRemoveOpen(true);
-  const handleRemoveClose = () => setRemoveOpen(false);
+  const handleRemoveClose = () => {
+    setRemoveOpen(false);
+    setComment(null);
+    setCommentError(null);
+  };
 
   const [editOpen, setEditOpen] = useState(false);
   const handleEditOpen = () => setEditOpen(true);
@@ -140,6 +147,8 @@ export default function CommentsTable(props) {
                         onClick={() => {
                           setComment(commentObj.comment);
                           setCommentDate(commentObj.commentDate);
+                          setTempComment(commentObj.comment);
+                          setTempCommentDate(commentObj.commentDate);
                           handleEditOpen();
                         }}
                       />
@@ -175,14 +184,14 @@ export default function CommentsTable(props) {
       </TableContainer>
       <br></br>
 
-      {/* Add new material */}
+      {/* Add new comment */}
       <Modal
         open={addOpen}
         onClose={handleAddClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style">
+        <Box className="modal-style-bigger">
           <Typography
             id="modal-modal-title"
             variant="h6"
@@ -195,8 +204,14 @@ export default function CommentsTable(props) {
             className="link"
             placeholder="Enter your comment here"
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            error={commentError !== null}
+            onChange={(e) => {
+              setCommentError(null);
+              setComment(e.target.value);
+            }}
           />
+          {commentError && <p style={{ color: "#ff0000" }}>{commentError}</p>}
+
           <div className="modal-buttons">
             <div className="request-form-button">
               <Button
@@ -227,6 +242,145 @@ export default function CommentsTable(props) {
                     })
                     .finally(() => {
                       handleAddClose();
+                    });
+                }
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Remove comment */}
+      <Modal
+        open={removeOpen}
+        onClose={handleRemoveClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style">
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Remove Comment
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Would you like to remove this comment from the list?
+          </Typography>
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  handleRemoveClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={() => {
+                removeComment(comment, commentDate)
+                  .then(() => {
+                    setCommentsArray((p) => {
+                      let pp = [...p];
+                      for (let i = 0; i < pp.length; i++) {
+                        if (
+                          pp[i].comment === comment &&
+                          pp[i].commentDate === commentDate
+                        ) {
+                          pp.splice(i, 1);
+                          break;
+                        }
+                      }
+                      return pp;
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    // Could not remove material from Firestore
+                  })
+                  .finally(() => {
+                    handleRemoveClose();
+                  });
+              }}
+            >
+              OK
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Edit comment */}
+      <Modal
+        open={editOpen}
+        onClose={handleEditClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style-bigger">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ mt: 2, mb: 3 }}
+          >
+            Edit Comment
+          </Typography>
+          <TextArea
+            className="link"
+            placeholder="Enter your comment here"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          {commentError && (
+            <p style={{ color: "#ff0000" }}>Comment cannot be empty.</p>
+          )}
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  handleEditClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={() => {
+                if (checkComment()) {
+                  removeComment(tempComment, tempCommentDate)
+                    .then(() => addComment())
+                    .then(() => {
+                      setCommentsArray((p) => {
+                        let pp = [...p];
+                        for (let i = 0; i < pp.length; i++) {
+                          if (
+                            pp[i].comment === tempComment &&
+                            pp[i].commentDate === tempCommentDate
+                          ) {
+                            pp.splice(i, 1, {
+                              comment,
+                              commentDate,
+                            });
+                            break;
+                          }
+                        }
+                        return pp;
+                      });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      // Could not update material to Firestore
+                    })
+                    .finally(() => {
+                      handleEditClose();
                     });
                 }
               }}
