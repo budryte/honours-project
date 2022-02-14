@@ -14,11 +14,12 @@ import {
 } from "@mui/material";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
-function changePassword(oldPassword, newPassword, confirmPassword) {
-  const auth = getAuth();
-}
+import {
+  getAuth,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+} from "firebase/auth";
 
 export default function Account() {
   const users = useLiveQuery(() => dexieDB.users.toArray());
@@ -28,11 +29,77 @@ export default function Account() {
 
   const [changePassword, setChangePassword] = useState(false);
   const changePasswordOpen = () => setChangePassword(true);
-  const changePasswordClose = () => setChangePassword(false);
+  const changePasswordClose = () => {
+    setNewPassword(null);
+    setConfirmPassword(null);
+    setOldPassword(null);
+    setOldPasswordError(null);
+    setNewPasswordError(null);
+    setConfirmPasswordError(null);
+    setChangePassword(false);
+  };
 
   const [oldPassword, setOldPassword] = useState(null);
   const [newPassword, setNewPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
+
+  const [oldPasswordError, setOldPasswordError] = useState(null);
+  const [newPasswordError, setNewPasswordError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+
+  async function changePass() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    let proceed = true;
+
+    if (!oldPassword) {
+      setOldPasswordError("Please enter old password");
+      proceed = false;
+    }
+    if (!newPassword) {
+      setNewPasswordError("Please enter new password");
+      proceed = false;
+    }
+    if (!confirmPassword) {
+      setConfirmPasswordError("Please confirm new password");
+      proceed = false;
+    } else if (newPassword !== confirmPassword) {
+      setNewPasswordError("New passwords should match");
+      setConfirmPasswordError("New passwords shoudld match");
+      proceed = false;
+    }
+
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+
+    await reauthenticateWithCredential(user, credential)
+      .then(() => {
+        console.log("User re-authenticated.");
+      })
+      .catch((err) => {
+        console.log("User not re-authenticated", err);
+        if (err.code === "auth/wrong-password") {
+          setOldPasswordError("Password is incorrect");
+          proceed = false;
+        }
+      });
+
+    if (!proceed) return;
+
+    updatePassword(user, newPassword)
+      .then(() => {
+        console.log("Update successful.");
+        changePasswordClose();
+      })
+      .catch((error) => {
+        console.log("Password update failed", error);
+        if (error.code === "auth/weak-password") {
+          setNewPasswordError("Password should be at least 6 characters long");
+          setConfirmPasswordError(
+            "Password should be at least 6 characters long"
+          );
+        }
+      });
+  }
 
   useEffect(() => {
     if (!users || !users[0] || !users[0].email) return;
@@ -40,6 +107,7 @@ export default function Account() {
     setFirstname(users[0].firstname);
     setLastname(users[0].lastname);
   }, [users]);
+
   return (
     <div>
       <Navbar />
@@ -105,8 +173,15 @@ export default function Account() {
             label="Old Password"
             variant="outlined"
             required
+            type="password"
             size="small"
+            error={oldPasswordError !== null}
             value={oldPassword}
+            onChange={(e) => {
+              setOldPasswordError(null);
+              setOldPassword(e.target.value);
+            }}
+            helperText={oldPasswordError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Enter New Password:
@@ -117,8 +192,15 @@ export default function Account() {
             label="New Password"
             variant="outlined"
             required
+            type="password"
             size="small"
+            error={newPasswordError !== null}
             value={newPassword}
+            onChange={(e) => {
+              setNewPasswordError(null);
+              setNewPassword(e.target.value);
+            }}
+            helperText={newPasswordError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Confirm New Password:
@@ -129,8 +211,15 @@ export default function Account() {
             label="Confirm Password"
             variant="outlined"
             required
+            type="password"
             size="small"
+            error={confirmPasswordError !== null}
             value={confirmPassword}
+            onChange={(e) => {
+              setConfirmPasswordError(null);
+              setConfirmPassword(e.target.value);
+            }}
+            helperText={confirmPasswordError}
           />
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -148,11 +237,7 @@ export default function Account() {
               variant="outlined"
               color="success"
               onClick={() => {
-                setOldPassword(oldPassword);
-                setNewPassword(newPassword);
-                setConfirmPassword(confirmPassword);
-                changePassword(oldPassword, newPassword, confirmPassword);
-                changePasswordClose();
+                changePass();
               }}
             >
               Save

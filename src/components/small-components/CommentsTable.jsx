@@ -40,6 +40,7 @@ export default function CommentsTable(props) {
 
   const { state } = useLocation();
   const { id: requestID } = state.data;
+  const [status, setStatus] = useState(state.data.status);
 
   const [commentsArray, setCommentsArray] = useState(state.data.comments ?? []);
 
@@ -167,7 +168,7 @@ export default function CommentsTable(props) {
                 ) : undefined}
               </TableRow>
             ))}
-            {pos === "Technician" ? (
+            {pos === "Technician" && status !== "Completed" ? (
               <TableRow>
                 <IconButton>
                   <AddIcon
