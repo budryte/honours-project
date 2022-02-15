@@ -14,8 +14,8 @@ export default function MainRequestDetails() {
   const { time, id, firstname, lastname, email, linkToFolder } = state.data;
 
   const requestDetails = {
-    projectType: state.data.projectType,
     discipline: state.data.discipline,
+    projectType: state.data.projectType,
     priority: state.data.priority,
     natureOfRequest: state.data.extraInfo,
   };
@@ -27,7 +27,7 @@ export default function MainRequestDetails() {
         <br></br>
         {email}
         <br></br>
-        Submitted: {new Date(time.seconds * 1000).toLocaleString()}
+        Submitted: {new Date(time.seconds * 1000).toLocaleDateString()}
       </h3>
       <h3>Request Details</h3>
       <TableContainer>

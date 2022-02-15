@@ -87,7 +87,10 @@ const statusValues = [
 export default function PickUpRequest() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setEstimatedTime(null);
+  };
 
   const [approvalOpen, setApprovalOpen] = useState(false);
   const handleApprovalOpen = () => setApprovalOpen(true);
@@ -106,32 +109,30 @@ export default function PickUpRequest() {
 
   const [estimatedCompletion, setEstimatedCompletionOpen] = useState(false);
   const handleEstimatedCompletionOpen = () => setEstimatedCompletionOpen(true);
-  const handleEstimatedCompletionClose = () =>
+  const handleEstimatedCompletionClose = () => {
     setEstimatedCompletionOpen(false);
+  };
 
   const { state } = useLocation();
-  const { id, supervisor } = state.data;
+  const { id, supervisor, estimatedTime: eTime } = state.data;
   const { parentId } = state;
   const [status, setStatus] = useState(state.data.status);
   const [technicianInCharge, setTechnicianInCharge] = useState(
     state.data.technicianInCharge
   );
   const [estimatedTime, setEstimatedTime] = useState(
-    new Date(state.data.estimatedTime?.seconds * 1000 ?? null)
+    eTime ? new Date(eTime.seconds * 1000) : null
   );
 
   const [TICError, setTICError] = useState(null);
   const [tempTIC, setTempTIC] = useState(null);
   const [tempStatus, setTempStatus] = useState(state.data.status);
   const [tempEstimatedTime, setTempEstimatedTime] = useState(
-    new Date(state.data.estimatedTime?.seconds * 1000 ?? null)
+    eTime ? new Date(eTime.seconds * 1000) : null
   );
 
   function checkDetails() {
     let change = true;
-
-    console.log(tempTIC);
-
     if (!tempTIC) {
       setTICError("Please enter tecnician's email address");
       change = false;
@@ -158,8 +159,10 @@ export default function PickUpRequest() {
               <MainRequestDetails />
               <SupervisorDetails />
               <h3>Technician Details</h3>
+
               <List className="request-details">
-                {status === "In progress" ? (
+                {status !== "Pending approval" &&
+                status !== "Waiting on technician" ? (
                   <ListItem
                     disablePadding
                     secondaryAction={
@@ -182,7 +185,8 @@ export default function PickUpRequest() {
                 <ListItem
                   disablePadding
                   secondaryAction={
-                    status === "In progress" ? (
+                    status !== "Pending approval" &&
+                    status !== "Waiting on technician" ? (
                       <IconButton
                         edge="end"
                         aria-label="edit"
@@ -199,7 +203,8 @@ export default function PickUpRequest() {
                     <b>Status:</b> {status}
                   </ListItemText>
                 </ListItem>
-                {status === "In progress" ? (
+                {status !== "Pending approval" &&
+                status !== "Waiting on technician" ? (
                   <ListItem
                     disablePadding
                     secondaryAction={
@@ -221,14 +226,16 @@ export default function PickUpRequest() {
                   </ListItem>
                 ) : undefined}
               </List>
-              {status === "In progress" || status === "Completed" ? (
+              {status !== "Pending approval" &&
+              status !== "Waiting on technician" ? (
                 <MaterialsTable parentId={parentId} />
               ) : undefined}
-              {status === "In progress" || status === "Completed" ? (
+              {status !== "Pending approval" &&
+              status !== "Waiting on technician" ? (
                 <CommentsTable parentId={parentId} />
               ) : undefined}
-              <div className="buttons">
-                {status === "Waiting on technician" ? (
+              {status === "Waiting on technician" ? (
+                <div className="buttons">
                   <div className="request-form-button">
                     <Button
                       variant="contained"
@@ -239,8 +246,6 @@ export default function PickUpRequest() {
                       Send to Supervisor
                     </Button>
                   </div>
-                ) : undefined}
-                {status === "Waiting on technician" ? (
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -249,8 +254,8 @@ export default function PickUpRequest() {
                   >
                     Pick Up Request
                   </Button>
-                ) : undefined}
-              </div>
+                </div>
+              ) : undefined}
             </Grid>
           </Grid>
         </div>
@@ -296,7 +301,7 @@ export default function PickUpRequest() {
             <Button
               variant="outlined"
               color="success"
-              disabled={estimatedTime === null}
+              disabled={!estimatedTime}
               onClick={() => {
                 pickUpRequest(estimatedTime, parentId, id);
                 handleClose();

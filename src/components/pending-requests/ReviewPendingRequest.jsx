@@ -92,7 +92,7 @@ export default function ReviewPendingRequest() {
                 }}
               />
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Enter student grant:
+                Enter student grant (£):
               </Typography>
               <TextField
                 className="form-group"
