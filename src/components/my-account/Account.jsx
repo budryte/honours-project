@@ -121,7 +121,7 @@ export default function Account() {
               </div>
             </Grid>
             <Grid item xs={11}>
-              <h1>Change Account Details</h1>
+              <h1>Account Details</h1>
               <List className="request-details">
                 <ListItem disablePadding>
                   <ListItemText>
