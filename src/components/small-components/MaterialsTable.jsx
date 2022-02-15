@@ -86,6 +86,7 @@ export default function MaterialsTable(props) {
 
   const { state } = useLocation();
   const { id: requestID } = state.data;
+  const [status, setStatus] = useState(state.data.status);
 
   const [matArr, setMatArr] = useState(state.data.materials);
   const [total, setTotal] = useState(
@@ -150,8 +151,8 @@ export default function MaterialsTable(props) {
 
   return (
     <div>
-      <h3>Ordered Materials</h3>
-      {matArr !== undefined ? (
+      {status !== "Waiting on technician" && <h3>Ordered Materials</h3>}
+      {matArr?.length > 0 || pos === "Technician" ? (
         <TableContainer>
           <Table sx={{ minWidth: 450 }} aria-label="simple table">
             <TableHead className="table-head">
@@ -182,7 +183,7 @@ export default function MaterialsTable(props) {
                   </TableCell>
                   <TableCell>{mat.quantity}</TableCell>
                   <TableCell>£{mat.price}</TableCell>
-                  {pos === "Technician" ? (
+                  {pos === "Technician" && status !== "Completed" ? (
                     <TableCell>
                       <IconButton>
                         <EditIcon
@@ -212,7 +213,7 @@ export default function MaterialsTable(props) {
                   ) : undefined}
                 </TableRow>
               ))}
-              {pos === "Technician" ? (
+              {pos === "Technician" && status !== "Completed" ? (
                 <TableRow>
                   <IconButton>
                     <AddIcon
@@ -230,13 +231,15 @@ export default function MaterialsTable(props) {
                   <b>Total:</b>
                 </TableCell>
                 <TableCell align="left">£{total.toFixed(2)}</TableCell>
-                {pos === "Technician" && <TableCell />}
+                {pos === "Technician" && status !== "Completed" && (
+                  <TableCell />
+                )}
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
       ) : (
-        <p>There no materials ordered yet.</p>
+        status !== "Waiting on technician" && <p>There no materials ordered.</p>
       )}
       <br></br>
 
