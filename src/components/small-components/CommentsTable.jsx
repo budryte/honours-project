@@ -47,9 +47,11 @@ export default function CommentsTable(props) {
   const [comment, setComment] = useState(null);
   const [commentError, setCommentError] = useState(null);
   const [commentDate, setCommentDate] = useState(null);
+  const [commenter, setCommenter] = useState(null);
 
   const [tempComment, setTempComment] = useState(null);
   const [tempCommentDate, setTempCommentDate] = useState(null);
+  const [tempCommenter, setTempCommenter] = useState(null);
 
   function addComment() {
     const fireStore = getFirestore();
@@ -64,11 +66,12 @@ export default function CommentsTable(props) {
       comments: arrayUnion({
         comment: comment,
         commentDate: new Date().getTime(),
+        commenter: email,
       }),
     });
   }
 
-  function removeComment(com, comDate) {
+  function removeComment(com, comDate, name) {
     const fireStore = getFirestore();
     const requestRef = doc(
       fireStore,
@@ -78,7 +81,11 @@ export default function CommentsTable(props) {
       requestID
     );
     return updateDoc(requestRef, {
-      comments: arrayRemove({ comment: com, commentDate: comDate }),
+      comments: arrayRemove({
+        comment: com,
+        commentDate: comDate,
+        commenter: name,
+      }),
     });
   }
 
@@ -110,7 +117,7 @@ export default function CommentsTable(props) {
     let toAdd = true;
 
     if (!comment) {
-      setCommentError("Please enter comment");
+      setCommentError("Comment cannot be empty.");
       toAdd = false;
     }
     return toAdd;
@@ -127,6 +134,9 @@ export default function CommentsTable(props) {
                 <b>Comment</b>
               </TableCell>
               <TableCell>
+                <b>Last modified by</b>
+              </TableCell>
+              <TableCell>
                 <b>Date</b>
               </TableCell>
               {pos === "Technician" && <TableCell />}
@@ -138,6 +148,9 @@ export default function CommentsTable(props) {
                 <TableCell component="th" scope="row">
                   {commentObj.comment}
                 </TableCell>
+                <TableCell component="th" scope="row">
+                  {commentObj.commenter}
+                </TableCell>
                 <TableCell>
                   {new Date(commentObj.commentDate).toLocaleDateString()}
                 </TableCell>
@@ -148,8 +161,10 @@ export default function CommentsTable(props) {
                         onClick={() => {
                           setComment(commentObj.comment);
                           setCommentDate(commentObj.commentDate);
+                          setCommenter(commentObj.commenter);
                           setTempComment(commentObj.comment);
                           setTempCommentDate(commentObj.commentDate);
+                          setTempCommenter(commentObj.commenter);
                           handleEditOpen();
                         }}
                       />
@@ -160,6 +175,7 @@ export default function CommentsTable(props) {
                         onClick={() => {
                           setComment(commentObj.comment);
                           setCommentDate(commentObj.commentDate);
+                          setCommenter(commentObj.commenter);
                           handleRemoveOpen();
                         }}
                       />
@@ -234,7 +250,11 @@ export default function CommentsTable(props) {
                     .then(() => {
                       setCommentsArray((p) => [
                         ...p,
-                        { comment: comment, commentDate: new Date() },
+                        {
+                          comment: comment,
+                          commentDate: new Date(),
+                          commenter: email,
+                        },
                       ]);
                     })
                     .catch((err) => {
@@ -283,14 +303,15 @@ export default function CommentsTable(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                removeComment(comment, commentDate)
+                removeComment(comment, commentDate, commenter)
                   .then(() => {
                     setCommentsArray((p) => {
                       let pp = [...p];
                       for (let i = 0; i < pp.length; i++) {
                         if (
                           pp[i].comment === comment &&
-                          pp[i].commentDate === commentDate
+                          pp[i].commentDate === commentDate &&
+                          pp[i].commenter === commenter
                         ) {
                           pp.splice(i, 1);
                           break;
@@ -336,9 +357,7 @@ export default function CommentsTable(props) {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          {commentError && (
-            <p style={{ color: "#ff0000" }}>Comment cannot be empty.</p>
-          )}
+          {commentError && <p style={{ color: "#ff0000" }}>{commentError}</p>}
           <div className="modal-buttons">
             <div className="request-form-button">
               <Button
@@ -356,7 +375,7 @@ export default function CommentsTable(props) {
               color="success"
               onClick={() => {
                 if (checkComment()) {
-                  removeComment(tempComment, tempCommentDate)
+                  removeComment(tempComment, tempCommentDate, tempCommenter)
                     .then(() => addComment())
                     .then(() => {
                       setCommentsArray((p) => {
@@ -364,11 +383,13 @@ export default function CommentsTable(props) {
                         for (let i = 0; i < pp.length; i++) {
                           if (
                             pp[i].comment === tempComment &&
-                            pp[i].commentDate === tempCommentDate
+                            pp[i].commentDate === tempCommentDate &&
+                            pp[i].commenter === tempCommenter
                           ) {
                             pp.splice(i, 1, {
                               comment,
                               commentDate,
+                              commenter,
                             });
                             break;
                           }
