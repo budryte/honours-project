@@ -1,11 +1,36 @@
 import React, { useState } from "react";
-import { RadioGroup, FormControlLabel, Radio, Button } from "@mui/material";
+import {
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  InputLabel,
+  Radio,
+  Button,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 export default function Filters(props) {
   const [status, setStatus] = useState(null);
   const [priority, setPriority] = useState(null);
+  const [sortingType, setSortingType] = useState("newest last");
+
   return (
     <div>
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={sortingType}
+          onChange={(e) => {
+            setSortingType(e.target.value);
+            props.setSorting({ sortingType: e.target.value });
+          }}
+        >
+          <MenuItem value={"newest last"}>Newest Last</MenuItem>
+          <MenuItem value={"newest first"}>Newest First</MenuItem>
+        </Select>
+      </FormControl>
       <h2>Filter by:</h2>
       <h3>Status</h3>
       <RadioGroup
@@ -14,7 +39,11 @@ export default function Filters(props) {
         value={status}
         onChange={(e) => {
           setStatus(e.target.value);
-          props.setFilters({ status: e.target.value, priority: priority });
+          props.setFilters({
+            status: e.target.value,
+            priority: priority,
+          });
+          props.setSorting({ sortingType: sortingType });
         }}
       >
         <FormControlLabel
@@ -50,7 +79,11 @@ export default function Filters(props) {
         value={priority}
         onChange={(e) => {
           setPriority(e.target.value);
-          props.setFilters({ status: status, priority: e.target.value });
+          props.setFilters({
+            status: status,
+            priority: e.target.value,
+          });
+          props.setSorting({ sortingType: sortingType });
         }}
       >
         <FormControlLabel value="Low" control={<Radio />} label="Low" />
@@ -65,7 +98,7 @@ export default function Filters(props) {
           props.setFilters("cleared");
         }}
       >
-        Clear All
+        Clear All Filters
       </Button>
     </div>
   );
