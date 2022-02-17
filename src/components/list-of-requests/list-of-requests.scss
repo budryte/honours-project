@@ -8,8 +8,19 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   color: #464646;
+}
+
+.para {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.status {
+  margin-top: 2px;
 }
 
 .list-of-request-button {
