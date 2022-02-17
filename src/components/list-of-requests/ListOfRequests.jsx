@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { Button, List, ListItem, Grid } from "@mui/material";
+import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import WarningIcon from "@mui/icons-material/Warning";
+
 import Filters from "../small-components/Filters";
 import {
   collectionGroup,
@@ -20,6 +24,7 @@ export default function ListofRequests() {
   const users = useLiveQuery(() => dexieDB.users.toArray());
   const [requests, setRequests] = useState([]);
   const [filters, setFilters] = useState(null);
+  const [sorting, setSorting] = useState(null);
 
   useEffect(() => {
     getIncompleteRequests();
@@ -35,7 +40,6 @@ export default function ListofRequests() {
 
     (async () => {
       try {
-        console.log("filters: ", filters);
         const filteredQuery = !filters.status
           ? query(
               collectionGroup(getFirestore(), "requests"),
@@ -53,13 +57,12 @@ export default function ListofRequests() {
               where("priority", "==", filters.priority)
             );
 
-        console.log("filteredQuery: ", filteredQuery);
-
         const querySnapshot = await getDocs(filteredQuery);
         let reqArr = [];
         querySnapshot.forEach((doc) => {
           reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
         });
+
         setRequests(reqArr);
       } catch (error) {
         console.log(error);
@@ -79,11 +82,34 @@ export default function ListofRequests() {
       querySnapshot.forEach((doc) => {
         reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
       });
+
+      reqArr.sort(function (x, y) {
+        return x.data.time - y.data.time;
+      });
       setRequests(reqArr);
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    if (!sorting) return;
+    console.log(sorting.sortingType);
+
+    let reqArr = [...requests];
+
+    if (sorting.sortingType === "newest first") {
+      reqArr.sort(function (x, y) {
+        return y.data.time - x.data.time;
+      });
+    } else {
+      reqArr.sort(function (x, y) {
+        return x.data.time - y.data.time;
+      });
+    }
+
+    setRequests(reqArr);
+  }, [sorting]);
 
   return (
     <div>
@@ -93,7 +119,7 @@ export default function ListofRequests() {
         <div className="list-container">
           <Grid container spacing={2}>
             <Grid item xs={3}>
-              <Filters setFilters={setFilters} />
+              <Filters setFilters={setFilters} setSorting={setSorting} />
             </Grid>
             <Grid item xs={9}>
               {requests.length > 0 ? (
@@ -113,15 +139,25 @@ export default function ListofRequests() {
                           <div>
                             <p>
                               <b className="id">{req.data.id} </b>
-                              {"Submitted: "}
                               {new Date(
                                 req.data.time.seconds * 1000
                               ).toLocaleDateString()}
                             </p>
                           </div>
-                          <p>
-                            <b>{req.data.status}</b>
-                          </p>
+                          <div>
+                            <p className="para">
+                              <b className="id status">{req.data.status}</b>
+                              {req.data.priority === "Urgent" ? (
+                                <WarningIcon style={{ color: "red" }} />
+                              ) : req.data.priority === "Medium" ? (
+                                <DragHandleIcon style={{ color: "orange" }} />
+                              ) : (
+                                <KeyboardDoubleArrowDownRoundedIcon
+                                  style={{ color: "blue" }}
+                                />
+                              )}
+                            </p>
+                          </div>
                         </div>
                       </Button>
                     </ListItem>
