@@ -13,15 +13,18 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useNavigate } from "react-router-dom";
 import { db as dexieDB } from "../../config/db";
 import {
   getAuth,
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider,
+  deleteUser,
 } from "firebase/auth";
 
 export default function Account() {
+  let navigate = useNavigate();
   const users = useLiveQuery(() => dexieDB.users.toArray());
   const [email, setEmail] = useState(null);
   const [firstname, setFirstname] = useState(null);
@@ -37,6 +40,14 @@ export default function Account() {
     setNewPasswordError(null);
     setConfirmPasswordError(null);
     setChangePassword(false);
+  };
+
+  const [deleteAcc, setDeleteAcc] = useState(false);
+  const deleteAccOpen = () => setDeleteAcc(true);
+  const deleteAccClose = () => {
+    setOldPassword(null);
+    setOldPasswordError(null);
+    setDeleteAcc(false);
   };
 
   const [oldPassword, setOldPassword] = useState(null);
@@ -101,6 +112,41 @@ export default function Account() {
       });
   }
 
+  async function deleteAccount() {
+    let proceed = true;
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!oldPassword) {
+      setOldPasswordError("Please enter old password");
+      proceed = false;
+    }
+
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+
+    await reauthenticateWithCredential(user, credential)
+      .then(() => {
+        console.log("User re-authenticated.");
+      })
+      .catch((err) => {
+        console.log("User not re-authenticated", err);
+        if (err.code === "auth/wrong-password") {
+          setOldPasswordError("Password is incorrect");
+          proceed = false;
+        }
+      });
+
+    if (!proceed) return;
+
+    deleteUser(user)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     if (!users || !users[0] || !users[0].email) return;
     setEmail(users[0].email);
@@ -144,16 +190,29 @@ export default function Account() {
                   </ListItemText>
                 </ListItem>
               </List>
-              <div className="buttons">
-                <Button variant="outlined" onClick={() => changePasswordOpen()}>
-                  Change password
-                </Button>
-              </div>
+              <h2>Change password</h2>
+              <p>Make sure it's at least 6 characters long</p>
+              <Button variant="outlined" onClick={() => changePasswordOpen()}>
+                Change password
+              </Button>
+              <h2>Delete account</h2>
+              <p>
+                Once you delete your account, there is no going back. Please be
+                certain.
+              </p>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => deleteAccOpen()}
+              >
+                Delete account
+              </Button>
             </Grid>
           </Grid>
         </div>
       </div>
 
+      {/* change password modal */}
       <Modal
         open={changePassword}
         onClose={changePasswordClose}
@@ -165,7 +224,7 @@ export default function Account() {
             Change Password
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Old Password:
+            Old password
           </Typography>
           <TextField
             className="form-group"
@@ -184,7 +243,7 @@ export default function Account() {
             helperText={oldPasswordError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter New Password:
+            New password
           </Typography>
           <TextField
             className="form-group"
@@ -203,7 +262,7 @@ export default function Account() {
             helperText={newPasswordError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Confirm New Password:
+            Confirm new password
           </Typography>
           <TextField
             className="form-group"
@@ -241,6 +300,63 @@ export default function Account() {
               }}
             >
               Save
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* delete account modal */}
+      <Modal
+        open={deleteAcc}
+        onClose={() => {
+          navigate("/my-account");
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style">
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Deleting an account
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            If you would like to delete your account, please enter your password
+          </Typography>
+          <TextField
+            className="form-group"
+            id="outlined-basic"
+            label="Old Password"
+            variant="outlined"
+            required
+            type="password"
+            size="small"
+            error={oldPasswordError !== null}
+            value={oldPassword}
+            onChange={(e) => {
+              setOldPasswordError(null);
+              setOldPassword(e.target.value);
+            }}
+            helperText={oldPasswordError}
+          />
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  deleteAccClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={() => {
+                deleteAccount();
+              }}
+            >
+              Delete
             </Button>
           </div>
         </Box>
