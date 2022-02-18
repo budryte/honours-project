@@ -14,6 +14,7 @@ import MyWork from "./components/technician-work/MyWork";
 import Archive from "./components/archive/Archive";
 import ReviewArchivedRequest from "./components/archive/ReviewArchivedRequest";
 import Account from "./components/my-account/Account";
+import ListOfTechncians from "./components/overview/ListOfTechnicians";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { Routes, Route } from "react-router-dom";
@@ -62,6 +63,7 @@ function App() {
           path="review-archived-request"
           element={<ReviewArchivedRequest />}
         />
+        <Route path="technicians" element={<ListOfTechncians />} />
       </Routes>
     </div>
   );
