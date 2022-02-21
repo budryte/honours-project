@@ -20,13 +20,13 @@ export default function Navbar() {
 
   const [left, setLeft] = useState(false);
   const [position, setPosition] = useState("");
-  const [email, setEmail] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pos = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     if (!pos || !pos[0] || !pos[0].position) return;
     setPosition(pos[0].position);
-    setEmail(pos[0].email);
+    setIsAdmin(pos[0].isAdmin);
   }, [pos]);
 
   const handleLogout = async () => {
@@ -101,9 +101,9 @@ export default function Navbar() {
           </ListItem>
         )}
 
-        {position === "Technician" && email === "technician@gmail.com" ? (
-          <ListItem button onClick={() => navigate("/technicians")}>
-            <ListItemText className="menu-item" primary="Technicians" />
+        {position === "Technician" && !!isAdmin ? (
+          <ListItem button onClick={() => navigate("/overview")}>
+            <ListItemText className="menu-item" primary="Overview" />
           </ListItem>
         ) : undefined}
 

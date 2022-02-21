@@ -10,7 +10,13 @@ import Select from "@mui/material/Select";
 import { db as dexieDB } from "../../config/db";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  getFirestore,
+  deleteDoc,
+} from "firebase/firestore";
 
 import "./login-register-style.scss";
 
@@ -21,11 +27,13 @@ export function Register() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [position, setPosition] = useState("");
+  const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [firstnameError, setFirstnameError] = useState("");
   const [lastnameError, setLastnameError] = useState("");
   const [positionError, setPositionError] = useState("");
+  const [codeError, setCodeError] = useState("");
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -50,6 +58,10 @@ export function Register() {
       setPositionError("Please select position");
       createAccount = false;
     }
+    if (code === "") {
+      setCodeError("PLease enter set-up code");
+      createAccount = false;
+    }
     if (password !== passwordConfirm) {
       setPasswordError("Passwords don't match");
       createAccount = false;
@@ -57,6 +69,24 @@ export function Register() {
     if (email === "") {
       setEmailError("Please enter your email address");
       createAccount = false;
+    }
+
+    if (position === "Technician" && position !== "") {
+      (async () => {
+        const docRef = doc(getFirestore(), "technicians", code);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          try {
+            deleteDoc(doc(getFirestore(), "technicians", code));
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          setCodeError("Set up code is invalid");
+          createAccount = false;
+        }
+      })();
     }
 
     if (!createAccount) return;
@@ -68,11 +98,18 @@ export function Register() {
           lastname: lastname,
           position: position,
           email: email,
+          isAdmin: false,
         });
       })
       .then(async () => {
         try {
-          await dexieDB.users.add({ position, email, firstname, lastname });
+          await dexieDB.users.add({
+            position,
+            email,
+            firstname,
+            lastname,
+            isAdmin: false,
+          });
         } catch (error) {
           console.log("Dexie Error: ", error);
         }
@@ -236,6 +273,23 @@ export function Register() {
             </Select>
             <FormHelperText>{positionError}</FormHelperText>
           </FormControl>
+          {position === "Technician" && (
+            <TextField
+              className="form-group-code"
+              id="outlined-basic"
+              label="Set-up code"
+              variant="outlined"
+              size="small"
+              required
+              error={codeError !== ""}
+              value={code}
+              onChange={(e) => {
+                setCodeError("");
+                setCode(e.target.value);
+              }}
+              helperText={codeError}
+            />
+          )}
         </div>
       </div>
       <div className="footer">
