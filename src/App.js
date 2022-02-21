@@ -19,11 +19,14 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/config";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { db } from "./config/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 initializeApp(firebaseConfig);
 
 function App() {
   const [user, setUser] = useState("");
+  const users = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     const auth = getAuth();
@@ -63,7 +66,9 @@ function App() {
           path="review-archived-request"
           element={<ReviewArchivedRequest />}
         />
-        <Route path="technicians" element={<ListOfTechncians />} />
+        {users?.length > 0 && users[0].isAdmin && (
+          <Route path="overview" element={<ListOfTechncians />} />
+        )}
       </Routes>
     </div>
   );
