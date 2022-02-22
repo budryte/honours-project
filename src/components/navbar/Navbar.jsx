@@ -103,7 +103,7 @@ export default function Navbar() {
 
         {position === "Technician" && !!isAdmin ? (
           <ListItem button onClick={() => navigate("/overview")}>
-            <ListItemText className="menu-item" primary="Overview" />
+            <ListItemText className="menu-item" primary="Technicians" />
           </ListItem>
         ) : undefined}
 

@@ -35,8 +35,10 @@ export function Register() {
   const [positionError, setPositionError] = useState("");
   const [codeError, setCodeError] = useState("");
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
+    //prevent from refreshing page
     e.preventDefault();
+
     const db = getFirestore();
     const auth = getAuth();
 
@@ -58,8 +60,8 @@ export function Register() {
       setPositionError("Please select position");
       createAccount = false;
     }
-    if (code === "") {
-      setCodeError("PLease enter set-up code");
+    if (position === "Technician" && code === "") {
+      setCodeError("Please enter set-up code");
       createAccount = false;
     }
     if (password !== passwordConfirm) {
@@ -70,23 +72,30 @@ export function Register() {
       setEmailError("Please enter your email address");
       createAccount = false;
     }
+    if (position === "Technician") {
+      await checkCode();
+    }
 
-    if (position === "Technician" && position !== "") {
-      (async () => {
-        const docRef = doc(getFirestore(), "technicians", code);
-        const docSnap = await getDoc(docRef);
+    async function checkCode() {
+      const docRef = doc(getFirestore(), "technicians", code);
+      const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          try {
-            deleteDoc(doc(getFirestore(), "technicians", code));
-          } catch (error) {
-            console.log(error);
-          }
-        } else {
-          setCodeError("Set up code is invalid");
-          createAccount = false;
-        }
-      })();
+      if (!docSnap.exists()) {
+        setCodeError("Set up code is invalid");
+        createAccount = false;
+        return;
+      }
+      if (docSnap.data().email !== email) {
+        setEmailError("Set-up code or email is incorrect");
+        setCodeError("Set-up code or email is incorrect");
+        createAccount = false;
+        return;
+      }
+      try {
+        deleteDoc(doc(getFirestore(), "technicians", code));
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (!createAccount) return;

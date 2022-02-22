@@ -16,7 +16,7 @@ import ReviewArchivedRequest from "./components/archive/ReviewArchivedRequest";
 import Account from "./components/my-account/Account";
 import ListOfTechncians from "./components/overview/ListOfTechnicians";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebase/config";
+import { firebaseConfig } from "./config/firebaseConfig";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "./config/db";
