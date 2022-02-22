@@ -38,8 +38,6 @@ export default function ListOfTechncians() {
   const [lastname, setLastname] = useState(null);
   const [email, setEmail] = useState(null);
   const [emailError, setEmailError] = useState(null);
-  const [firstnameError, setFirstnameError] = useState(null);
-  const [lastnameError, setLastnameError] = useState(null);
 
   const [admin, setAdmin] = useState(null);
   const [tempEmail, setTempEmail] = useState(null);
@@ -52,11 +50,7 @@ export default function ListOfTechncians() {
   const confirmationOpen = () => setConfirmation(true);
   const confirmationClose = () => {
     setEmail("");
-    setFirstname("");
-    setLastname("");
     setEmailError(null);
-    setFirstnameError(null);
-    setLastnameError(null);
     setConfirmation(false);
   };
 
@@ -115,14 +109,6 @@ export default function ListOfTechncians() {
   async function addNewTechnician() {
     let add = true;
 
-    if (!firstname) {
-      setFirstnameError("Please enter first name");
-      add = false;
-    }
-    if (!lastname) {
-      setLastnameError("Please enter last name");
-      add = false;
-    }
     if (!email) {
       setEmailError("Please enter email");
       add = false;
@@ -130,7 +116,6 @@ export default function ListOfTechncians() {
       setEmailError("Please enter a valid email address");
       add = false;
     }
-
     if (!add) return;
 
     let code = `SETUP${Date.now().toString()}`;
@@ -138,8 +123,6 @@ export default function ListOfTechncians() {
 
     const db = getFirestore();
     await setDoc(doc(db, "technicians", code), {
-      firstname: firstname,
-      lastname: lastname,
       email: email,
       code: code,
     });
@@ -177,7 +160,7 @@ export default function ListOfTechncians() {
     <div>
       <Navbar />
       <div className="box">
-        <div className="page-title">Overview</div>
+        <div className="page-title">Technicians</div>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid item xs={1}>
@@ -232,38 +215,6 @@ export default function ListOfTechncians() {
               <div className="add-new-technician">
                 <TextField
                   id="outlined-basic"
-                  label="First Name"
-                  variant="outlined"
-                  required
-                  size="small"
-                  error={firstnameError !== null}
-                  value={firstname}
-                  onChange={(e) => {
-                    setFirstnameError(null);
-                    setFirstname(e.target.value);
-                  }}
-                  helperText={firstnameError}
-                />
-              </div>
-              <div className="add-new-technician">
-                <TextField
-                  id="outlined-basic"
-                  label="Last Name"
-                  variant="outlined"
-                  required
-                  size="small"
-                  error={lastnameError !== null}
-                  value={lastname}
-                  onChange={(e) => {
-                    setLastnameError(null);
-                    setLastname(e.target.value);
-                  }}
-                  helperText={lastnameError}
-                />
-              </div>
-              <div className="add-new-technician">
-                <TextField
-                  id="outlined-basic"
                   label="Email"
                   variant="outlined"
                   required
@@ -292,9 +243,7 @@ export default function ListOfTechncians() {
                   {waitingToJoin.map((user) => (
                     <ListItem>
                       <div className="tech-item">
-                        {user.data.firstname} {user.data.lastname} |{" "}
-                        {user.data.email} <br></br>
-                        Set-up code: <b>{user.data.code}</b>
+                        {user.data.email}| Set-up code: <b>{user.data.code}</b>
                       </div>
                     </ListItem>
                   ))}
