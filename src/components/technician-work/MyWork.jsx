@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import { Button, List, ListItem } from "@mui/material";
+import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import WarningIcon from "@mui/icons-material/Warning";
 import {
   collectionGroup,
   where,
@@ -52,7 +53,11 @@ export default function MyWork() {
                   <Button
                     onClick={() =>
                       navigate("/pick-up-request", {
-                        state: { data: req.data, parentId: req.parentId },
+                        state: {
+                          data: req.data,
+                          parentId: req.parentId,
+                          prevPage: "/my-work",
+                        },
                       })
                     }
                     variant="outlined"
@@ -62,15 +67,26 @@ export default function MyWork() {
                       <div>
                         <p>
                           <b className="id">{req.data.id} </b>
-                          {"Date: "}
+                          {}
                           {new Date(
                             req.data.time.seconds * 1000
                           ).toLocaleDateString()}
                         </p>
                       </div>
-                      <p>
-                        <b>{req.data.status}</b>
-                      </p>
+                      <div>
+                        <p className="para">
+                          <b className="id status">{req.data.status}</b>
+                          {req.data.priority === "Urgent" ? (
+                            <WarningIcon style={{ color: "red" }} />
+                          ) : req.data.priority === "Medium" ? (
+                            <DragHandleIcon style={{ color: "orange" }} />
+                          ) : (
+                            <KeyboardDoubleArrowDownRoundedIcon
+                              style={{ color: "blue" }}
+                            />
+                          )}
+                        </p>
+                      </div>
                     </div>
                   </Button>
                 </ListItem>
