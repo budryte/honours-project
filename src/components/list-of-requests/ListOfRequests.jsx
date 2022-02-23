@@ -129,7 +129,11 @@ export default function ListofRequests() {
                       <Button
                         onClick={() =>
                           navigate("/pick-up-request", {
-                            state: { data: req.data, parentId: req.parentId },
+                            state: {
+                              data: req.data,
+                              parentId: req.parentId,
+                              prevPage: "/list-of-requests",
+                            },
                           })
                         }
                         variant="outlined"

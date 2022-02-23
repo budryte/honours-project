@@ -115,7 +115,7 @@ export default function PickUpRequest() {
 
   const { state } = useLocation();
   const { id, supervisor, estimatedTime: eTime } = state.data;
-  const { parentId } = state;
+  const { parentId, prevPage } = state;
   const [status, setStatus] = useState(state.data.status);
   const [technicianInCharge, setTechnicianInCharge] = useState(
     state.data.technicianInCharge
@@ -152,7 +152,7 @@ export default function PickUpRequest() {
           <Grid container spacing={2}>
             <Grid item xs={1}>
               <div className="back-button">
-                <BackButton pageTitle={"/list-of-requests"} />
+                <BackButton pageTitle={prevPage} />
               </div>
             </Grid>
             <Grid item xs={11}>
