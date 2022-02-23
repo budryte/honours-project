@@ -33,17 +33,13 @@ export default function Home() {
       <div className="box">
         <div className="page-title">Technical Request System</div>
         <div className="white-container">
-          <Grid
-            container
-            spacing={{ xs: 1, md: 2 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
+          <div
+            className="card"
+            onMouseOver={() => accRef.current.play()}
+            onMouseLeave={() => accRef.current.stop()}
           >
-            <Grid item xs={6} md={6}>
-              <div
-                className="card"
-                onMouseOver={() => accRef.current.play()}
-                onMouseLeave={() => accRef.current.stop()}
-              >
+            <Grid container spacing={{ xs: 2, md: 12 }}>
+              <Grid item xs={3}>
                 <Player
                   ref={accRef}
                   autoplay={false}
@@ -51,6 +47,8 @@ export default function Home() {
                   src="https://assets6.lottiefiles.com/datafiles/PJaBnGmD25lDMgV/data.json"
                   className="animation-smaller"
                 />
+              </Grid>
+              <Grid item xs={9}>
                 <h3>My Account</h3>
                 <p>Change your account details</p>
                 <Button
@@ -61,15 +59,17 @@ export default function Home() {
                 >
                   My Account
                 </Button>
-              </div>
+              </Grid>
             </Grid>
-            {position !== "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div
-                  className="card"
-                  onMouseOver={() => reqRef.current.play()}
-                  onMouseLeave={() => reqRef.current.stop()}
-                >
+          </div>
+          {position !== "Technician" && (
+            <div
+              className="card"
+              onMouseOver={() => reqRef.current.play()}
+              onMouseLeave={() => reqRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
                   <Player
                     className="animation"
                     ref={reqRef}
@@ -78,6 +78,8 @@ export default function Home() {
                     keepLastFrame
                     src="https://assets8.lottiefiles.com/packages/lf20_65fiagjg.json"
                   />
+                </Grid>
+                <Grid item xs={9}>
                   <h3>New Request</h3>
                   <p>Create and send your new request</p>
                   <Button
@@ -88,16 +90,18 @@ export default function Home() {
                   >
                     New Request
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            )}
-            {position !== "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div
-                  className="card"
-                  onMouseOver={() => trackRef.current.play()}
-                  onMouseLeave={() => trackRef.current.stop()}
-                >
+            </div>
+          )}
+          {position !== "Technician" && (
+            <div
+              className="card"
+              onMouseOver={() => trackRef.current.play()}
+              onMouseLeave={() => trackRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
                   <Player
                     ref={trackRef}
                     autoplay={false}
@@ -105,6 +109,8 @@ export default function Home() {
                     src="https://assets3.lottiefiles.com/packages/lf20_C1giXF.json"
                     className="animation"
                   />
+                </Grid>
+                <Grid item xs={9}>
                   <h3>Track Requests</h3>
                   <p>Track your request status</p>
                   <Button
@@ -115,16 +121,18 @@ export default function Home() {
                   >
                     Track Requests
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            )}
-            {position === "Supervisor" && (
-              <Grid item xs={6} md={6}>
-                <div
-                  className="card"
-                  onMouseOver={() => signRef.current.play()}
-                  onMouseLeave={() => signRef.current.stop()}
-                >
+            </div>
+          )}
+          {position === "Supervisor" && (
+            <div
+              className="card"
+              onMouseOver={() => signRef.current.play()}
+              onMouseLeave={() => signRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
                   <Player
                     ref={signRef}
                     autoplay={false}
@@ -133,6 +141,8 @@ export default function Home() {
                     src="https://assets10.lottiefiles.com/packages/lf20_s3u31uyq.json"
                     className="animation"
                   />
+                </Grid>
+                <Grid item xs={9}>
                   <h3>Pending Requests</h3>
                   <p>Approve your pending requests</p>
                   <Button
@@ -143,16 +153,18 @@ export default function Home() {
                   >
                     Pending Requests
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            )}
-            {position === "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div
-                  className="card"
-                  onMouseOver={() => listRef.current.play()}
-                  onMouseLeave={() => listRef.current.stop()}
-                >
+            </div>
+          )}
+          {position === "Technician" && (
+            <div
+              className="card"
+              onMouseOver={() => listRef.current.play()}
+              onMouseLeave={() => listRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
                   <Player
                     ref={listRef}
                     autoplay={false}
@@ -160,6 +172,8 @@ export default function Home() {
                     src="https://assets1.lottiefiles.com/packages/lf20_2LMpmD.json"
                     className="animation-smaller"
                   />
+                </Grid>
+                <Grid item xs={9}>
                   <h3>List of Requests</h3>
                   <p>View the list of requests</p>
                   <Button
@@ -168,18 +182,20 @@ export default function Home() {
                       navigate("/list-of-requests");
                     }}
                   >
-                    List of Requets
+                    List of Requests
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            )}
-            {position === "Technician" && (
-              <Grid item xs={6} md={6}>
-                <div
-                  className="card"
-                  onMouseOver={() => workRef.current.play()}
-                  onMouseLeave={() => workRef.current.stop()}
-                >
+            </div>
+          )}
+          {position === "Technician" && (
+            <div
+              className="card"
+              onMouseOver={() => workRef.current.play()}
+              onMouseLeave={() => workRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
                   <Player
                     ref={workRef}
                     autoplay={false}
@@ -187,6 +203,8 @@ export default function Home() {
                     src="https://assets8.lottiefiles.com/packages/lf20_9zrznuec.json"
                     className="animation"
                   />
+                </Grid>
+                <Grid item xs={9}>
                   <h3>My Work</h3>
                   <p>View your tasks</p>
                   <Button
@@ -197,15 +215,17 @@ export default function Home() {
                   >
                     My Work
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            )}
-            <Grid item xs={6} md={6}>
-              <div
-                className="card"
-                onMouseOver={() => arcRef.current.play()}
-                onMouseLeave={() => arcRef.current.stop()}
-              >
+            </div>
+          )}
+          <div
+            className="card"
+            onMouseOver={() => arcRef.current.play()}
+            onMouseLeave={() => arcRef.current.stop()}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
                 <Player
                   ref={arcRef}
                   autoplay={false}
@@ -213,6 +233,8 @@ export default function Home() {
                   src="https://assets1.lottiefiles.com/packages/lf20_fx7Gm7.json"
                   className="animation"
                 />
+              </Grid>
+              <Grid item xs={9}>
                 <h3>Archive</h3>
                 <p>View archive</p>
                 <Button
@@ -223,9 +245,9 @@ export default function Home() {
                 >
                   Archive
                 </Button>
-              </div>
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
         </div>
       </div>
     </div>
