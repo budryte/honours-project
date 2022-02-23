@@ -12,7 +12,6 @@ import {
   Modal,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
   Avatar,
 } from "@mui/material";
@@ -34,8 +33,6 @@ export default function ListOfTechncians() {
   let navigate = useNavigate();
   const users = useLiveQuery(() => dexieDB.users.toArray());
 
-  const [firstname, setFirstname] = useState(null);
-  const [lastname, setLastname] = useState(null);
   const [email, setEmail] = useState(null);
   const [emailError, setEmailError] = useState(null);
 
@@ -85,7 +82,7 @@ export default function ListOfTechncians() {
         console.log(error);
       }
     })();
-  }, [technicians]);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -104,11 +101,10 @@ export default function ListOfTechncians() {
         console.log(error);
       }
     })();
-  }, [waitingToJoin]);
+  }, []);
 
-  async function addNewTechnician() {
+  function checkEmail() {
     let add = true;
-
     if (!email) {
       setEmailError("Please enter email");
       add = false;
@@ -116,18 +112,18 @@ export default function ListOfTechncians() {
       setEmailError("Please enter a valid email address");
       add = false;
     }
-    if (!add) return;
+    return add;
+  }
 
+  function addNewTechnician() {
     let code = `SETUP${Date.now().toString()}`;
     setSetupCode(code);
 
     const db = getFirestore();
-    await setDoc(doc(db, "technicians", code), {
+    return setDoc(doc(db, "technicians", code), {
       email: email,
       code: code,
     });
-
-    confirmationOpen();
   }
 
   async function changeAdmin(newAdminEmail) {
@@ -155,6 +151,10 @@ export default function ListOfTechncians() {
       isAdmin: true,
     });
   }
+
+  useEffect(() => {
+    console.log(waitingToJoin);
+  }, [waitingToJoin]);
 
   return (
     <div>
@@ -231,7 +231,25 @@ export default function ListOfTechncians() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  addNewTechnician();
+                  if (checkEmail()) {
+                    addNewTechnician()
+                      .then(() => {
+                        console.log(setupCode);
+                        setWaitingToJoin((p) => [
+                          ...p,
+                          {
+                            data: { email: email, code: setupCode },
+                          },
+                        ]);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        // Could not save code to Firestore
+                      })
+                      .finally(() => {
+                        confirmationOpen();
+                      });
+                  }
                 }}
               >
                 Add
@@ -240,7 +258,7 @@ export default function ListOfTechncians() {
               <h3>Waiting to join the system</h3>
               {waitingToJoin.length > 0 ? (
                 <List>
-                  {waitingToJoin.map((user) => (
+                  {waitingToJoin?.map((user) => (
                     <ListItem>
                       <div className="tech-item">
                         {user.data.email}| Set-up code: <b>{user.data.code}</b>
