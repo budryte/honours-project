@@ -17,6 +17,7 @@ export default function Filters(props) {
 
   return (
     <div>
+      <h3>Sort by:</h3>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
         <Select
           labelId="demo-simple-select-standard-label"
@@ -27,8 +28,8 @@ export default function Filters(props) {
             props.setSorting({ sortingType: e.target.value });
           }}
         >
-          <MenuItem value={"newest last"}>Newest Last</MenuItem>
-          <MenuItem value={"newest first"}>Newest First</MenuItem>
+          <MenuItem value={"newest last"}>Oldest</MenuItem>
+          <MenuItem value={"newest first"}>Newest</MenuItem>
         </Select>
       </FormControl>
       <h2>Filter by:</h2>
