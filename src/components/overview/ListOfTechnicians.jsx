@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
-import BackButton from "../small-components/BackButton";
 import PersonIcon from "@mui/icons-material/Person";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useNavigate } from "react-router-dom";
 import {
-  Grid,
   Button,
   Box,
   Typography,
@@ -14,6 +13,7 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
+  IconButton,
 } from "@mui/material";
 import {
   collectionGroup,
@@ -25,6 +25,7 @@ import {
   setDoc,
   updateDoc,
   collection,
+  deleteDoc,
 } from "firebase/firestore";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
@@ -49,6 +50,14 @@ export default function ListOfTechncians() {
     setEmail("");
     setEmailError(null);
     setConfirmation(false);
+  };
+
+  const [removeOpen, setRemoveOpen] = useState(null);
+  const handleRemoveOpen = () => setRemoveOpen(true);
+  const handleRemoveClose = () => {
+    setRemoveOpen(false);
+    setSetupCode(null);
+    setEmail(null);
   };
 
   const [confirmAdmin, setConfirmAdmin] = useState(null);
@@ -126,6 +135,16 @@ export default function ListOfTechncians() {
     });
   }
 
+  function deleteTechnician(code) {
+    console.log("code ", code);
+    const db = getFirestore();
+    try {
+      return deleteDoc(doc(db, "technicians", code));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function changeAdmin(newAdminEmail) {
     // Set current admin's status to false
     const fireStore = getFirestore();
@@ -152,125 +171,122 @@ export default function ListOfTechncians() {
     });
   }
 
-  useEffect(() => {
-    console.log(waitingToJoin);
-  }, [waitingToJoin]);
-
   return (
     <div>
       <Navbar />
       <div className="box">
         <div className="page-title">Technicians</div>
-        <div className="white-container">
-          <Grid container spacing={2}>
-            <Grid item xs={1}>
-              <div className="back-button">
-                <BackButton pageTitle={"/home"} />
-              </div>
-            </Grid>
-            <Grid item xs={11}>
-              <h1>Technicians</h1>
-              <h2>Administrator</h2>
-              <p className="tech-item">
-                Current Administrator: <b>{admin?.email}</b>
-              </p>
-              <h2>List Of Technicians</h2>
-              {technicians.length > 0 ? (
-                <List>
-                  {technicians.map((tech) => (
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar
-                          style={{
-                            backgroundColor: tech.data.isAdmin
-                              ? "#4365e2"
-                              : undefined,
-                          }}
-                        >
-                          <PersonIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <div className="tech-item">
-                        {tech.data.firstname} {tech.data.lastname} |{" "}
-                        <b>{tech.data.email}</b>
-                      </div>
-                      {!tech.data.isAdmin && (
-                        <Button
-                          onClick={() => {
-                            setTempEmail(tech.data.email);
-                            confirmAdminOpen();
-                          }}
-                        >
-                          Make admin
-                        </Button>
-                      )}
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <p>There are no technicians.</p>
-              )}
+        <div className="white-container-account">
+          <h1>Manage Technicians</h1>
+          <h2>Administrator</h2>
+          <p className="tech-item">
+            Current Administrator: <b>{admin?.email}</b>
+          </p>
+          <h2>List Of Technicians</h2>
+          {technicians.length > 0 ? (
+            <List>
+              {technicians.map((tech) => (
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar
+                      style={{
+                        backgroundColor: tech.data.isAdmin
+                          ? "#4365e2"
+                          : undefined,
+                      }}
+                    >
+                      <PersonIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <div className="tech-item">
+                    {tech.data.firstname} {tech.data.lastname} |{" "}
+                    <b>{tech.data.email}</b>
+                  </div>
+                  {!tech.data.isAdmin && (
+                    <Button
+                      onClick={() => {
+                        setTempEmail(tech.data.email);
+                        confirmAdminOpen();
+                      }}
+                    >
+                      Make admin
+                    </Button>
+                  )}
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <p>There are no technicians.</p>
+          )}
 
-              <h2>Add new technician</h2>
-              <div className="add-new-technician">
-                <TextField
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                  required
-                  size="small"
-                  error={emailError !== null}
-                  value={email}
-                  onChange={(e) => {
-                    setEmailError(null);
-                    setEmail(e.target.value);
-                  }}
-                  helperText={emailError}
-                />
-              </div>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (checkEmail()) {
-                    addNewTechnician()
-                      .then(() => {
-                        console.log(setupCode);
-                        setWaitingToJoin((p) => [
-                          ...p,
-                          {
-                            data: { email: email, code: setupCode },
-                          },
-                        ]);
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                        // Could not save code to Firestore
-                      })
-                      .finally(() => {
-                        confirmationOpen();
-                      });
-                  }
-                }}
-              >
-                Add
-              </Button>
+          <h2>Add new technician</h2>
+          <div className="add-new-technician">
+            <TextField
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+              required
+              size="small"
+              error={emailError !== null}
+              value={email}
+              onChange={(e) => {
+                setEmailError(null);
+                setEmail(e.target.value);
+              }}
+              helperText={emailError}
+            />
+          </div>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (checkEmail()) {
+                addNewTechnician()
+                  .then(() => {
+                    console.log(setupCode);
+                    setWaitingToJoin((p) => [
+                      ...p,
+                      {
+                        data: { email: email, code: setupCode },
+                      },
+                    ]);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    // Could not save code to Firestore
+                  })
+                  .finally(() => {
+                    confirmationOpen();
+                  });
+              }
+            }}
+          >
+            Add
+          </Button>
 
-              <h3>Waiting to join the system</h3>
-              {waitingToJoin.length > 0 ? (
-                <List>
-                  {waitingToJoin?.map((user) => (
-                    <ListItem>
-                      <div className="tech-item">
-                        {user.data.email}| Set-up code: <b>{user.data.code}</b>
-                      </div>
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <p>No one is waiting to join.</p>
-              )}
-            </Grid>
-          </Grid>
+          <h3>Waiting to join the system</h3>
+          {waitingToJoin.length > 0 ? (
+            <List>
+              {waitingToJoin?.map((user) => (
+                <ListItem>
+                  <div className="tech-item">
+                    {user.data.email}| Set-up code: <b>{user.data.code}</b>
+                  </div>
+                  <IconButton>
+                    <DeleteOutlineIcon
+                      className="bin"
+                      onClick={() => {
+                        setSetupCode(user.data.code);
+                        setEmail(user.data.email);
+                        handleRemoveOpen();
+                      }}
+                    />
+                  </IconButton>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <p>No one is waiting to join.</p>
+          )}
         </div>
       </div>
 
@@ -303,6 +319,72 @@ export default function ListOfTechncians() {
                 OK
               </Button>
             </div>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Remove technician */}
+      <Modal
+        open={removeOpen}
+        onClose={() => {
+          navigate("/overview");
+          handleRemoveClose();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style">
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Confirmation
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Would you like to remove <b>{email}</b> from the waiting list?
+          </Typography>
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  handleRemoveClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                deleteTechnician(setupCode)
+                  .then(() => {
+                    setWaitingToJoin((p) => {
+                      let pp = [...p];
+                      for (let i = 0; i < pp.length; i++) {
+                        if (
+                          pp[i].data.email === email &&
+                          pp[i].data.code === setupCode
+                        ) {
+                          pp.splice(i, 1);
+                          break;
+                        }
+                      }
+                      return pp;
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    // Could not remove technician from Firestore
+                  })
+                  .finally(() => {
+                    handleRemoveClose();
+                    alert(
+                      "Techncian was successfully removed from the waiting list"
+                    );
+                  });
+              }}
+            >
+              OK
+            </Button>
           </div>
         </Box>
       </Modal>
