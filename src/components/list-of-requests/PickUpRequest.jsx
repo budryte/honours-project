@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
 import BackButton from "../small-components/BackButton";
 import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
 import MaterialsTable from "../small-components/MaterialsTable";
 import CommentsTable from "../small-components/CommentsTable";
+import DeleteRequest from "../small-components/DeleteRequest";
 import {
   Button,
   Box,
@@ -13,7 +14,6 @@ import {
   Modal,
   List,
   ListItem,
-  ListItemText,
   MenuItem,
   IconButton,
   Select,
@@ -28,6 +28,8 @@ import DatePicker from "@mui/lab/DatePicker";
 import { useLocation } from "react-router-dom";
 import { doc, updateDoc, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { db } from "../../config/db";
+import { useLiveQuery } from "dexie-react-hooks";
 
 import "./list-of-requests.scss";
 
@@ -85,6 +87,16 @@ const statusValues = [
 ];
 
 export default function PickUpRequest() {
+  const [position, setPosition] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const pos = useLiveQuery(() => db.users.toArray());
+
+  useEffect(() => {
+    if (!pos || !pos[0] || !pos[0].position) return;
+    setPosition(pos[0].position);
+    setIsAdmin(pos[0].isAdmin);
+  }, [pos]);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -158,8 +170,7 @@ export default function PickUpRequest() {
             <Grid item xs={11}>
               <MainRequestDetails />
               <SupervisorDetails />
-              <h3>Technician Details</h3>
-
+              <h2>Technician Details</h2>
               <List className="request-details">
                 {status !== "Pending approval" &&
                 status !== "Waiting on technician" ? (
@@ -177,9 +188,9 @@ export default function PickUpRequest() {
                       </IconButton>
                     }
                   >
-                    <ListItemText>
+                    <div className="tech-details-item">
                       <b>Technician in charge:</b> {technicianInCharge}
-                    </ListItemText>
+                    </div>
                   </ListItem>
                 ) : undefined}
                 <ListItem
@@ -199,9 +210,9 @@ export default function PickUpRequest() {
                     ) : undefined
                   }
                 >
-                  <ListItemText>
+                  <div className="tech-details-item">
                     <b>Status:</b> {status}
-                  </ListItemText>
+                  </div>
                 </ListItem>
                 {status !== "Pending approval" &&
                 status !== "Waiting on technician" ? (
@@ -219,10 +230,10 @@ export default function PickUpRequest() {
                       </IconButton>
                     }
                   >
-                    <ListItemText>
+                    <div className="tech-details-item">
                       <b>Estimated completion date: </b>
                       {estimatedTime.toLocaleDateString()}
-                    </ListItemText>
+                    </div>
                   </ListItem>
                 ) : undefined}
               </List>
@@ -256,10 +267,14 @@ export default function PickUpRequest() {
                   </Button>
                 </div>
               ) : undefined}
+              {position === "Technician" && (
+                <DeleteRequest userID={parentId} requestID={id} />
+              )}
             </Grid>
           </Grid>
         </div>
       </div>
+
       {/* Pick up request */}
       <Modal
         open={open}
