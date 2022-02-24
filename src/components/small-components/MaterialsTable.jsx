@@ -151,7 +151,7 @@ export default function MaterialsTable(props) {
 
   return (
     <div>
-      {status !== "Waiting on technician" && <h3>Ordered Materials</h3>}
+      {status !== "Waiting on technician" && <h2>Ordered Materials</h2>}
       {matArr?.length > 0 || pos === "Technician" ? (
         <TableContainer>
           <Table sx={{ minWidth: 450 }} aria-label="simple table">
