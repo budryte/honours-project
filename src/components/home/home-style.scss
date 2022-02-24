@@ -31,7 +31,14 @@
   padding: 2em;
 }
 
+.white-container-account {
+  background-color: white;
+  font-family: "Baxter Sans Regular";
+  padding: 2em 4em;
+}
+
 .card {
+  height: 130px;
   padding: 5px 25px 25px 25px;
   border: #d1e2f2 8px;
   border-style: solid;
@@ -59,6 +66,17 @@
 
 .animation-smaller {
   padding-top: 20px;
+  height: 100px;
+  width: 100px;
+  @media (max-width: 800px) {
+    height: 60px;
+    width: 60px;
+  }
+}
+
+.animation-smaller-account {
+  padding-top: 20px;
+  padding-left: 30px;
   height: 100px;
   width: 100px;
   @media (max-width: 800px) {

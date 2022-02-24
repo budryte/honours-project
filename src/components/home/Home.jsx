@@ -12,11 +12,13 @@ import "./home-style.scss";
 export default function Home() {
   let navigate = useNavigate();
   const [position, setPosition] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const users = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     if (!users || !users[0] || !users[0].position) return;
     setPosition(users[0].position);
+    setIsAdmin(users[0].isAdmin);
   }, [users]);
 
   let accRef = useRef();
@@ -38,7 +40,7 @@ export default function Home() {
             onMouseOver={() => accRef.current.play()}
             onMouseLeave={() => accRef.current.stop()}
           >
-            <Grid container spacing={{ xs: 2, md: 12 }}>
+            <Grid container spacing={{ xs: 2 }}>
               <Grid item xs={3}>
                 <Player
                   ref={accRef}
@@ -219,6 +221,36 @@ export default function Home() {
               </Grid>
             </div>
           )}
+          {position === "Technician" && !!isAdmin ? (
+            <div
+              className="card"
+              onMouseOver={() => workRef.current.play()}
+              onMouseLeave={() => workRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <Player
+                    ref={workRef}
+                    autoplay={false}
+                    loop={false}
+                    className="animation"
+                  />
+                </Grid>
+                <Grid item xs={9}>
+                  <h3>Technicians</h3>
+                  <p>View and manage technicians</p>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/overview");
+                    }}
+                  >
+                    Technicians
+                  </Button>
+                </Grid>
+              </Grid>
+            </div>
+          ) : undefined}
           <div
             className="card"
             onMouseOver={() => arcRef.current.play()}
