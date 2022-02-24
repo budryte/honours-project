@@ -5,9 +5,13 @@ import SupervisorDetails from "../small-components/SupervisorDetails";
 import MainRequestDetails from "../small-components/MainRequestDetails";
 import TechnicianDetails from "../small-components/TechnicianDetails";
 import MaterialsTable from "../small-components/MaterialsTable";
+import DeleteRequest from "../small-components/DeleteRequest";
 import { Grid } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 export default function ReviewRequest() {
+  const { state } = useLocation();
+  const { status } = state.data;
   return (
     <div>
       <Navbar />
@@ -25,6 +29,7 @@ export default function ReviewRequest() {
               <SupervisorDetails />
               <TechnicianDetails />
               <MaterialsTable />
+              {status === "Pending approval" && <DeleteRequest />}
             </Grid>
           </Grid>
         </div>

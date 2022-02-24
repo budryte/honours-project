@@ -276,7 +276,6 @@ export default function ListOfTechncians() {
                       className="bin"
                       onClick={() => {
                         setSetupCode(user.data.code);
-                        setEmail(user.data.email);
                         handleRemoveOpen();
                       }}
                     />
