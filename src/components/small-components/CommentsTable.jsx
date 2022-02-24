@@ -40,7 +40,7 @@ export default function CommentsTable(props) {
 
   const { state } = useLocation();
   const { id: requestID } = state.data;
-  const [status, setStatus] = useState(state.data.status);
+  const status = state.data.status;
 
   const [commentsArray, setCommentsArray] = useState(state.data.comments ?? []);
 
@@ -125,7 +125,7 @@ export default function CommentsTable(props) {
 
   return (
     <div>
-      <h3>Comments History</h3>
+      <h2>Comments History</h2>
       <TableContainer>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
           <TableHead className="table-head">

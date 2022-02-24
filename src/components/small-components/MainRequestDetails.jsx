@@ -11,7 +11,8 @@ import { useLocation } from "react-router-dom";
 
 export default function MainRequestDetails() {
   const { state } = useLocation();
-  const { time, id, firstname, lastname, email, linkToFolder } = state.data;
+  const { time, id, firstname, lastname, email, linkToFolder, status } =
+    state.data;
 
   const requestDetails = {
     discipline: state.data.discipline,
@@ -22,14 +23,26 @@ export default function MainRequestDetails() {
   return (
     <div>
       <h1>{id}</h1>
-      <h3>
-        Requested by {firstname} {lastname}
+      <p
+        style={{
+          fontSize: "24px",
+          color: "#4365e2",
+          textDecorationLine: "underline",
+        }}
+      >
+        <b>{status}</b>
+      </p>
+      <p style={{ fontSize: "20px" }}>
+        Requested by{" "}
+        <b>
+          {firstname} {lastname}
+        </b>
         <br></br>
-        {email}
+        <b style={{ fontStyle: "italic" }}>{email}</b>
         <br></br>
-        Submitted: {new Date(time.seconds * 1000).toLocaleDateString()}
-      </h3>
-      <h3>Request Details</h3>
+        Submitted: <b>{new Date(time.seconds * 1000).toLocaleDateString()}</b>
+      </p>
+      <h2>Request Details</h2>
       <TableContainer>
         <Table sx={{ minWidth: 450 }} aria-label="simple table">
           <TableBody>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar/Navbar";
-import BackButton from "../small-components/BackButton";
 import {
-  Grid,
   Button,
   Box,
   Typography,
@@ -159,56 +157,47 @@ export default function Account() {
       <Navbar />
       <div className="box">
         <div className="page-title">My Account</div>
-        <div className="white-container">
-          <Grid container spacing={2}>
-            <Grid item xs={1}>
-              <div className="back-button">
-                <BackButton pageTitle={"/home"} />
-              </div>
-            </Grid>
-            <Grid item xs={11}>
-              <h1>Account Details</h1>
-              <List className="request-details">
-                <ListItem disablePadding>
-                  <ListItemText>
-                    <b>First Name:</b> {firstname}
-                  </ListItemText>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemText>
-                    <b>Last Time:</b> {lastname}
-                  </ListItemText>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemText>
-                    <b>Email address:</b> {email}
-                  </ListItemText>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemText>
-                    <b>Password: </b> *******
-                  </ListItemText>
-                </ListItem>
-              </List>
-              <h2>Change password</h2>
-              <p>Make sure it's at least 6 characters long</p>
-              <Button variant="outlined" onClick={() => changePasswordOpen()}>
-                Change password
-              </Button>
-              <h2>Delete account</h2>
-              <p>
-                Once you delete your account, there is no going back. Please be
-                certain.
-              </p>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => deleteAccOpen()}
-              >
-                Delete account
-              </Button>
-            </Grid>
-          </Grid>
+        <div className="white-container-account">
+          <h1>Account Details</h1>
+          <List className="request-details">
+            <ListItem disablePadding>
+              <ListItemText>
+                <b>First Name:</b> {firstname}
+              </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemText>
+                <b>Last Time:</b> {lastname}
+              </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemText>
+                <b>Email address:</b> {email}
+              </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemText>
+                <b>Password: </b> *******
+              </ListItemText>
+            </ListItem>
+          </List>
+          <h2>Change password</h2>
+          <p>Make sure it's at least 6 characters long</p>
+          <Button variant="outlined" onClick={() => changePasswordOpen()}>
+            Change password
+          </Button>
+          <h2>Delete account</h2>
+          <p>
+            Once you delete your account, there is no going back. Please be
+            certain.
+          </p>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => deleteAccOpen()}
+          >
+            Delete account
+          </Button>
         </div>
       </div>
 
