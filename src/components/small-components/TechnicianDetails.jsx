@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 export default function TechnicianDetails() {
@@ -7,28 +7,28 @@ export default function TechnicianDetails() {
   const { technicianInCharge, status } = state.data;
   return (
     <div>
-      <h3>Technician Details</h3>
+      <h2>Technician Details</h2>
       <List className="request-details">
         {technicianInCharge !== undefined ? (
           <ListItem disablePadding>
-            <ListItemText>
+            <div className="tech-details-item">
               <b>Technician in charge:</b> {technicianInCharge}
-            </ListItemText>
+            </div>
           </ListItem>
         ) : undefined}
         <ListItem disablePadding>
-          <ListItemText>
+          <div className="tech-details-item">
             <b>Status:</b> {status}
-          </ListItemText>
+          </div>
         </ListItem>
         {state.data.estimatedTime !== undefined ? (
           <ListItem disablePadding>
-            <ListItemText>
+            <div className="tech-details-item">
               <b>Estimated completion date: </b>
               {new Date(
                 state.data.estimatedTime.seconds * 1000
               ).toLocaleDateString()}
-            </ListItemText>
+            </div>
           </ListItem>
         ) : undefined}
       </List>

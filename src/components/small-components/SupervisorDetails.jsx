@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 export default function SupervisorDetails() {
@@ -7,35 +7,35 @@ export default function SupervisorDetails() {
   const { grant, account, approvalRequired, supervisor } = state.data;
   return (
     <div>
-      <h3>Other Details</h3>
+      <h2>Other Details</h2>
       <List>
         <ListItem disablePadding>
-          <ListItemText>
+          <div className="tech-details-item">
             <b>Supervisor approval required: </b>
             {approvalRequired}
-          </ListItemText>
+          </div>
         </ListItem>
         {supervisor !== undefined ? (
           <ListItem disablePadding>
-            <ListItemText>
+            <div className="tech-details-item">
               <b>Supervised by: </b>
               {supervisor}
-            </ListItemText>
+            </div>
           </ListItem>
         ) : undefined}
         {grant !== undefined ? (
           <ListItem disablePadding>
-            <ListItemText>
+            <div className="tech-details-item">
               <b>Student grant: </b>£{grant}
-            </ListItemText>
+            </div>
           </ListItem>
         ) : undefined}
         {account !== undefined ? (
           <ListItem disablePadding>
-            <ListItemText>
+            <div className="tech-details-item">
               <b>Account to be charged: </b>
               {account}
-            </ListItemText>
+            </div>
           </ListItem>
         ) : undefined}
       </List>
