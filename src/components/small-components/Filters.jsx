@@ -3,7 +3,6 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  InputLabel,
   Radio,
   Button,
   Select,

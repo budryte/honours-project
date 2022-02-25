@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, Box, Modal, Link } from "@mui/material";
 import logo from "../../images/logo.png";
 import { db } from "../../config/db";
 import { initPosition } from "../../config/constants";
-
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 
 import "./login-register-style.scss";
 
@@ -38,15 +41,101 @@ export function Login() {
       });
   };
 
+  function resetPassword() {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("Password reset email has been sent - please check your inbox");
+      })
+      .catch((error) => {
+        console.log("error ", error);
+      });
+  }
+
+  function checkEmail() {
+    let proceed = true;
+    if (!email) {
+      setEmailError("Please enter email");
+      proceed = false;
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      setEmailError("Please enter a valid email address");
+      proceed = false;
+    }
+    return proceed;
+  }
+
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const handleConfirmationOpen = () => setConfirmationOpen(true);
+  const handleConfirmationClose = () => {
+    setConfirmationOpen(false);
+    setEmailError("");
+    setEmail("");
+  };
+
   return (
-    <form className="container" onSubmit={handleLogin}>
-      <div className="image">
-        <img src={logo} alt="" />
-      </div>
-      <div className="title">Technical Request System</div>
-      <div className="header">Sign In</div>
-      <div className="content">
-        <div className="form">
+    <div>
+      <form className="container" onSubmit={handleLogin}>
+        <div className="image">
+          <img src={logo} alt="" />
+        </div>
+        <div className="title">Technical Request System</div>
+        <div className="header">Sign In</div>
+        <div className="content">
+          <div className="form">
+            <TextField
+              className="form-group"
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+              required
+              error={emailError !== ""}
+              size="small"
+              value={email}
+              onChange={(e) => {
+                setEmailError("");
+                setEmail(e.target.value);
+              }}
+              helperText={emailError}
+            />
+            <TextField
+              className="form-group"
+              id="outlined-basic"
+              label="Password"
+              type="password"
+              variant="outlined"
+              required
+              error={passwordError !== ""}
+              size="small"
+              value={password}
+              onChange={(e) => {
+                setPasswordError("");
+                setPassword(e.target.value);
+              }}
+              helperText={passwordError}
+            />
+          </div>
+        </div>
+        <Link onClick={() => handleConfirmationOpen()}> Forgot password?</Link>
+        <div className="footer">
+          <Button variant="contained" size="lg" type="submit">
+            Sign In
+          </Button>
+        </div>
+      </form>
+
+      {/* Reset password */}
+      <Modal
+        open={confirmationOpen}
+        onClose={() => {
+          handleConfirmationClose();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-style">
+          <p style={{ fontSize: "18px" }}>
+            <b>Enter your email to reset password</b>
+          </p>
           <TextField
             className="form-group"
             id="outlined-basic"
@@ -62,29 +151,37 @@ export function Login() {
             }}
             helperText={emailError}
           />
-          <TextField
-            className="form-group"
-            id="outlined-basic"
-            label="Password"
-            type="password"
-            variant="outlined"
-            required
-            error={passwordError !== ""}
-            size="small"
-            value={password}
-            onChange={(e) => {
-              setPasswordError("");
-              setPassword(e.target.value);
-            }}
-            helperText={passwordError}
-          />
-        </div>
-      </div>
-      <div className="footer">
-        <Button variant="contained" size="lg" type="submit">
-          Sign In
-        </Button>
-      </div>
-    </form>
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  handleConfirmationClose();
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                if (checkEmail()) {
+                  try {
+                    resetPassword();
+                  } catch (error) {
+                    console.log(error);
+                  } finally {
+                    handleConfirmationClose();
+                  }
+                }
+              }}
+            >
+              Reset password
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+    </div>
   );
 }

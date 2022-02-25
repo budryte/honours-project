@@ -88,13 +88,11 @@ const statusValues = [
 
 export default function PickUpRequest() {
   const [position, setPosition] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
   const pos = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     if (!pos || !pos[0] || !pos[0].position) return;
     setPosition(pos[0].position);
-    setIsAdmin(pos[0].isAdmin);
   }, [pos]);
 
   const [open, setOpen] = useState(false);

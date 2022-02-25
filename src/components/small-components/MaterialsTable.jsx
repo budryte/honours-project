@@ -86,7 +86,7 @@ export default function MaterialsTable(props) {
 
   const { state } = useLocation();
   const { id: requestID } = state.data;
-  const [status, setStatus] = useState(state.data.status);
+  const status = useState(state.data.status);
 
   const [matArr, setMatArr] = useState(state.data.materials);
   const [total, setTotal] = useState(
