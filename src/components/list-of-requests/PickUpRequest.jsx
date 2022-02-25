@@ -30,6 +30,7 @@ import { doc, updateDoc, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../config/db";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useNavigate } from "react-router-dom";
 
 import "./list-of-requests.scss";
 
@@ -87,6 +88,7 @@ const statusValues = [
 ];
 
 export default function PickUpRequest() {
+  let navigate = useNavigate();
   const [position, setPosition] = useState("");
   const pos = useLiveQuery(() => db.users.toArray());
 
@@ -146,7 +148,9 @@ export default function PickUpRequest() {
     if (!tempTIC) {
       setTICError("Please enter tecnician's email address");
       change = false;
-    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(tempTIC)) {
+    } else if (
+      !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(tempTIC)
+    ) {
       setTICError("Please enter a valid email address");
       change = false;
     }
@@ -318,6 +322,7 @@ export default function PickUpRequest() {
               onClick={() => {
                 pickUpRequest(estimatedTime, parentId, id);
                 handleClose();
+                navigate("/list-of-requests");
               }}
             >
               Save
