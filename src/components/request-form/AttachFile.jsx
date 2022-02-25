@@ -1,34 +1,33 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { useDropzone } from "react-dropzone";
 import { TextArea } from "semantic-ui-react";
 
 import "./request-form-style.scss";
 
-function Basic() {
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+// function Basic() {
+//   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const files = acceptedFiles.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ));
+//   const files = acceptedFiles.map((file) => (
+//     <li key={file.path}>
+//       {file.path} - {file.size} bytes
+//     </li>
+//   ));
 
-  return (
-    <section>
-      <div className="attach-file">
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        </div>
-      </div>
-      <aside>
-        <h4>Files</h4>
-        <ul>{files}</ul>
-      </aside>
-    </section>
-  );
-}
+//   return (
+//     <section>
+//       <div className="attach-file">
+//         <div {...getRootProps({ className: "dropzone" })}>
+//           <input {...getInputProps()} />
+//           <p>Drag 'n' drop some files here, or click to select files</p>
+//         </div>
+//       </div>
+//       <aside>
+//         <h4>Files</h4>
+//         <ul>{files}</ul>
+//       </aside>
+//     </section>
+//   );
+// }
 
 export function AttachFile(props) {
   const {
