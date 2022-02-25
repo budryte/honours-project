@@ -81,7 +81,7 @@ export default function Navbar() {
 
         {position !== "Technician" && (
           <ListItem button onClick={() => navigate("/track-requests")}>
-            <ListItemText className="menu-item" primary="Track Requests" />
+            <ListItemText className="menu-item" primary="Track Your Requests" />
           </ListItem>
         )}
 

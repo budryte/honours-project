@@ -117,7 +117,7 @@ export default function ListOfTechncians() {
     if (!email) {
       setEmailError("Please enter email");
       add = false;
-    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
       setEmailError("Please enter a valid email address");
       add = false;
     }
