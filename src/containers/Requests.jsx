@@ -4,8 +4,7 @@ import { Button, List, ListItem, Grid } from "@mui/material";
 import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import WarningIcon from "@mui/icons-material/Warning";
-
-import Filters from "./Filters";
+import Filters from "../components/small-components/Filters";
 import {
   collectionGroup,
   query,
@@ -14,7 +13,7 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { useLiveQuery } from "dexie-react-hooks";
-import { db as dexieDB } from "../../config/db";
+import { db as dexieDB } from "../config/db";
 
 export default function Requests({ prevPage }) {
   let navigate = useNavigate();
@@ -243,7 +242,7 @@ export default function Requests({ prevPage }) {
       <ListItem key={req.data.id}>
         <Button
           onClick={() =>
-            navigate("/pick-up-request", {
+            navigate("/review-request", {
               state: {
                 data: req.data,
                 parentId: req.parentId,
