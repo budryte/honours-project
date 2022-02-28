@@ -64,6 +64,15 @@
   }
 }
 
+.animation-bigger {
+  height: 150px;
+  width: 150px;
+  @media (max-width: 800px) {
+    height: 80px;
+    width: 80px;
+  }
+}
+
 .animation-smaller {
   padding-top: 20px;
   height: 100px;
@@ -83,4 +92,98 @@
     height: 60px;
     width: 60px;
   }
+}
+
+#modal-modal-description {
+  margin-bottom: 10px;
+}
+
+.modal-style {
+  position: absolute;
+  margin-top: 50vh;
+  margin-left: 50vw;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: white;
+  border: 2px solid #000;
+  box-shadow: 24;
+  padding: 2em;
+}
+
+.modal-style-bigger {
+  position: absolute;
+  margin-top: 50vh;
+  margin-left: 50vw;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white;
+  border: 2px solid #000;
+  box-shadow: 24;
+  padding: 2em;
+}
+
+.list-of-request-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: #464646;
+}
+
+.para {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.status {
+  margin-top: 2px;
+}
+
+.priority {
+  padding-bottom: 3px;
+}
+
+.list-of-request-button {
+  width: 100%;
+}
+
+.id {
+  margin-right: 10px;
+}
+
+.request-details {
+  width: 75%;
+}
+
+.back-button {
+  padding-top: 16px;
+}
+
+.arrow {
+  color: black;
+}
+
+.bin {
+  color: #464646;
+}
+
+.table-head {
+  background-color: #d1e2f2;
+}
+
+.add-new-technician {
+  margin-bottom: 10px;
+}
+
+.tech-item {
+  font-size: 18px;
+  width: 75%;
+}
+
+.tech-details-item {
+  padding: 5px 0;
+  font-size: 18px;
+  width: 75%;
 }

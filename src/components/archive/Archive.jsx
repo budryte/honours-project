@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../navbar/Navbar";
-import Requests from "../small-components/Requests";
+import Requests from "../../containers/Requests";
 
 export default function Archive() {
   return (

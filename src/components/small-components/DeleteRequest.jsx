@@ -65,7 +65,7 @@ export default function DeleteRequest(props) {
               color="success"
               onClick={() => {
                 deleteRequest();
-                navigate("/list-of-requests");
+                navigate("/home");
                 alert("Request was successfully removed from the list.");
               }}
             >

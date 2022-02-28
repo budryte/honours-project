@@ -28,6 +28,7 @@ export default function Home() {
   let workRef = useRef();
   let listRef = useRef();
   let signRef = useRef();
+  let techRef = useRef();
 
   return (
     <div>
@@ -224,16 +225,17 @@ export default function Home() {
           {position === "Technician" && !!isAdmin ? (
             <div
               className="card"
-              onMouseOver={() => workRef.current.play()}
-              onMouseLeave={() => workRef.current.stop()}
+              onMouseOver={() => techRef.current.play()}
+              onMouseLeave={() => techRef.current.stop()}
             >
               <Grid container spacing={2}>
                 <Grid item xs={3}>
                   <Player
-                    ref={workRef}
+                    ref={techRef}
                     autoplay={false}
                     loop={false}
-                    className="animation"
+                    src="https://assets3.lottiefiles.com/packages/lf20_paqcfdch.json"
+                    className="animation-bigger"
                   />
                 </Grid>
                 <Grid item xs={9}>
