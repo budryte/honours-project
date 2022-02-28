@@ -27,7 +27,6 @@ export default function MainRequestDetails() {
         style={{
           fontSize: "24px",
           color: "#4365e2",
-          textDecorationLine: "underline",
         }}
       >
         <b>{status}</b>
