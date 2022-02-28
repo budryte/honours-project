@@ -24,17 +24,9 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db as dexieDB } from "../../config/db";
 
 export default function MaterialsTable(props) {
-  const [pos, setPos] = useState(null);
-  const users = useLiveQuery(() => dexieDB.users.toArray());
-
-  useEffect(() => {
-    if (!users || !users[0] || !users[0].email) return;
-    setPos(users[0].position);
-  }, [users]);
+  const position = props.position;
 
   const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(true);
@@ -152,7 +144,7 @@ export default function MaterialsTable(props) {
   return (
     <div>
       {status !== "Waiting on technician" && <h2>Ordered Materials</h2>}
-      {matArr?.length > 0 || pos === "Technician" ? (
+      {matArr?.length > 0 || position === "Technician" ? (
         <TableContainer>
           <Table sx={{ minWidth: 450 }} aria-label="simple table">
             <TableHead className="table-head">
@@ -166,7 +158,7 @@ export default function MaterialsTable(props) {
                 <TableCell>
                   <b>Price</b>
                 </TableCell>
-                {pos === "Technician" && <TableCell />}
+                {position === "Technician" && <TableCell />}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -183,7 +175,7 @@ export default function MaterialsTable(props) {
                   </TableCell>
                   <TableCell>{mat.quantity}</TableCell>
                   <TableCell>£{mat.price}</TableCell>
-                  {pos === "Technician" && status !== "Completed" ? (
+                  {position === "Technician" && status !== "Completed" ? (
                     <TableCell>
                       <IconButton>
                         <EditIcon
@@ -213,7 +205,7 @@ export default function MaterialsTable(props) {
                   ) : undefined}
                 </TableRow>
               ))}
-              {pos === "Technician" && status !== "Completed" ? (
+              {position === "Technician" && status !== "Completed" ? (
                 <TableRow>
                   <IconButton>
                     <AddIcon
@@ -231,7 +223,7 @@ export default function MaterialsTable(props) {
                   <b>Total:</b>
                 </TableCell>
                 <TableCell align="left">£{total.toFixed(2)}</TableCell>
-                {pos === "Technician" && status !== "Completed" && (
+                {position === "Technician" && status !== "Completed" && (
                   <TableCell />
                 )}
               </TableRow>
@@ -239,7 +231,9 @@ export default function MaterialsTable(props) {
           </Table>
         </TableContainer>
       ) : (
-        status !== "Waiting on technician" && <p>There no materials ordered.</p>
+        status !== "Waiting on technician" && (
+          <p className="tech-item">There no materials ordered.</p>
+        )
       )}
       <br></br>
 
