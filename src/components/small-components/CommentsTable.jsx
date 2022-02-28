@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -24,19 +24,10 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db as dexieDB } from "../../config/db";
 
 export default function CommentsTable(props) {
-  const [pos, setPos] = useState(null);
-  const [email, setEmail] = useState(null);
-  const users = useLiveQuery(() => dexieDB.users.toArray());
-
-  useEffect(() => {
-    if (!users || !users[0] || !users[0].email) return;
-    setPos(users[0].position);
-    setEmail(users[0].email);
-  }, [users]);
+  const position = props.position;
+  const email = props.email;
 
   const { state } = useLocation();
   const { id: requestID } = state.data;
@@ -125,80 +116,86 @@ export default function CommentsTable(props) {
 
   return (
     <div>
-      <h2>Comments History</h2>
-      <TableContainer>
-        <Table sx={{ minWidth: 450 }} aria-label="simple table">
-          <TableHead className="table-head">
-            <TableRow>
-              <TableCell>
-                <b>Comment</b>
-              </TableCell>
-              <TableCell>
-                <b>Last modified by</b>
-              </TableCell>
-              <TableCell>
-                <b>Date</b>
-              </TableCell>
-              {pos === "Technician" && <TableCell />}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {commentsArray?.map((commentObj) => (
-              <TableRow key={commentObj.comment}>
-                <TableCell component="th" scope="row">
-                  {commentObj.comment}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {commentObj.commenter}
+      {status !== "Waiting on technician" && <h2>Comments History</h2>}
+      {commentsArray?.length > 0 || position === "Technician" ? (
+        <TableContainer>
+          <Table sx={{ minWidth: 450 }} aria-label="simple table">
+            <TableHead className="table-head">
+              <TableRow>
+                <TableCell>
+                  <b>Comment</b>
                 </TableCell>
                 <TableCell>
-                  {new Date(commentObj.commentDate).toLocaleDateString()}
+                  <b>Last modified by</b>
                 </TableCell>
-                {pos === "Technician" ? (
-                  <TableCell>
-                    <IconButton>
-                      <EditIcon
-                        onClick={() => {
-                          setComment(commentObj.comment);
-                          setCommentDate(commentObj.commentDate);
-                          setCommenter(commentObj.commenter);
-                          setTempComment(commentObj.comment);
-                          setTempCommentDate(commentObj.commentDate);
-                          setTempCommenter(commentObj.commenter);
-                          handleEditOpen();
-                        }}
-                      />
-                    </IconButton>
-                    <IconButton>
-                      <DeleteOutlineIcon
-                        className="bin"
-                        onClick={() => {
-                          setComment(commentObj.comment);
-                          setCommentDate(commentObj.commentDate);
-                          setCommenter(commentObj.commenter);
-                          handleRemoveOpen();
-                        }}
-                      />
-                    </IconButton>
+                <TableCell>
+                  <b>Date</b>
+                </TableCell>
+                {position === "Technician" && <TableCell />}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {commentsArray?.map((commentObj) => (
+                <TableRow key={commentObj.comment}>
+                  <TableCell component="th" scope="row">
+                    {commentObj.comment}
                   </TableCell>
-                ) : undefined}
-              </TableRow>
-            ))}
-            {pos === "Technician" && status !== "Completed" ? (
-              <TableRow>
-                <IconButton>
-                  <AddIcon
-                    fontSize="large"
-                    onClick={() => {
-                      handleAddOpen();
-                    }}
-                  />
-                </IconButton>
-              </TableRow>
-            ) : undefined}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  <TableCell component="th" scope="row">
+                    {commentObj.commenter}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(commentObj.commentDate).toLocaleDateString()}
+                  </TableCell>
+                  {position === "Technician" ? (
+                    <TableCell>
+                      <IconButton>
+                        <EditIcon
+                          onClick={() => {
+                            setComment(commentObj.comment);
+                            setCommentDate(commentObj.commentDate);
+                            setCommenter(commentObj.commenter);
+                            setTempComment(commentObj.comment);
+                            setTempCommentDate(commentObj.commentDate);
+                            setTempCommenter(commentObj.commenter);
+                            handleEditOpen();
+                          }}
+                        />
+                      </IconButton>
+                      <IconButton>
+                        <DeleteOutlineIcon
+                          className="bin"
+                          onClick={() => {
+                            setComment(commentObj.comment);
+                            setCommentDate(commentObj.commentDate);
+                            setCommenter(commentObj.commenter);
+                            handleRemoveOpen();
+                          }}
+                        />
+                      </IconButton>
+                    </TableCell>
+                  ) : undefined}
+                </TableRow>
+              ))}
+              {position === "Technician" && status !== "Completed" ? (
+                <TableRow>
+                  <IconButton>
+                    <AddIcon
+                      fontSize="large"
+                      onClick={() => {
+                        handleAddOpen();
+                      }}
+                    />
+                  </IconButton>
+                </TableRow>
+              ) : undefined}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        status !== "Waiting on technician" && (
+          <p className="tech-item"> There no comments.</p>
+        )
+      )}
       <br></br>
 
       {/* Add new comment */}
