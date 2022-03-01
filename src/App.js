@@ -12,6 +12,7 @@ import Archive from "./components/archive/Archive";
 import ReviewRequest from "./containers/ReviewRequest";
 import Account from "./components/my-account/Account";
 import ListOfTechncians from "./components/overview/ListOfTechnicians";
+import CustomSearch from "./components/custom-search/CustomSearch";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./config/firebaseConfig";
 import { Routes, Route } from "react-router-dom";
@@ -57,6 +58,7 @@ function App() {
         {users?.length > 0 && users[0].isAdmin && (
           <Route path="overview" element={<ListOfTechncians />} />
         )}
+        <Route path="custom-search" element={<CustomSearch />} />
       </Routes>
     </div>
   );
