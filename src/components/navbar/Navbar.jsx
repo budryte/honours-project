@@ -112,6 +112,12 @@ export default function Navbar() {
         <ListItem button onClick={() => navigate("/archive")}>
           <ListItemText className="menu-item" primary="Archive" />
         </ListItem>
+
+        {position === "Technician" || position === "Supervisor" ? (
+          <ListItem button onClick={() => navigate("/custom-search")}>
+            <ListItemText className="menu-item" primary="Custom Search" />
+          </ListItem>
+        ) : undefined}
       </List>
 
       <Divider />
