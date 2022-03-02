@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, List, ListItem, Grid } from "@mui/material";
+import { Button, List, ListItem, Grid, Pagination, Box } from "@mui/material";
 import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -15,9 +15,20 @@ import {
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../config/db";
 
+const REQUESTS_PER_PAGE = 10;
+
 export default function Requests({ prevPage }) {
   let navigate = useNavigate();
   const users = useLiveQuery(() => dexieDB.users.toArray());
+
+  const [filters, setFilters] = useState(null);
+  const [sorting, setSorting] = useState(null);
+  const [allRequests, setAllRequests] = useState([]);
+  const [allFilteredReqs, setAllFilteredReqs] = useState([]);
+  const [requestsToShow, setRequestsToShow] = useState([]);
+  const [requestsAlt, setRequestsAlt] = useState([]);
+  const [emptyReqMsg, setEmptyReqMsg] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtersNeeded = () => {
     if (prevPage === "/archive") {
@@ -32,12 +43,11 @@ export default function Requests({ prevPage }) {
     return true;
   };
 
-  const [filters, setFilters] = useState(null);
-  const [sorting, setSorting] = useState(null);
-  const [requests, setRequests] = useState([]);
-  const [requestsAlt, setRequestsAlt] = useState([]);
+  const paginationNeeded = () => {
+    return true;
+  };
 
-  const [emptyReqMsg, setEmptyReqMsg] = useState("");
+  const handlePageChange = (_, p) => setPage(p);
 
   useEffect(() => {
     (async () => {
@@ -85,7 +95,8 @@ export default function Requests({ prevPage }) {
           return x.data.time - y.data.time;
         });
 
-        setRequests(reqArr);
+        setAllFilteredReqs(reqArr);
+        setAllRequests(reqArr);
         setRequestsAlt(reqArrAlt);
       } catch (error) {
         console.warn(error);
@@ -93,26 +104,77 @@ export default function Requests({ prevPage }) {
     })();
   }, [users]);
 
+  useEffect(() => {
+    if (!filters) return;
+
+    if (filters === "cleared") {
+      setAllFilteredReqs(allRequests);
+      return;
+    }
+
+    let filteredRequests = allRequests.filter((req) => {
+      if (!filters.status) {
+        return req.data.priority === filters.priority;
+      } else if (!filters.priority) {
+        return req.data.status === filters.status;
+      } else {
+        return (
+          req.data.status === filters.status &&
+          req.data.priority === filters.priority
+        );
+      }
+    });
+
+    if (filteredRequests.length > 0) {
+      if (!sorting || sorting.sortingType === "newest last") {
+        filteredRequests.sort((x, y) => x.data.time - y.data.time);
+      } else {
+        filteredRequests.sort((x, y) => y.data.time - x.data.time);
+      }
+    }
+
+    setAllFilteredReqs(filteredRequests);
+  }, [filters]);
+
+  useEffect(() => {
+    if (!sorting) return;
+
+    let reqArr = [...allFilteredReqs];
+
+    if (sorting.sortingType === "newest first") {
+      reqArr.sort((x, y) => y.data.time - x.data.time);
+    } else {
+      reqArr.sort((x, y) => x.data.time - y.data.time);
+    }
+
+    setAllFilteredReqs(reqArr);
+  }, [sorting]);
+
+  useEffect(() => {
+    setRequestsToShow(
+      !paginationNeeded()
+        ? allFilteredReqs
+        : allFilteredReqs.slice(
+            (page - 1) * REQUESTS_PER_PAGE,
+            page * REQUESTS_PER_PAGE
+          )
+    );
+  }, [allFilteredReqs, page]);
+
   function prepareReqArr(querySnapshot) {
     let reqArr = [],
       reqArrAlt = [];
 
     if (prevPage !== "/pending-requests") {
       querySnapshot.forEach((doc) => {
-        reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
+        reqArr.push({ data: doc.data() });
       });
     } else {
       querySnapshot.forEach((doc) => {
         if (!doc.data().technicianInCharge) {
-          reqArr.push({
-            parentId: doc.ref.parent.parent.id,
-            data: doc.data(),
-          });
+          reqArr.push({ data: doc.data() });
         } else {
-          reqArrAlt.push({
-            parentId: doc.ref.parent.parent.id,
-            data: doc.data(),
-          });
+          reqArrAlt.push({ data: doc.data() });
         }
       });
     }
@@ -179,64 +241,6 @@ export default function Requests({ prevPage }) {
     );
   }
 
-  useEffect(() => {
-    if (!filters) return;
-
-    if (filters === "cleared") {
-      getIncompleteRequests();
-      return;
-    }
-
-    (async () => {
-      try {
-        const filteredQuery = !filters.status
-          ? query(
-              collectionGroup(getFirestore(), "requests"),
-              where("status", "!=", "Completed"),
-              where("priority", "==", filters.priority)
-            )
-          : !filters.priority
-          ? query(
-              collectionGroup(getFirestore(), "requests"),
-              where("status", "==", filters.status)
-            )
-          : query(
-              collectionGroup(getFirestore(), "requests"),
-              where("status", "==", filters.status),
-              where("priority", "==", filters.priority)
-            );
-
-        const querySnapshot = await getDocs(filteredQuery);
-        let reqArr = [];
-        querySnapshot.forEach((doc) => {
-          reqArr.push({ parentId: doc.ref.parent.parent.id, data: doc.data() });
-        });
-
-        setRequests(reqArr);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [filters]);
-
-  useEffect(() => {
-    if (!sorting) return;
-
-    let reqArr = [...requests];
-
-    if (sorting.sortingType === "newest first") {
-      reqArr.sort(function (x, y) {
-        return y.data.time - x.data.time;
-      });
-    } else {
-      reqArr.sort(function (x, y) {
-        return x.data.time - y.data.time;
-      });
-    }
-
-    setRequests(reqArr);
-  }, [sorting]);
-
   function requestToJSX(req) {
     return (
       <ListItem key={req.data.id}>
@@ -245,7 +249,6 @@ export default function Requests({ prevPage }) {
             navigate("/review-request", {
               state: {
                 data: req.data,
-                parentId: req.parentId,
                 prevPage: prevPage,
               },
             })
@@ -289,9 +292,22 @@ export default function Requests({ prevPage }) {
           </Grid>
         )}
         <Grid item xs={filtersNeeded() ? 9 : 12}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
+          >
+            <Pagination
+              count={Math.ceil(allFilteredReqs.length / REQUESTS_PER_PAGE)}
+              page={page}
+              onChange={handlePageChange}
+            />
+          </Box>
           {prevPage === "/pending-requests" && <h2>From students</h2>}
-          {requests.length > 0 ? (
-            <List>{requests.map(requestToJSX)}</List>
+          {requestsToShow.length > 0 ? (
+            <List>{requestsToShow.map(requestToJSX)}</List>
           ) : (
             <p>{emptyReqMsg}</p>
           )}
