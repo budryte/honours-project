@@ -19,6 +19,7 @@ import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "./config/db";
 import { useLiveQuery } from "dexie-react-hooks";
+import PageNotFound from "./components/error-page/PageNotFound";
 
 initializeApp(firebaseConfig);
 
@@ -37,6 +38,20 @@ function App() {
     });
   }, []);
 
+  function whichPosition() {
+    let position = "";
+    if (users?.length > 0 && users[0].position === "Technician") {
+      position = "Technician";
+    }
+    if (users?.length > 0 && users[0].position === "Supervisor") {
+      position = "Supervisor";
+    }
+    if (users?.length > 0 && users[0].position === "Client") {
+      position = "Client";
+    }
+    return position;
+  }
+
   return (
     <div className="App">
       <Routes>
@@ -47,18 +62,51 @@ function App() {
         )}
         <Route path="home" element={<Home />} />
         <Route path="my-account" element={<Account />} />
-        <Route path="agreement" element={<Agreement />} />
-        <Route path="new-request" element={<NewRequestContainer />} />
-        <Route path="track-requests" element={<TrackRequest />} />
-        <Route path="pending-requests" element={<PendingRequests />} />
-        <Route path="list-of-requests" element={<ListofRequests />} />
-        <Route path="review-request" element={<ReviewRequest />} />
-        <Route path="my-work" element={<MyWork />} />
         <Route path="archive" element={<Archive />} />
-        {users?.length > 0 && users[0].isAdmin && (
-          <Route path="overview" element={<ListOfTechncians />} />
+        <Route path="review-request" element={<ReviewRequest />} />
+
+        {whichPosition() !== "Technician" ? (
+          <Route path="agreement" element={<Agreement />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
         )}
-        <Route path="custom-search" element={<CustomSearch />} />
+        {whichPosition() !== "Technician" ? (
+          <Route path="new-request" element={<NewRequestContainer />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {whichPosition() !== "Technician" ? (
+          <Route path="track-requests" element={<TrackRequest />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {whichPosition() === "Supervisor" ? (
+          <Route path="pending-requests" element={<PendingRequests />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {whichPosition() === "Technician" ? (
+          <Route path="list-of-requests" element={<ListofRequests />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {whichPosition() === "Technician" ? (
+          <Route path="my-work" element={<MyWork />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {whichPosition() !== "Client" ? (
+          <Route path="custom-search" element={<CustomSearch />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+        {users?.length > 0 && users[0].isAdmin ? (
+          <Route path="overview" element={<ListOfTechncians />} />
+        ) : (
+          <Route path="*" element={<PageNotFound />} />
+        )}
+
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );
