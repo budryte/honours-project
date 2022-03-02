@@ -35,16 +35,13 @@ export default function CustomSearch() {
       let arr = [];
       querySnapshot.forEach((document) => {
         arr.push({
-          id: document.id,
           data: document.data(),
-          parentId: document.ref.parent.parent.id,
         });
       });
       if (arr.length > 0) {
         console.log("Successfully found");
         navigate("/review-request", {
           state: {
-            parentId: arr[0].parentId,
             data: arr[0].data,
             prevPage: "/custom-search",
           },

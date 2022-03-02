@@ -25,9 +25,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-export default function MaterialsTable(props) {
-  const position = props.position;
-
+export default function MaterialsTable({ position }) {
   const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(true);
   const handleAddClose = () => {
@@ -77,8 +75,7 @@ export default function MaterialsTable(props) {
   const [tempPrice, setTempPrice] = useState(null);
 
   const { state } = useLocation();
-  const { id: requestID } = state.data;
-  const status = useState(state.data.status);
+  const { id: requestID, userId: parentId, status } = state.data;
 
   const [matArr, setMatArr] = useState(state.data.materials);
   const [total, setTotal] = useState(
@@ -115,13 +112,7 @@ export default function MaterialsTable(props) {
 
   function addNewMaterial() {
     const fireStore = getFirestore();
-    const requestRef = doc(
-      fireStore,
-      "users",
-      props.parentId,
-      "requests",
-      requestID
-    );
+    const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
     return updateDoc(requestRef, {
       materials: arrayUnion({ material, quantity, price }),
     });
@@ -129,13 +120,7 @@ export default function MaterialsTable(props) {
 
   function removeMaterial(mat, qty, cost) {
     const fireStore = getFirestore();
-    const requestRef = doc(
-      fireStore,
-      "users",
-      props.parentId,
-      "requests",
-      requestID
-    );
+    const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
     return updateDoc(requestRef, {
       materials: arrayRemove({ material: mat, quantity: qty, price: cost }),
     });
