@@ -28,6 +28,7 @@ async function saveToFirestore(details, extraInfo, linkToFolder, user) {
     firstname: user.firstname,
     lastname: user.lastname,
     status: "Pending approval",
+    userId: auth.currentUser.uid,
   });
 }
 
