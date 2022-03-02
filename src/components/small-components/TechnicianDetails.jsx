@@ -24,8 +24,7 @@ export default function TechnicianDetails(props) {
   const position = props.position;
 
   const { state } = useLocation();
-  const { parentId } = state;
-  const { id, estimatedTime: eTime } = state.data;
+  const { id, estimatedTime: eTime, userId: parentId } = state.data;
 
   const [status, setStatus] = useState(state.data.status);
   const [technicianInCharge, setTechnicianInCharge] = useState(

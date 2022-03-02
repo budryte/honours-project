@@ -19,8 +19,14 @@ import DatePicker from "@mui/lab/DatePicker";
 
 export default function ReviewRequest() {
   const { state } = useLocation();
-  const { id, status, supervisor, estimatedTime: eTime } = state.data;
-  const { parentId, prevPage } = state;
+  const {
+    id,
+    status,
+    supervisor,
+    estimatedTime: eTime,
+    userId: parentId,
+  } = state.data;
+  const { prevPage } = state;
   const [estimatedTime, setEstimatedTime] = useState(
     eTime ? new Date(eTime.seconds * 1000) : null
   );
@@ -42,14 +48,11 @@ export default function ReviewRequest() {
   let title = "";
   if (prevPage === "/archive") {
     title = "Review Archived Request";
-  }
-  if (prevPage === "/track-requests") {
+  } else if (prevPage === "/track-requests") {
     title = "Review Tracked Request";
-  }
-  if (prevPage === "/pending-requests") {
+  } else if (prevPage === "/pending-requests") {
     title = "Review Pending Request";
-  }
-  if (prevPage === "/list-of-requests" || prevPage === "/my-work") {
+  } else if (prevPage === "/list-of-requests" || prevPage === "/my-work") {
     title = "Review Request";
   }
 

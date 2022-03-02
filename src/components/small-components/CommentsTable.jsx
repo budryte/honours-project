@@ -25,13 +25,9 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-export default function CommentsTable(props) {
-  const position = props.position;
-  const email = props.email;
-
+export default function CommentsTable({ position, email }) {
   const { state } = useLocation();
-  const { id: requestID } = state.data;
-  const status = state.data.status;
+  const { id: requestID, userId: parentId, status } = state.data;
 
   const [commentsArray, setCommentsArray] = useState(state.data.comments ?? []);
 
@@ -46,13 +42,7 @@ export default function CommentsTable(props) {
 
   function addComment() {
     const fireStore = getFirestore();
-    const requestRef = doc(
-      fireStore,
-      "users",
-      props.parentId,
-      "requests",
-      requestID
-    );
+    const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
     return updateDoc(requestRef, {
       comments: arrayUnion({
         comment: comment,
@@ -64,13 +54,7 @@ export default function CommentsTable(props) {
 
   function removeComment(com, comDate, name) {
     const fireStore = getFirestore();
-    const requestRef = doc(
-      fireStore,
-      "users",
-      props.parentId,
-      "requests",
-      requestID
-    );
+    const requestRef = doc(fireStore, "users", parentId, "requests", requestID);
     return updateDoc(requestRef, {
       comments: arrayRemove({
         comment: com,
