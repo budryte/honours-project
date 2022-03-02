@@ -43,7 +43,6 @@ export default function Filters(props) {
             status: e.target.value,
             priority: priority,
           });
-          props.setSorting({ sortingType: sortingType });
         }}
       >
         <FormControlLabel
@@ -83,7 +82,6 @@ export default function Filters(props) {
             status: status,
             priority: e.target.value,
           });
-          props.setSorting({ sortingType: sortingType });
         }}
       >
         <FormControlLabel value="Low" control={<Radio />} label="Low" />
