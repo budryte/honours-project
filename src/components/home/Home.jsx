@@ -29,6 +29,7 @@ export default function Home() {
   let listRef = useRef();
   let signRef = useRef();
   let techRef = useRef();
+  let searchRef = useRef();
 
   return (
     <div>
@@ -74,7 +75,7 @@ export default function Home() {
               <Grid container spacing={2}>
                 <Grid item xs={3}>
                   <Player
-                    className="animation"
+                    className="animation-bigger"
                     ref={reqRef}
                     autoplay={false}
                     loop={false}
@@ -110,7 +111,7 @@ export default function Home() {
                     autoplay={false}
                     loop={false}
                     src="https://assets3.lottiefiles.com/packages/lf20_C1giXF.json"
-                    className="animation"
+                    className="animation-smaller"
                   />
                 </Grid>
                 <Grid item xs={9}>
@@ -142,7 +143,7 @@ export default function Home() {
                     loop={false}
                     keepLastFrame
                     src="https://assets10.lottiefiles.com/packages/lf20_s3u31uyq.json"
-                    className="animation"
+                    className="animation-bigger"
                   />
                 </Grid>
                 <Grid item xs={9}>
@@ -174,6 +175,7 @@ export default function Home() {
                     loop={false}
                     src="https://assets1.lottiefiles.com/packages/lf20_2LMpmD.json"
                     className="animation-smaller"
+                    style={{ width: "90px", heigth: "90px" }}
                   />
                 </Grid>
                 <Grid item xs={9}>
@@ -204,7 +206,7 @@ export default function Home() {
                     autoplay={false}
                     loop={false}
                     src="https://assets8.lottiefiles.com/packages/lf20_9zrznuec.json"
-                    className="animation"
+                    className="animation-smaller"
                   />
                 </Grid>
                 <Grid item xs={9}>
@@ -222,6 +224,7 @@ export default function Home() {
               </Grid>
             </div>
           )}
+
           {position === "Technician" && !!isAdmin ? (
             <div
               className="card"
@@ -265,7 +268,7 @@ export default function Home() {
                   autoplay={false}
                   loop={false}
                   src="https://assets1.lottiefiles.com/packages/lf20_fx7Gm7.json"
-                  className="animation"
+                  className="animation-smaller"
                 />
               </Grid>
               <Grid item xs={9}>
@@ -282,6 +285,37 @@ export default function Home() {
               </Grid>
             </Grid>
           </div>
+          {position !== "Client" && (
+            <div
+              className="card"
+              onMouseOver={() => searchRef.current.play()}
+              onMouseLeave={() => searchRef.current.stop()}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <Player
+                    ref={searchRef}
+                    autoplay={false}
+                    loop={false}
+                    src="https://assets4.lottiefiles.com/private_files/lf30_t7oxjwxh.json"
+                    className="animation-smaller"
+                  />
+                </Grid>
+                <Grid item xs={9}>
+                  <h3>Custom search</h3>
+                  <p>Search for a specific request</p>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      navigate("/custom-search");
+                    }}
+                  >
+                    Custom Search
+                  </Button>
+                </Grid>
+              </Grid>
+            </div>
+          )}
         </div>
       </div>
     </div>

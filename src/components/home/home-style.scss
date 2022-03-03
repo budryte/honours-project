@@ -54,10 +54,10 @@
   margin-bottom: 5px;
 }
 
-.animation {
+.animation-smaller {
   padding-top: 20px;
-  height: 120px;
-  width: 120px;
+  height: 110px;
+  width: 110px;
   @media (max-width: 800px) {
     height: 80px;
     width: 80px;
@@ -65,32 +65,11 @@
 }
 
 .animation-bigger {
-  height: 150px;
-  width: 150px;
+  height: 140px;
+  width: 140px;
   @media (max-width: 800px) {
     height: 80px;
     width: 80px;
-  }
-}
-
-.animation-smaller {
-  padding-top: 20px;
-  height: 100px;
-  width: 100px;
-  @media (max-width: 800px) {
-    height: 60px;
-    width: 60px;
-  }
-}
-
-.animation-smaller-account {
-  padding-top: 20px;
-  padding-left: 30px;
-  height: 100px;
-  width: 100px;
-  @media (max-width: 800px) {
-    height: 60px;
-    width: 60px;
   }
 }
 
