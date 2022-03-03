@@ -53,7 +53,12 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div
+      style={{
+        backgroundImage: `url(${process.env.PUBLIC_URL + "img/bg.jpg"})`,
+      }}
+      className="App"
+    >
       <Routes>
         {user ? (
           <Route index element={<Home />} />
