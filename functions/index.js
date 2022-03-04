@@ -83,7 +83,7 @@ exports.addTwentyRandomRequests = functions
       .commit()
       .then(() => res.status(200).send("20 random posts added"))
       .catch((e) => {
-        console.log(e);
+        functions.logger.log(e);
         res.status(500).send(e);
       });
   });
@@ -109,7 +109,57 @@ exports.deleteTestRequests = functions
       .commit()
       .then(() => res.status(200).send("20 test posts deleted"))
       .catch((e) => {
-        console.log(e);
+        functions.logger.log(e);
         res.status(500).send(e);
       });
+  });
+
+exports.moveAllToArchive = functions
+  .region("europe-west1")
+  .https.onRequest((_req, _res) => {
+    const requestsRef = db.collection("archive");
+
+    requestsRef.get().then((reqsSnap) => {
+      reqsSnap.forEach(async (reqSnap) => {
+        try {
+          const batch = db.batch();
+          const reqRef = reqSnap.ref;
+          const snap = await reqRef.get();
+          const request = snap.data();
+          batch.delete(db.doc(`archive/${request.id}`));
+          batch.set(
+            db.doc(`users/${request.userId}/archive/${request.id}`),
+            request
+          );
+          batch.commit();
+        } catch (e) {
+          functions.logger.log(e);
+        }
+      });
+    });
+  });
+
+exports.moveCompletedRequestToArchive = functions
+  .region("europe-west1")
+  .firestore.document("/users/{userId}/requests/{requestId}")
+  .onUpdate((change, _context) => {
+    /* If request is completed, move it to the 'archive' collection */
+    const newData = change.after;
+    const request = newData.data();
+    if (request.status !== "Completed") return;
+
+    const batch = db.batch();
+    batch.create(
+      db.doc(`users/${request.userId}/archive/${request.id}`),
+      request
+    );
+    batch.delete(db.doc(`users/${request.userId}/requests/${request.id}`));
+
+    batch.update(db.doc(`users/${request.userId}`), {
+      archivedRequests: admin.firestore.FieldValue.increment(),
+    });
+    batch.update(db.doc(`metadata/count`), {
+      totalArchived: admin.firestore.FieldValue.increment(),
+    });
+    batch.commit().catch(functions.logger.log);
   });
