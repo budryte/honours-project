@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, List, ListItem, Grid, Pagination, Box } from "@mui/material";
-import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import WarningIcon from "@mui/icons-material/Warning";
+import {
+  Warning as WarningIcon,
+  DragHandle as DragHandleIcon,
+  KeyboardDoubleArrowDownRounded as KeyboardDoubleArrowDownRoundedIcon,
+} from "@mui/icons-material";
 import Filters from "../components/small-components/Filters";
 import {
   collectionGroup,
@@ -14,8 +16,7 @@ import {
 } from "firebase/firestore";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../config/db";
-
-const REQUESTS_PER_PAGE = 10;
+import { REQUESTS_PER_PAGE } from "../config/constants";
 
 export default function Requests({ prevPage }) {
   let navigate = useNavigate();

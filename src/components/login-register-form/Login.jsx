@@ -24,8 +24,16 @@ export function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         try {
-          let { position, firstname, lastname, isAdmin } = await initPosition();
-          await db.users.add({ position, email, firstname, lastname, isAdmin });
+          const userDoc = await initPosition();
+          const { position, firstname, lastname, isAdmin } = userDoc.data();
+          return db.users.add({
+            userId: userDoc.id,
+            position,
+            email,
+            firstname,
+            lastname,
+            isAdmin,
+          });
         } catch (error) {
           console.log("Dexie Error: ", error);
         }
@@ -115,7 +123,7 @@ export function Login() {
             />
           </div>
         </div>
-        <Link onClick={() => handleConfirmationOpen()}> Forgot password?</Link>
+        <Link onClick={() => handleConfirmationOpen()}>Forgot password?</Link>
         <div className="footer">
           <Button variant="contained" size="lg" type="submit">
             Sign In
