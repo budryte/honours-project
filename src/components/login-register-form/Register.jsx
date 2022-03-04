@@ -108,11 +108,13 @@ export function Register() {
           position: position,
           email: email,
           isAdmin: false,
+          archivedRequests: 0,
         });
       })
       .then(async () => {
         try {
           await dexieDB.users.add({
+            userId: auth.currentUser.uid,
             position,
             email,
             firstname,
