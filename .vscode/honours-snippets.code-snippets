@@ -26,5 +26,16 @@
     "prefix": "eff",
     "body": ["useEffect(() => {", "  ${0}", "}, [${1}]);"],
     "description": "useEffect hook"
+  },
+  "Default try-catch": {
+    "prefix": "tc",
+    "body": [
+      "try {",
+      "  ${0}",
+      "} catch (error) {",
+      "  console.warn(error)",
+      "}"
+    ],
+    "description": "Default try-catch"
   }
 }
