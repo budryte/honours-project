@@ -4,6 +4,8 @@ import { getFirestore, doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function DeleteRequest(props) {
+  let collection = props.status === "Completed" ? "archive" : "requests";
+
   let navigate = useNavigate();
 
   const [removeOpen, setRemoveOpen] = useState(false);
@@ -14,7 +16,7 @@ export default function DeleteRequest(props) {
     const db = getFirestore();
     try {
       return deleteDoc(
-        doc(db, "users", props.userID, "requests", props.requestID)
+        doc(db, "users", props.userID, collection, props.requestID)
       );
     } catch (error) {
       console.log(error);

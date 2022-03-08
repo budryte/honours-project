@@ -47,8 +47,34 @@ export default function CustomSearch() {
           },
         });
       } else {
-        console.log("not found");
-        setErrorMessage("Request was not found. Try again.");
+        try {
+          const qSnapshot = await getDocs(
+            query(
+              collectionGroup(getFirestore(), "archive"),
+              where("id", "==", requestID)
+            )
+          );
+          let array = [];
+          qSnapshot.forEach((document) => {
+            array.push({
+              data: document.data(),
+            });
+          });
+          if (array.length > 0) {
+            console.log("Successfully found");
+            navigate("/review-request", {
+              state: {
+                data: array[0].data,
+                prevPage: "/custom-search",
+              },
+            });
+          } else {
+            console.log("not found");
+            setErrorMessage("Request was not found. Try again.");
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log(error);

@@ -187,7 +187,11 @@ export default function ReviewRequest() {
               {position === "Technician" ||
               (prevPage === "/track-requests" &&
                 status === "Pending approval") ? (
-                <DeleteRequest userID={parentId} requestID={id} />
+                <DeleteRequest
+                  userID={parentId}
+                  requestID={id}
+                  status={status}
+                />
               ) : undefined}
             </Grid>
           </Grid>
