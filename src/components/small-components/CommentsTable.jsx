@@ -101,7 +101,7 @@ export default function CommentsTable({ position, email }) {
   return (
     <div>
       {status !== "Waiting on technician" && <h2>Comments History</h2>}
-      {commentsArray?.length > 0 || position === "Technician" ? (
+      {commentsArray?.length > 0 || status !== "Completed" ? (
         <TableContainer>
           <Table sx={{ minWidth: 450 }} aria-label="simple table">
             <TableHead className="table-head">

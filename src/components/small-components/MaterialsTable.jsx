@@ -129,7 +129,7 @@ export default function MaterialsTable({ position }) {
   return (
     <div>
       {status !== "Waiting on technician" && <h2>Ordered Materials</h2>}
-      {matArr?.length > 0 || position === "Technician" ? (
+      {matArr?.length > 0 || status !== "Completed" ? (
         <TableContainer>
           <Table sx={{ minWidth: 450 }} aria-label="simple table">
             <TableHead className="table-head">
