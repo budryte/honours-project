@@ -117,6 +117,9 @@ export default function TechnicianDetails(props) {
     if (position === "Technician") {
       edits = true;
     }
+    if (status === "Completed") {
+      edits = false;
+    }
     return edits;
   }
 
