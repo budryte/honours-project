@@ -14,14 +14,15 @@ import Account from "./components/my-account/Account";
 import ListOfTechncians from "./components/overview/ListOfTechnicians";
 import CustomSearch from "./components/custom-search/CustomSearch";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./config/firebaseConfig";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "./config/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import PageNotFound from "./components/error-page/PageNotFound";
 
-initializeApp(firebaseConfig);
+if (process.env.REACT_APP_FIREBASE_CONFIG)
+  initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG));
+else console.warn("Could not find the firebase config");
 
 function App() {
   const [user, setUser] = useState("");
