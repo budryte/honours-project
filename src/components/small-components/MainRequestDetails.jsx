@@ -8,6 +8,7 @@ import {
   Link,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import LaunchIcon from "@mui/icons-material/Launch";
 
 export default function MainRequestDetails() {
   const { state } = useLocation();
@@ -59,8 +60,18 @@ export default function MainRequestDetails() {
             {linkToFolder !== undefined ? (
               <TableRow>
                 <TableCell>Link To Folder</TableCell>
-                <TableCell>
-                  <Link href={linkToFolder}>{linkToFolder}</Link>
+                <TableCell style={{ display: "flex", justifyContent: "row" }}>
+                  <Link href={linkToFolder} target="_blank" rel="noopener">
+                    {linkToFolder}
+                  </Link>
+                  <LaunchIcon
+                    style={{
+                      color: "#4365e2",
+                      fontSize: 16,
+                      marginTop: 1.5,
+                      marginLeft: 5,
+                    }}
+                  />
                 </TableCell>
               </TableRow>
             ) : undefined}
