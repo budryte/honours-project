@@ -81,7 +81,7 @@ export function Login() {
   };
 
   return (
-    <div>
+    <>
       <form className="container" onSubmit={handleLogin}>
         <div className="image">
           <img src={logo} alt="" />
@@ -125,7 +125,7 @@ export function Login() {
         </div>
         <Link onClick={() => handleConfirmationOpen()}>Forgot password?</Link>
         <div className="footer">
-          <Button variant="contained" size="lg" type="submit">
+          <Button component="span" variant="contained" size="lg" type="submit">
             Sign In
           </Button>
         </div>
@@ -190,6 +190,6 @@ export function Login() {
           </div>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }
