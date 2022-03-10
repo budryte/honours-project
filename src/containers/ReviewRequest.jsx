@@ -61,7 +61,6 @@ export default function ReviewRequest() {
   const handleSigningOpen = () => setSigningOpen(true);
   const handleSigningClose = () => {
     setSigningOpen(false);
-    alert("The request was signed and sent successfully.");
   };
 
   const [grant, setGrant] = useState("");
@@ -191,6 +190,7 @@ export default function ReviewRequest() {
                   userID={parentId}
                   requestID={id}
                   status={status}
+                  prevPage={prevPage}
                 />
               ) : undefined}
             </Grid>
@@ -257,6 +257,8 @@ export default function ReviewRequest() {
               disabled={grant === "" || account === ""}
               onClick={() => {
                 addFields();
+                alert("The request was signed and sent successfully.");
+                navigate("/pending-requests");
                 handleSigningClose();
               }}
             >

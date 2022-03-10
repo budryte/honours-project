@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function DeleteRequest(props) {
   let collection = props.status === "Completed" ? "archive" : "requests";
+  let prevPage = props.prevPage;
 
   let navigate = useNavigate();
 
@@ -67,7 +68,7 @@ export default function DeleteRequest(props) {
               color="success"
               onClick={() => {
                 deleteRequest();
-                navigate("/home");
+                navigate(prevPage);
                 alert("Request was successfully removed from the list.");
               }}
             >

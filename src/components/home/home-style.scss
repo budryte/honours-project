@@ -1,10 +1,15 @@
 .box {
   align-items: center;
   justify-content: center;
-  padding: 3% 10%;
-  width: 75%;
-  @media (min-width: 1400px) {
-    width: 55%;
+  padding: 3% 0% 3% 10%;
+  width: 60%;
+  @media (max-width: 1400px) {
+    width: 90%;
+    padding: 0% 5%;
+  }
+  @media (max-width: 1000px) {
+    width: 96%;
+    padding: 2%;
   }
 }
 
@@ -20,7 +25,8 @@
   font-size: 4em;
   font-family: "Baxter Sans Semibold";
   margin-bottom: 15px;
-  @media (max-width: 800px) {
+  margin-right: 10px;
+  @media (max-width: 700px) {
     font-size: 2em;
   }
 }
@@ -29,6 +35,9 @@
   background-color: white;
   font-family: "Baxter Sans Regular";
   padding: 2em;
+  @media (max-width: 700px) {
+    padding: 1em;
+  }
 }
 
 .white-container-account {
@@ -38,8 +47,8 @@
 }
 
 .card {
-  height: 130px;
-  padding: 5px 25px 25px 25px;
+  height: 100px;
+  padding: 5px 15px 10px 10px;
   border: #d1e2f2 8px;
   border-style: solid;
   color: #464646;
@@ -47,7 +56,6 @@
     border-color: #a9cfe7;
     box-shadow: 5px 5px 5px #d1e2f2;
   }
-  margin-bottom: 20px;
 }
 
 .h3 {
@@ -55,21 +63,36 @@
 }
 
 .animation-smaller {
-  padding-top: 20px;
-  height: 110px;
-  width: 110px;
-  @media (max-width: 800px) {
+  padding-top: 10px;
+  height: 90px;
+  width: 90px;
+  @media (max-width: 700px) {
+    height: 60px;
+    width: 60px;
+    padding-top: 20px;
+  }
+}
+
+.animation-bigger {
+  height: 120px;
+  width: 120px;
+  @media (max-width: 700px) {
+    padding-top: 10px;
     height: 80px;
     width: 80px;
   }
 }
 
-.animation-bigger {
-  height: 140px;
-  width: 140px;
-  @media (max-width: 800px) {
-    height: 80px;
-    width: 80px;
+.link-to-menu-item {
+  font-family: "Baxter Sans Semibold";
+  font-size: 20px;
+  align-items: center;
+  color: #464646;
+  width: auto;
+  &:hover {
+    text-decoration: underline;
+    color: #4365e2;
+    cursor: pointer;
   }
 }
 

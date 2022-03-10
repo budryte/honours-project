@@ -63,7 +63,7 @@ export default function Requests({ prevPage }) {
         switch (prevPage) {
           case "/my-work": {
             querySnapshot = await getTechnicianRequests(currentUserEmail);
-            setEmptyReqMsg("There are no active requests.");
+            setEmptyReqMsg("You haven't picked up any requests.");
             break;
           }
           case "/archive": {

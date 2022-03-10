@@ -115,7 +115,9 @@ export default function CommentsTable({ position, email }) {
                 <TableCell>
                   <b>Date</b>
                 </TableCell>
-                {position === "Technician" && <TableCell />}
+                {position === "Technician" && status !== "Completed" ? (
+                  <TableCell />
+                ) : undefined}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -130,7 +132,7 @@ export default function CommentsTable({ position, email }) {
                   <TableCell>
                     {new Date(commentObj.commentDate).toLocaleDateString()}
                   </TableCell>
-                  {position === "Technician" ? (
+                  {position === "Technician" && status !== "Completed" ? (
                     <TableCell>
                       <IconButton>
                         <EditIcon
