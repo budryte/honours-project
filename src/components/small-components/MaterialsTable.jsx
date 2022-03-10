@@ -77,7 +77,7 @@ export default function MaterialsTable({ position }) {
   const { state } = useLocation();
   const { id: requestID, userId: parentId, status } = state.data;
 
-  const [matArr, setMatArr] = useState(state.data.materials);
+  const [matArr, setMatArr] = useState(state.data.materials ?? []);
   const [total, setTotal] = useState(
     matArr?.reduce((acc, mat) => acc + parseFloat(mat.price), 0) ?? 0
   );
@@ -143,7 +143,9 @@ export default function MaterialsTable({ position }) {
                 <TableCell>
                   <b>Price</b>
                 </TableCell>
-                {position === "Technician" && <TableCell />}
+                {position === "Technician" && status !== "Completed" ? (
+                  <TableCell />
+                ) : undefined}
               </TableRow>
             </TableHead>
             <TableBody>

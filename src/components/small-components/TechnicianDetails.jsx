@@ -99,7 +99,7 @@ export default function TechnicianDetails(props) {
   const statusValues = [
     "Waiting on materials",
     "In progress",
-    "Waiting  to be collected",
+    "Waiting to be collected",
     "Completed",
   ];
 
@@ -108,7 +108,7 @@ export default function TechnicianDetails(props) {
     const fireStore = getFirestore();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
     await updateDoc(requestRef, {
-      status: status,
+      status: tempStatus,
     });
   }
 
