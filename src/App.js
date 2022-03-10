@@ -23,6 +23,10 @@ import PageNotFound from "./components/error-page/PageNotFound";
 if (process.env.REACT_APP_FIREBASE_CONFIG)
   initializeApp(JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG));
 else console.warn("Could not find the firebase config");
+console.log(
+  "process.env.REACT_APP_FIREBASE_CONFIG: ",
+  process.env.REACT_APP_FIREBASE_CONFIG
+);
 
 function App() {
   const [user, setUser] = useState("");
