@@ -113,7 +113,7 @@ export default function Home() {
                           navigate("/new-request");
                         }}
                       >
-                        My Account
+                        New Request
                         <ArrowForwardIcon
                           fontSize="small"
                           style={{ marginLeft: "8px" }}
@@ -153,7 +153,7 @@ export default function Home() {
                       <p
                         className="link-to-menu-item para"
                         onClick={() => {
-                          navigate("/track-request");
+                          navigate("/track-requests");
                         }}
                       >
                         Track Your Requests
