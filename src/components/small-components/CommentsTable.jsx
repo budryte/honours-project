@@ -201,7 +201,7 @@ export default function CommentsTable({ position, email }) {
             Add Comment
           </Typography>
           <TextArea
-            className="link"
+            className="comment"
             placeholder="Enter your comment here"
             value={comment}
             error={commentError !== null}
@@ -335,7 +335,7 @@ export default function CommentsTable({ position, email }) {
             Edit Comment
           </Typography>
           <TextArea
-            className="link"
+            className="comment"
             placeholder="Enter your comment here"
             value={comment}
             onChange={(e) => setComment(e.target.value)}

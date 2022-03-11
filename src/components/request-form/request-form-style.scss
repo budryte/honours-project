@@ -64,6 +64,7 @@
   color: #464646;
   padding: 5px 10px;
   width: 95%;
+  max-width: 95%;
   height: 200px;
   min-height: 100px;
 }
@@ -77,9 +78,28 @@
   color: #464646;
   padding: 5px 10px;
   width: 50%;
+  max-width: 50%;
   height: 100px;
   @media (max-width: 700px) {
     width: 95%;
+    max-width: 95%;
+  }
+}
+
+.comment {
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: #464646;
+  font-family: "Baxter Sans Regular";
+  font-size: 18px;
+  color: #464646;
+  padding: 5px 10px;
+  width: 80%;
+  height: 100px;
+  max-width: 80%;
+  @media (max-width: 700px) {
+    width: 95%;
+    max-width: 95%;
   }
 }
 
