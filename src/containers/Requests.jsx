@@ -246,6 +246,7 @@ export default function Requests({ prevPage }) {
     return (
       <ListItem key={req.data.id}>
         <Button
+          style={{ width: "100%", minWidth: "300px" }}
           onClick={() =>
             navigate("/review-request", {
               state: {
@@ -288,11 +289,11 @@ export default function Requests({ prevPage }) {
     <div className="white-container">
       <Grid container spacing={2}>
         {filtersNeeded() && (
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={12} md={3}>
             <Filters setFilters={setFilters} setSorting={setSorting} />
           </Grid>
         )}
-        <Grid item xs={filtersNeeded() ? 9 : 12}>
+        <Grid item xs={12} sm={12} md={filtersNeeded() ? 9 : 12}>
           <Box
             style={{
               display: "flex",
