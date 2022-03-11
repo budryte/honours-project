@@ -104,13 +104,13 @@ export default function Home() {
                       item
                       xs={9}
                       onClick={() => {
-                        navigate("/new-request");
+                        navigate("/agreement");
                       }}
                     >
                       <p
                         className="link-to-menu-item para"
                         onClick={() => {
-                          navigate("/new-request");
+                          navigate("/agreement");
                         }}
                       >
                         New Request

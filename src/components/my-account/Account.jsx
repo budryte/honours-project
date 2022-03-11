@@ -158,7 +158,7 @@ export default function Account() {
       <div className="box">
         <div className="page-title">My Account</div>
         <div className="white-container-account">
-          <h1>Account Details</h1>
+          <h2 style={{ marginTop: 0 }}>Account Details</h2>
           <List className="request-details">
             <ListItem disablePadding>
               <ListItemText>

@@ -127,12 +127,10 @@ export default function ReviewRequest() {
         <div className="page-title">{title}</div>
         <div className="white-container">
           <Grid container spacing={2}>
-            <Grid item xs={1}>
-              <div className="back-button">
-                <BackButton pageTitle={prevPage} />
-              </div>
+            <Grid item xs={12} sm={1} md={1}>
+              <BackButton pageTitle={prevPage} />
             </Grid>
-            <Grid item xs={11}>
+            <Grid item xs={12} sm={11} md={11}>
               <MainRequestDetails />
               <SupervisorDetails />
               {isVisible() && <TechnicianDetails position={position} />}
@@ -329,7 +327,7 @@ export default function ReviewRequest() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style-bigger">
+        <Box className="modal-style">
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Get Approval
           </Typography>

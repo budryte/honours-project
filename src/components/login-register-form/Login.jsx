@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Button, Box, Modal, Link } from "@mui/material";
+import { Button, Box, Modal, Link, Typography } from "@mui/material";
 import logo from "../../images/logo.png";
 import { db } from "../../config/db";
 import { initPosition } from "../../config/constants";
@@ -123,7 +123,12 @@ export function Login() {
             />
           </div>
         </div>
-        <Link onClick={() => handleConfirmationOpen()}>Forgot password?</Link>
+        <Link
+          className="forgot-password-link"
+          onClick={() => handleConfirmationOpen()}
+        >
+          Forgot password?
+        </Link>
         <div className="footer">
           <Button variant="contained" size="lg" type="submit">
             Sign In
@@ -141,9 +146,9 @@ export function Login() {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal-style">
-          <p style={{ fontSize: "18px" }}>
-            <b>Enter your email to reset password</b>
-          </p>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Enter your email to reset password
+          </Typography>
           <TextField
             className="form-group"
             id="outlined-basic"

@@ -44,7 +44,7 @@ export function AttachFile(props) {
       {/* <Basic /> */}
       <h3>OneDrive Link *</h3>
       <TextArea
-        className="link"
+        className="onedrive-link"
         placeholder="Insert a link to the OneDrive folder"
         value={linkToFolder}
         onChange={(e) => setLinkToFolder(e.target.value)}

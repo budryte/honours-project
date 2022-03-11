@@ -201,7 +201,7 @@ export default function TechnicianDetails(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style-bigger">
+        <Box className="modal-style">
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Change Estimated Time of Completion
           </Typography>
@@ -246,6 +246,7 @@ export default function TechnicianDetails(props) {
           </div>
         </Box>
       </Modal>
+
       {/* Modal to change status */}
       <Modal
         open={statusOpen}
@@ -302,6 +303,7 @@ export default function TechnicianDetails(props) {
           </div>
         </Box>
       </Modal>
+
       {/* Modal to change technician in charge */}
       <Modal
         open={technicianOpen}
@@ -309,7 +311,7 @@ export default function TechnicianDetails(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style-bigger">
+        <Box className="modal-style">
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Change Technician
           </Typography>

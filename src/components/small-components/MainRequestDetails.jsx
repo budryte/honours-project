@@ -23,7 +23,7 @@ export default function MainRequestDetails() {
   };
   return (
     <div>
-      <h1>{id}</h1>
+      <h1 style={{ marginTop: 0 }}>{id}</h1>
       <p
         style={{
           fontSize: "24px",

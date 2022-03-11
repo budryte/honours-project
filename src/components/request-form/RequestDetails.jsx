@@ -183,7 +183,7 @@ export function RequestDetails(props) {
         <TextField
           className="item"
           id="outlined-basic"
-          label="Supervisor"
+          label="Supervisor's email address"
           variant="outlined"
           size="small"
           required
@@ -211,8 +211,16 @@ export function RequestDetails(props) {
               }));
             }}
           >
-            <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="No" control={<Radio />} label="No" />
+            <FormControlLabel
+              value="Yes"
+              control={<Radio size="small" />}
+              label="Yes"
+            />
+            <FormControlLabel
+              value="No"
+              control={<Radio size="small" />}
+              label="No"
+            />
           </RadioGroup>
         </FormControl>
         <div>
