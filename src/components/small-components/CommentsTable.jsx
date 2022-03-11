@@ -191,7 +191,7 @@ export default function CommentsTable({ position, email }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style-bigger">
+        <Box className="modal-style">
           <Typography
             id="modal-modal-title"
             variant="h6"
@@ -325,7 +325,7 @@ export default function CommentsTable({ position, email }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modal-style-bigger">
+        <Box className="modal-style">
           <Typography
             id="modal-modal-title"
             variant="h6"

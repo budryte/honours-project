@@ -43,7 +43,7 @@ export default function Agreement() {
             <br></br>
             <ListItemText className="list-item">
               3. The status of technical requests can be viewed on the Track
-              Request Page.
+              Your Requests Page.
             </ListItemText>
             <br></br>
             <ListItemText className="list-item">
