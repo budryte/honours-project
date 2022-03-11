@@ -7,16 +7,14 @@ export default function BackButton(props) {
   const { pageTitle } = props;
   let navigate = useNavigate();
   return (
-    <div>
-      <IconButton>
-        <ArrowBackIcon
-          fontSize="large"
-          className="arrow"
-          onClick={() => {
-            navigate(pageTitle);
-          }}
-        />
-      </IconButton>
-    </div>
+    <IconButton>
+      <ArrowBackIcon
+        fontSize="large"
+        className="arrow"
+        onClick={() => {
+          navigate(pageTitle);
+        }}
+      />
+    </IconButton>
   );
 }
