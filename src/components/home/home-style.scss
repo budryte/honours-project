@@ -16,8 +16,16 @@
 .box-list {
   align-items: center;
   justify-content: center;
-  padding: 3% 10%;
-  width: 65%;
+  width: 70%;
+  padding-left: 10%;
+  @media (max-width: 1300px) {
+    width: 90%;
+    padding: 2%;
+  }
+  @media (max-width: 1000px) {
+    width: 96%;
+    padding: 2%;
+  }
 }
 
 .page-title {
@@ -44,6 +52,9 @@
   background-color: white;
   font-family: "Baxter Sans Regular";
   padding: 2em 4em;
+  @media (max-width: 700px) {
+    padding: 1em;
+  }
 }
 
 .card {
@@ -110,18 +121,12 @@
   border: 2px solid #000;
   box-shadow: 24;
   padding: 2em;
-}
-
-.modal-style-bigger {
-  position: absolute;
-  margin-top: 50vh;
-  margin-left: 50vw;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background-color: white;
-  border: 2px solid #000;
-  box-shadow: 24;
-  padding: 2em;
+  @media (max-width: 500px) {
+    width: 60%;
+  }
+  @media (max-width: 400px) {
+    width: 70%;
+  }
 }
 
 .list-of-request-item {
