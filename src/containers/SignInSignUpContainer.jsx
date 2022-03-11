@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Login } from "../components/login-register-form/Login";
 import { Register } from "../components/login-register-form/Register";
 
-import "./sign-in-sign-up.scss";
+import "../components/login-register-form/login-register-style.scss";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
