@@ -20,8 +20,8 @@ code {
 }
 
 @font-face {
-  font-family: "Baxter Sans Semibold";
-  src: local("BaxterSansSemibold"),
-    url("./fonts/BaxterSans-SemiboldItalic.ttf") format("truetype");
-  font-weight: bold;
+  font-family: "Baxter Sans Bold";
+  src: local("BaxterSansBold"),
+    url("./fonts/BaxterSans-Bold.ttf") format("truetype");
+  font-weight: normal;
 }

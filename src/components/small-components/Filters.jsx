@@ -36,7 +36,7 @@ export default function Filters(props) {
           id="panel1a-header"
         >
           <Typography
-            style={{ fontSize: "20px", fontFamily: "Baxter Sans Semibold" }}
+            style={{ fontSize: "20px", fontFamily: "Baxter Sans Bold" }}
           >
             Filters
           </Typography>
