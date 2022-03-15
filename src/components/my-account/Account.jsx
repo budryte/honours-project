@@ -167,7 +167,7 @@ export default function Account() {
             </ListItem>
             <ListItem disablePadding>
               <ListItemText>
-                <b>Last Time:</b> {lastname}
+                <b>Last Name:</b> {lastname}
               </ListItemText>
             </ListItem>
             <ListItem disablePadding>
