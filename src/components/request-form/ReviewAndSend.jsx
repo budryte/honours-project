@@ -15,6 +15,13 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
 
 async function saveToFirestore(details, extraInfo, linkToFolder, user) {
+  let statusOnSubmission =
+    details.approvalRequired === "No"
+      ? "Waiting on technician"
+      : "Pending approval";
+
+  console.log(statusOnSubmission);
+
   const db = getFirestore();
   const auth = getAuth();
   const id = `RTA${Date.now().toString()}`;
@@ -27,7 +34,7 @@ async function saveToFirestore(details, extraInfo, linkToFolder, user) {
     email: user.email,
     firstname: user.firstname,
     lastname: user.lastname,
-    status: "Pending approval",
+    status: statusOnSubmission,
     userId: auth.currentUser.uid,
   });
 }
