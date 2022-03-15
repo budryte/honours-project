@@ -87,7 +87,8 @@ export default function CustomSearch() {
       <div className="box">
         <div className="page-title">Custom Search</div>
         <div className="white-container">
-          <h1>Search for a specific request</h1>
+          <h1 style={{ marginBottom: 0 }}>Search for a specific request</h1>
+          <p style={{ fontStyle: "italic" }}>For example: RTA0000000000001</p>
           <TextField
             style={{ marginRight: "15px" }}
             className="form-group"
