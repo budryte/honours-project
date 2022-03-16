@@ -313,7 +313,7 @@ export default function Account() {
           <TextField
             className="form-group"
             id="outlined-basic"
-            label="Old Password"
+            label="Password"
             variant="outlined"
             required
             type="password"

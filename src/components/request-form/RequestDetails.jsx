@@ -196,6 +196,12 @@ export function RequestDetails(props) {
             }));
           }}
         />
+        <p style={{ marginTop: 0 }}>
+          <b style={{ color: "red" }}>Important:</b> for testing purposes please
+          enter <b>supervisor1@dundee.ac.uk</b> email address and select{" "}
+          <b>'Yes'</b> for the question below in order to see this request later
+          on the supervisor's account
+        </p>
         <h3 className="heading">Supervisor approval required? *</h3>
         <FormControl component="fieldset">
           <RadioGroup
