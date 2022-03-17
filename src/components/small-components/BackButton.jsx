@@ -9,6 +9,7 @@ export default function BackButton(props) {
   return (
     <IconButton>
       <ArrowBackIcon
+        aria-label="back button"
         fontSize="large"
         className="arrow"
         onClick={() => {

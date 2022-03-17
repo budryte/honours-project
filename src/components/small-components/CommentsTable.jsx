@@ -103,7 +103,7 @@ export default function CommentsTable({ position, email }) {
       {status !== "Waiting on technician" && <h2>Comments History</h2>}
       {commentsArray?.length > 0 || status !== "Completed" ? (
         <TableContainer>
-          <Table sx={{ minWidth: 450 }} aria-label="simple table">
+          <Table sx={{ minWidth: 450 }} aria-label="comments table">
             <TableHead className="table-head">
               <TableRow>
                 <TableCell>
@@ -116,7 +116,9 @@ export default function CommentsTable({ position, email }) {
                   <b>Date</b>
                 </TableCell>
                 {position === "Technician" && status !== "Completed" ? (
-                  <TableCell />
+                  <TableCell>
+                    <b>Tools</b>
+                  </TableCell>
                 ) : undefined}
               </TableRow>
             </TableHead>
@@ -136,6 +138,7 @@ export default function CommentsTable({ position, email }) {
                     <TableCell>
                       <IconButton>
                         <EditIcon
+                          aria-label="edit comment"
                           onClick={() => {
                             setComment(commentObj.comment);
                             setCommentDate(commentObj.commentDate);
@@ -149,6 +152,7 @@ export default function CommentsTable({ position, email }) {
                       </IconButton>
                       <IconButton>
                         <DeleteOutlineIcon
+                          aria-label="delete comment"
                           className="bin"
                           onClick={() => {
                             setComment(commentObj.comment);
@@ -166,6 +170,7 @@ export default function CommentsTable({ position, email }) {
                 <TableRow>
                   <IconButton>
                     <AddIcon
+                      aria-label="add comment"
                       fontSize="large"
                       onClick={() => {
                         handleAddOpen();
@@ -201,6 +206,7 @@ export default function CommentsTable({ position, email }) {
             Add Comment
           </Typography>
           <TextArea
+            id="comment"
             className="comment"
             placeholder="Enter your comment here"
             value={comment}
@@ -335,6 +341,7 @@ export default function CommentsTable({ position, email }) {
             Edit Comment
           </Typography>
           <TextArea
+            aria-label="comment"
             className="comment"
             placeholder="Enter your comment here"
             value={comment}
