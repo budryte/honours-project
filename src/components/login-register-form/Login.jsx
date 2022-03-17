@@ -86,13 +86,13 @@ export function Login() {
         <div className="image">
           <img src={logo} alt="" />
         </div>
-        <div className="title">Technical Request System</div>
-        <div className="header">Sign In</div>
+        <h1 className="title">Technical Request System</h1>
+        <h2 className="header">Sign In</h2>
         <div className="content">
           <div className="form">
             <TextField
               className="form-group"
-              id="outlined-basic"
+              id="email"
               label="Email"
               variant="outlined"
               required
@@ -107,7 +107,7 @@ export function Login() {
             />
             <TextField
               className="form-group"
-              id="outlined-basic"
+              id="password"
               label="Password"
               type="password"
               variant="outlined"

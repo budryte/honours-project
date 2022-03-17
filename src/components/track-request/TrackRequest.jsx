@@ -6,10 +6,10 @@ export default function TrackRequest() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Track Your Requests</div>
+      <main className="box">
+        <h1 className="page-title">Track Your Requests</h1>
         <Requests prevPage="/track-requests" />
-      </div>
+      </main>
     </div>
   );
 }

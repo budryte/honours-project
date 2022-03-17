@@ -6,10 +6,10 @@ export default function MyWork() {
   return (
     <div>
       <Navbar />
-      <div className="box-list">
-        <div className="page-title">My Work</div>
+      <main className="box-list">
+        <h1 className="page-title">My Work</h1>
         <Requests prevPage="/my-work" />
-      </div>
+      </main>
     </div>
   );
 }

@@ -37,8 +37,8 @@ export default function Home() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Technical Request System</div>
+      <main className="box">
+        <h1 className="page-title">Technical Request System</h1>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid item xs={XS} md={MD} sm={SM}>
@@ -428,7 +428,7 @@ export default function Home() {
             )}
           </Grid>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

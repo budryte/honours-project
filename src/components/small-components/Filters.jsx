@@ -35,11 +35,15 @@ export default function Filters(props) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography
-            style={{ fontSize: "20px", fontFamily: "Baxter Sans Bold" }}
+          <h2
+            style={{
+              fontSize: "20px",
+              fontFamily: "Baxter Sans Bold",
+              margin: 0,
+            }}
           >
             Filters
-          </Typography>
+          </h2>
         </AccordionSummary>
         <AccordionDetails>
           <h3 style={{ textDecoration: "underline", marginTop: 0 }}>
@@ -48,8 +52,9 @@ export default function Filters(props) {
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <Select
               style={{ padding: 0, width: 160 }}
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
+              labelId="sort-by"
+              id="sort-by"
+              aria-labelledby="sort-by"
               value={sortingType}
               onChange={(e) => {
                 setSortingType(e.target.value);
@@ -61,76 +66,81 @@ export default function Filters(props) {
             </Select>
           </FormControl>
           <h3 style={{ textDecoration: "underline" }}>Filter by:</h3>
-          <h3>Status</h3>
-          <RadioGroup
-            className="radio-group"
-            name="controlled-radio-buttons-group"
-            value={status}
-            onChange={(e) => {
-              setStatus(e.target.value);
-              props.setFilters({
-                status: e.target.value,
-                priority: priority,
-              });
-            }}
-          >
-            <FormControlLabel
-              style={{ padding: 0 }}
-              value="Pending approval"
-              control={<Radio size="small" />}
-              label="Pending approval"
-            />
-            <FormControlLabel
-              value="In progress"
-              control={<Radio size="small" />}
-              label="In progress"
-            />
-            <FormControlLabel
-              value="Waiting on technician"
-              control={<Radio size="small" />}
-              label="Waiting on technician"
-            />
-            <FormControlLabel
-              value="Waiting on materials"
-              control={<Radio size="small" />}
-              label="Waiting on materials"
-            />
-            <FormControlLabel
-              value="Waiting to be collected"
-              control={<Radio size="small" />}
-              label="Waiting to be collected"
-            />
-          </RadioGroup>
-          <h3>Priority</h3>
-          <RadioGroup
-            className="radio-group"
-            name="controlled-radio-buttons-group"
-            value={priority}
-            onChange={(e) => {
-              setPriority(e.target.value);
-              props.setFilters({
-                status: status,
-                priority: e.target.value,
-              });
-            }}
-          >
-            <FormControlLabel
-              value="Low"
-              control={<Radio size="small" />}
-              label="Low"
-            />
-            <FormControlLabel
-              value="Medium"
-              control={<Radio size="small" />}
-              label="Medium"
-            />
-            <FormControlLabel
-              value="Urgent"
-              control={<Radio size="small" />}
-              label="Urgent"
-            />
-          </RadioGroup>
+          <fieldset style={{ paddingBottom: 0 }}>
+            <legend>Status</legend>
+            <RadioGroup
+              className="radio-group"
+              name="controlled-radio-buttons-group-status"
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                props.setFilters({
+                  status: e.target.value,
+                  priority: priority,
+                });
+              }}
+            >
+              <FormControlLabel
+                style={{ padding: 0 }}
+                value="Pending approval"
+                control={<Radio size="small" />}
+                label="Pending approval"
+              />
+              <FormControlLabel
+                value="In progress"
+                control={<Radio size="small" />}
+                label="In progress"
+              />
+              <FormControlLabel
+                value="Waiting on technician"
+                control={<Radio size="small" />}
+                label="Waiting on technician"
+              />
+              <FormControlLabel
+                value="Waiting on materials"
+                control={<Radio size="small" />}
+                label="Waiting on materials"
+              />
+              <FormControlLabel
+                value="Waiting to be collected"
+                control={<Radio size="small" />}
+                label="Waiting to be collected"
+              />
+            </RadioGroup>
+          </fieldset>
+          <fieldset style={{ marginTop: "10px", paddingBottom: 0 }}>
+            <legend>Priority</legend>
+            <RadioGroup
+              className="radio-group"
+              name="controlled-radio-buttons-group"
+              value={priority}
+              onChange={(e) => {
+                setPriority(e.target.value);
+                props.setFilters({
+                  status: status,
+                  priority: e.target.value,
+                });
+              }}
+            >
+              <FormControlLabel
+                value="Low"
+                control={<Radio size="small" />}
+                label="Low"
+              />
+              <FormControlLabel
+                value="Medium"
+                control={<Radio size="small" />}
+                label="Medium"
+              />
+              <FormControlLabel
+                value="Urgent"
+                control={<Radio size="small" />}
+                label="Urgent"
+              />
+            </RadioGroup>
+          </fieldset>
           <Button
+            style={{ marginTop: "15px" }}
             variant="outlined"
             onClick={() => {
               setPriority(null);

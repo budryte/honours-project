@@ -205,8 +205,8 @@ export default function Archive() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Archive</div>
+      <main className="box">
+        <h1 className="page-title">Archive</h1>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -235,7 +235,7 @@ export default function Archive() {
             </Grid>
           </Grid>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

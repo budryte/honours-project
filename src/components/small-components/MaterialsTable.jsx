@@ -131,7 +131,7 @@ export default function MaterialsTable({ position }) {
       {status !== "Waiting on technician" && <h2>Ordered Materials</h2>}
       {matArr?.length > 0 || status !== "Completed" ? (
         <TableContainer>
-          <Table sx={{ minWidth: 450 }} aria-label="simple table">
+          <Table sx={{ minWidth: 450 }} aria-label="materials table">
             <TableHead className="table-head">
               <TableRow>
                 <TableCell>
@@ -144,7 +144,9 @@ export default function MaterialsTable({ position }) {
                   <b>Price</b>
                 </TableCell>
                 {position === "Technician" && status !== "Completed" ? (
-                  <TableCell />
+                  <TableCell>
+                    <b>Tools</b>
+                  </TableCell>
                 ) : undefined}
               </TableRow>
             </TableHead>
@@ -166,6 +168,7 @@ export default function MaterialsTable({ position }) {
                     <TableCell>
                       <IconButton>
                         <EditIcon
+                          aria-label="edit material"
                           onClick={() => {
                             setMaterial(mat.material);
                             setQuantity(mat.quantity);
@@ -179,6 +182,7 @@ export default function MaterialsTable({ position }) {
                       </IconButton>
                       <IconButton>
                         <DeleteOutlineIcon
+                          aria-label="delete material"
                           className="bin"
                           onClick={() => {
                             setMaterial(mat.material);
@@ -196,6 +200,7 @@ export default function MaterialsTable({ position }) {
                 <TableRow>
                   <IconButton>
                     <AddIcon
+                      aria-label="add material"
                       fontSize="large"
                       onClick={() => {
                         handleAddOpen();
@@ -245,7 +250,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="material"
             label="Material"
             variant="outlined"
             required
@@ -263,7 +268,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="quantity"
             label="Quantity"
             variant="outlined"
             required
@@ -281,7 +286,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="price"
             label="Price"
             variant="outlined"
             required
@@ -410,7 +415,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="material"
             label="Material"
             variant="outlined"
             required
@@ -428,7 +433,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="quantity"
             label="Quantity"
             variant="outlined"
             required
@@ -446,7 +451,7 @@ export default function MaterialsTable({ position }) {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="price"
             label="Price"
             variant="outlined"
             required

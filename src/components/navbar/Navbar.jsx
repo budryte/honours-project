@@ -52,7 +52,7 @@ export default function Navbar() {
     setLeft(open);
   };
 
-  const list = () => (
+  const Menu = () => (
     <Box
       className="menu-drawer"
       role="presentation"
@@ -130,19 +130,21 @@ export default function Navbar() {
   );
 
   return (
-    <div>
-      <React.Fragment key="left">
-        <MenuIcon
-          className="hamburger"
-          fontSize="large"
-          onClick={toggleDrawer(true)}
-        >
-          {"left"}
-        </MenuIcon>
-        <Drawer anchor="left" open={left} onClose={toggleDrawer(false)}>
-          {list()}
-        </Drawer>
-      </React.Fragment>
-    </div>
+    <header>
+      <nav>
+        <React.Fragment key="left">
+          <MenuIcon
+            className="hamburger"
+            fontSize="large"
+            onClick={toggleDrawer(true)}
+          >
+            {"left"}
+          </MenuIcon>
+          <Drawer anchor="left" open={left} onClose={toggleDrawer(false)}>
+            <Menu />
+          </Drawer>
+        </React.Fragment>
+      </nav>
+    </header>
   );
 }

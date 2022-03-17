@@ -155,8 +155,8 @@ export default function Account() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">My Account</div>
+      <main className="box">
+        <h1 className="page-title">My Account</h1>
         <div className="white-container-account">
           <h2 style={{ marginTop: 0 }}>Account Details</h2>
           <List className="request-details">
@@ -199,7 +199,7 @@ export default function Account() {
             Delete account
           </Button>
         </div>
-      </div>
+      </main>
 
       {/* change password modal */}
       <Modal
@@ -217,7 +217,7 @@ export default function Account() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="old-password"
             label="Old Password"
             variant="outlined"
             required
@@ -236,7 +236,7 @@ export default function Account() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="new-password"
             label="New Password"
             variant="outlined"
             required
@@ -255,7 +255,7 @@ export default function Account() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="confirm-password"
             label="Confirm Password"
             variant="outlined"
             required
@@ -312,7 +312,7 @@ export default function Account() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="password"
             label="Password"
             variant="outlined"
             required

@@ -134,7 +134,7 @@ export default function TechnicianDetails(props) {
               isEditingAllowed() ? (
                 <IconButton
                   edge="end"
-                  aria-label="edit"
+                  aria-label="change technician"
                   onClick={() => {
                     handleTechnicianOpen();
                   }}
@@ -155,7 +155,7 @@ export default function TechnicianDetails(props) {
             isEditingAllowed() && (
               <IconButton
                 edge="end"
-                aria-label="edit"
+                aria-label="change status"
                 onClick={() => {
                   handleStatusOpen();
                 }}
@@ -176,7 +176,7 @@ export default function TechnicianDetails(props) {
               isEditingAllowed() && (
                 <IconButton
                   edge="end"
-                  aria-label="edit"
+                  aria-label="change estimated completion date"
                   onClick={() => {
                     handleEstimatedCompletionOpen();
                   }}

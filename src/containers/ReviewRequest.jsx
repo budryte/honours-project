@@ -123,8 +123,8 @@ export default function ReviewRequest() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">{title}</div>
+      <main className="box">
+        <h1 className="page-title">{title}</h1>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid item xs={12} sm={1} md={1}>
@@ -194,7 +194,7 @@ export default function ReviewRequest() {
             </Grid>
           </Grid>
         </div>
-      </div>
+      </main>
 
       {/* Sign request modal */}
       <Modal

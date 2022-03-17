@@ -15,13 +15,7 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
         <Box sx={{ p: 3 }}>
           <Typography component="span">{children}</Typography>
@@ -34,12 +28,12 @@ function TabPanel(props) {
 export function SignInSignUpContainer() {
   const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <div className="base-container">
         <Tabs
           value={value}
@@ -56,6 +50,6 @@ export function SignInSignUpContainer() {
           <Register />
         </TabPanel>
       </div>
-    </div>
+    </main>
   );
 }
