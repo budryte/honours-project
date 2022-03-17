@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
-import Select from "@mui/material/Select";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import {
+  TextField,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Button,
+  Select,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from "@mui/material";
 
 import "./request-form-style.scss";
 
@@ -71,13 +73,13 @@ export function RequestDetails(props) {
       <h2>Request Details</h2>
       <div className="form">
         <FormControl fullWidth size="small">
-          <InputLabel id="demo-simple-select-label">Discipline *</InputLabel>
+          <InputLabel id="discipline">Discipline *</InputLabel>
           <Select
+            labelId="discipline"
+            id="select"
             className="item"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
             value={discipline}
-            label="Discipline * "
+            label="Discipline *"
             onChange={(e) => {
               setDiscipline(e.target.value);
               setDetails((p) => ({
@@ -95,7 +97,7 @@ export function RequestDetails(props) {
           {discipline === "Other" ? (
             <div className="other-item">
               <TextField
-                id="outlined-basic"
+                id="other-disicpline"
                 label="If other, please specifiy.."
                 variant="outlined"
                 size="small"
@@ -113,11 +115,11 @@ export function RequestDetails(props) {
           ) : undefined}
         </div>
         <FormControl fullWidth size="small">
-          <InputLabel id="demo-simple-select-label">Project Type *</InputLabel>
+          <InputLabel id="project-type">Project Type *</InputLabel>
           <Select
             className="item"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="project-type"
+            id="project-type"
             value={projectType}
             label="Project Type *"
             onChange={(e) => {
@@ -140,7 +142,7 @@ export function RequestDetails(props) {
           {projectType === "Other" ? (
             <div className="other-item">
               <TextField
-                id="outlined-basic"
+                id="other-project-type"
                 label="If other, please specifiy.."
                 variant="outlined"
                 size="small"
@@ -158,13 +160,11 @@ export function RequestDetails(props) {
           ) : undefined}
         </div>
         <FormControl fullWidth size="small">
-          <InputLabel id="demo-simple-select-label">
-            Priority Level *
-          </InputLabel>
+          <InputLabel id="priority-level">Priority Level *</InputLabel>
           <Select
             className="item"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="priority-level"
+            id="priority-level"
             value={priority}
             label="Priority Level *"
             onChange={(e) => {
@@ -182,7 +182,7 @@ export function RequestDetails(props) {
         </FormControl>
         <TextField
           className="item"
-          id="outlined-basic"
+          id="supervisor's email"
           label="Supervisor's email address"
           variant="outlined"
           size="small"
@@ -203,10 +203,10 @@ export function RequestDetails(props) {
           on the supervisor's account
         </p>
         <h3 className="heading">Supervisor approval required? *</h3>
-        <FormControl component="fieldset">
+        <FormControl>
           <RadioGroup
             className="radio-group"
-            aria-label="gender"
+            aria-label="supervisor's approval"
             name="controlled-radio-buttons-group"
             value={approvalRequired}
             onChange={(e) => {
