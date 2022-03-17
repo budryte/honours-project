@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
+import {
+  TextField,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Button,
+} from "@mui/material";
 import logo from "../../images/logo.png";
 import Select from "@mui/material/Select";
 import { db as dexieDB } from "../../config/db";
@@ -147,13 +149,13 @@ export function Register() {
       <div className="image">
         <img src={logo} alt="" />
       </div>
-      <div className="title">Technical Request System</div>
-      <div className="header">Sign Up</div>
+      <h1 className="title">Technical Request System</h1>
+      <h2 className="header">Sign Up</h2>
       <div className="content">
         <div className="form">
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="firstname"
             label="First Name"
             variant="outlined"
             size="small"
@@ -168,7 +170,7 @@ export function Register() {
           />
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="last-name"
             label="Last Name"
             variant="outlined"
             size="small"
@@ -183,7 +185,7 @@ export function Register() {
           />
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="email"
             label="Email"
             variant="outlined"
             required
@@ -198,7 +200,7 @@ export function Register() {
           />
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="password"
             label="Password"
             variant="outlined"
             required
@@ -214,7 +216,7 @@ export function Register() {
           />
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="confirm-password"
             label="Confirm Password"
             variant="outlined"
             type="password"
