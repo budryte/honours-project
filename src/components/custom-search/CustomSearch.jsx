@@ -84,10 +84,12 @@ export default function CustomSearch() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Custom Search</div>
+      <main className="box">
+        <h1 className="page-title">Custom Search</h1>
         <div className="white-container">
-          <h1 style={{ marginBottom: 0 }}>Search for a specific request</h1>
+          <h2 style={{ marginBottom: 0, fontSize: "32px" }}>
+            Search for a specific request
+          </h2>
           <p style={{ fontStyle: "italic" }}>For example: RTA0000000000001</p>
           <TextField
             style={{ marginRight: "15px" }}
@@ -122,7 +124,7 @@ export default function CustomSearch() {
           </Button>
           {errorMessage && <p>{errorMessage}</p>}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

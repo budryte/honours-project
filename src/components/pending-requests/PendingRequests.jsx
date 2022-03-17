@@ -6,10 +6,10 @@ export default function PendingRequests() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Pending Requests</div>
+      <main className="box">
+        <h1 className="page-title">Pending Requests</h1>
         <Requests prevPage="/pending-requests" />
-      </div>
+      </main>
     </div>
   );
 }

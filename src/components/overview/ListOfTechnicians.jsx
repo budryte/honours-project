@@ -174,8 +174,8 @@ export default function ListOfTechncians() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Technicians</div>
+      <main className="box">
+        <h1 className="page-title">Technicians</h1>
         <div className="white-container-account">
           <h1>Manage Technicians</h1>
           <h2>Administrator</h2>
@@ -273,6 +273,7 @@ export default function ListOfTechncians() {
                   </div>
                   <IconButton>
                     <DeleteOutlineIcon
+                      aria-label="delete technician waiting in line"
                       className="bin"
                       onClick={() => {
                         setSetupCode(user.data.code);
@@ -287,7 +288,7 @@ export default function ListOfTechncians() {
             <p>No one is waiting to join.</p>
           )}
         </div>
-      </div>
+      </main>
 
       {/* Add new technician confirmation */}
       <Modal

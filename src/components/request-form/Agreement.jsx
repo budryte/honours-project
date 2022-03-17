@@ -21,8 +21,8 @@ export default function Agreement() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">Guidelines</div>
+      <main className="box">
+        <h1 className="page-title">Guidelines</h1>
         <div className="white-container">
           <h2>Request for Technical Assistance Guidelines</h2>
           <List>
@@ -125,7 +125,7 @@ export default function Agreement() {
             </Button>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

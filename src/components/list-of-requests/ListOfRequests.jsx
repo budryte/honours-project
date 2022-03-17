@@ -6,10 +6,10 @@ export default function ListofRequests() {
   return (
     <div>
       <Navbar />
-      <div className="box-list">
-        <div className="page-title">List of Requests</div>
+      <main className="box-list">
+        <h1 className="page-title">List of Requests</h1>
         <Requests prevPage="/list-of-requests" />
-      </div>
+      </main>
     </div>
   );
 }
