@@ -12,13 +12,7 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
         <Box sx={{ p: 3 }}>
           <Typography>{children}</Typography>
@@ -41,14 +35,10 @@ export function NewRequestContainer() {
   return (
     <div>
       <Navbar />
-      <div className="box">
-        <div className="page-title">New Request Form</div>
+      <main className="box">
+        <h1 className="page-title">New Request Form</h1>
         <div className="white-container">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="disabled tabs example"
-          >
+          <Tabs value={value} onChange={handleChange}>
             <Tab label="Details" />
             <Tab
               label="Attach Files"
@@ -94,7 +84,7 @@ export function NewRequestContainer() {
             />
           </TabPanel>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
