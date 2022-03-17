@@ -24,14 +24,14 @@ export default function MainRequestDetails() {
   return (
     <div>
       <h1 style={{ marginTop: 0 }}>{id}</h1>
-      <p
+      <h2
         style={{
           fontSize: "24px",
           color: "#4365e2",
         }}
       >
-        <b>{status}</b>
-      </p>
+        {status}
+      </h2>
       <p style={{ fontSize: "20px" }}>
         Requested by{" "}
         <b>
@@ -44,7 +44,7 @@ export default function MainRequestDetails() {
       </p>
       <h2>Request Details</h2>
       <TableContainer>
-        <Table sx={{ minWidth: 450 }} aria-label="simple table">
+        <Table sx={{ minWidth: 450 }} aria-label="main request details table">
           <TableBody>
             {Object.keys(requestDetails ?? {}).map((key) => (
               <TableRow key={key}>
