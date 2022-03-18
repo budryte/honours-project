@@ -70,7 +70,10 @@ export function RequestDetails(props) {
 
   return (
     <div className="request-form-tab">
-      <h2>Request Details</h2>
+      <h2 style={{ marginBottom: 0 }}>Request Details</h2>
+      <p style={{ marginBottom: "25px" }}>
+        * Required - Please fill in all fields in order to proceed
+      </p>
       <div className="form">
         <FormControl fullWidth size="small">
           <InputLabel id="discipline">Discipline *</InputLabel>
@@ -205,6 +208,7 @@ export function RequestDetails(props) {
         <h3 className="heading">Supervisor approval required? *</h3>
         <FormControl>
           <RadioGroup
+            style={{ marginBottom: 0 }}
             className="radio-group"
             aria-label="supervisor's approval"
             name="controlled-radio-buttons-group"
@@ -231,21 +235,29 @@ export function RequestDetails(props) {
         </FormControl>
         <div>
           {approvalRequired === "No" ? (
-            <TextField
-              id="outlined-basic"
-              label="Account to be charged"
-              variant="outlined"
-              size="small"
-              required
-              value={account}
-              onChange={(e) => {
-                setAccount(e.target.value);
-                setDetails((p) => ({
-                  ...p,
-                  account: e.target.value,
-                }));
-              }}
-            />
+            <div>
+              <p style={{ fontStyle: "italic" }}>
+                If you do not know the approved School's account covering you
+                request, please add any information (i.e. your School name) that
+                would help us to identify the account to be charged. You won't
+                be charged anything.
+              </p>
+              <TextField
+                id="outlined-basic"
+                label="Account to be charged"
+                variant="outlined"
+                size="small"
+                required
+                value={account}
+                onChange={(e) => {
+                  setAccount(e.target.value);
+                  setDetails((p) => ({
+                    ...p,
+                    account: e.target.value,
+                  }));
+                }}
+              />
+            </div>
           ) : undefined}
         </div>
         <div className="buttons">

@@ -39,9 +39,13 @@ export function NewRequestContainer() {
         <h1 className="page-title">New Request Form</h1>
         <div className="white-container">
           <Tabs value={value} onChange={handleChange}>
-            <Tab label="Details" />
+            <Tab
+              label="Details"
+              style={{ fontSize: "18px", fontFamily: "Baxter Sans Regular" }}
+            />
             <Tab
               label="Attach Files"
+              style={{ fontSize: "18px", fontFamily: "Baxter Sans Regular" }}
               disabled={
                 details === null ||
                 details.discipline === undefined ||
@@ -57,7 +61,11 @@ export function NewRequestContainer() {
                   details.account === undefined)
               }
             />
-            <Tab label="Review & Send" disabled={extraInfo === ""} />
+            <Tab
+              label="Review & Send"
+              style={{ fontSize: "18px", fontFamily: "Baxter Sans Regular" }}
+              disabled={extraInfo === ""}
+            />
           </Tabs>
           <TabPanel value={value} index={0}>
             <RequestDetails
