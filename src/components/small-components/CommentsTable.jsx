@@ -15,6 +15,7 @@ import {
   Modal,
   Box,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import {
@@ -136,47 +137,53 @@ export default function CommentsTable({ position, email }) {
                   </TableCell>
                   {position === "Technician" && status !== "Completed" ? (
                     <TableCell>
-                      <IconButton>
-                        <EditIcon
-                          aria-label="edit comment"
-                          onClick={() => {
-                            setComment(commentObj.comment);
-                            setCommentDate(commentObj.commentDate);
-                            setCommenter(commentObj.commenter);
-                            setTempComment(commentObj.comment);
-                            setTempCommentDate(commentObj.commentDate);
-                            setTempCommenter(commentObj.commenter);
-                            handleEditOpen();
-                          }}
-                        />
-                      </IconButton>
-                      <IconButton>
-                        <DeleteOutlineIcon
-                          aria-label="delete comment"
-                          className="bin"
-                          onClick={() => {
-                            setComment(commentObj.comment);
-                            setCommentDate(commentObj.commentDate);
-                            setCommenter(commentObj.commenter);
-                            handleRemoveOpen();
-                          }}
-                        />
-                      </IconButton>
+                      <Tooltip title="Edit">
+                        <IconButton>
+                          <EditIcon
+                            aria-label="edit comment"
+                            onClick={() => {
+                              setComment(commentObj.comment);
+                              setCommentDate(commentObj.commentDate);
+                              setCommenter(commentObj.commenter);
+                              setTempComment(commentObj.comment);
+                              setTempCommentDate(commentObj.commentDate);
+                              setTempCommenter(commentObj.commenter);
+                              handleEditOpen();
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton>
+                          <DeleteOutlineIcon
+                            aria-label="delete comment"
+                            className="bin"
+                            onClick={() => {
+                              setComment(commentObj.comment);
+                              setCommentDate(commentObj.commentDate);
+                              setCommenter(commentObj.commenter);
+                              handleRemoveOpen();
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   ) : undefined}
                 </TableRow>
               ))}
               {position === "Technician" && status !== "Completed" ? (
                 <TableRow>
-                  <IconButton>
-                    <AddIcon
-                      aria-label="add comment"
-                      fontSize="large"
-                      onClick={() => {
-                        handleAddOpen();
-                      }}
-                    />
-                  </IconButton>
+                  <Tooltip title="Add">
+                    <IconButton>
+                      <AddIcon
+                        aria-label="add comment"
+                        fontSize="large"
+                        onClick={() => {
+                          handleAddOpen();
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableRow>
               ) : undefined}
             </TableBody>

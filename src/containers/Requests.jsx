@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, List, ListItem, Grid, Pagination, Box } from "@mui/material";
+import {
+  Button,
+  List,
+  ListItem,
+  Grid,
+  Pagination,
+  Box,
+  Tooltip,
+} from "@mui/material";
 import {
   Warning as WarningIcon,
   DragHandle as DragHandleIcon,
@@ -268,13 +276,19 @@ export default function Requests({ prevPage }) {
               <p className="para">
                 <b className="id status">{req.data.status}</b>
                 {req.data.priority === "Urgent" ? (
-                  <WarningIcon style={{ color: "red" }} />
+                  <Tooltip title={`Priority: ${req.data.priority}`}>
+                    <WarningIcon style={{ color: "red" }} />
+                  </Tooltip>
                 ) : req.data.priority === "Medium" ? (
-                  <DragHandleIcon style={{ color: "orange" }} />
+                  <Tooltip title={`Priority: ${req.data.priority}`}>
+                    <DragHandleIcon style={{ color: "orange" }} />
+                  </Tooltip>
                 ) : (
-                  <KeyboardDoubleArrowDownRoundedIcon
-                    style={{ color: "blue" }}
-                  />
+                  <Tooltip title={`Priority: ${req.data.priority}`}>
+                    <KeyboardDoubleArrowDownRoundedIcon
+                      style={{ color: "blue" }}
+                    />
+                  </Tooltip>
                 )}
               </p>
             </div>
