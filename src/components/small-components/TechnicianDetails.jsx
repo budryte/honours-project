@@ -12,6 +12,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Tooltip,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { doc, updateDoc, getFirestore } from "firebase/firestore";
@@ -132,15 +133,17 @@ export default function TechnicianDetails(props) {
             disablePadding
             secondaryAction={
               isEditingAllowed() ? (
-                <IconButton
-                  edge="end"
-                  aria-label="change technician"
-                  onClick={() => {
-                    handleTechnicianOpen();
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
+                <Tooltip title="Edit Technician">
+                  <IconButton
+                    edge="end"
+                    aria-label="change technician"
+                    onClick={() => {
+                      handleTechnicianOpen();
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
               ) : undefined
             }
           >
@@ -153,15 +156,17 @@ export default function TechnicianDetails(props) {
           disablePadding
           secondaryAction={
             isEditingAllowed() && (
-              <IconButton
-                edge="end"
-                aria-label="change status"
-                onClick={() => {
-                  handleStatusOpen();
-                }}
-              >
-                <EditIcon />
-              </IconButton>
+              <Tooltip title="Edit Status">
+                <IconButton
+                  edge="end"
+                  aria-label="change status"
+                  onClick={() => {
+                    handleStatusOpen();
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             )
           }
         >
@@ -174,15 +179,17 @@ export default function TechnicianDetails(props) {
             disablePadding
             secondaryAction={
               isEditingAllowed() && (
-                <IconButton
-                  edge="end"
-                  aria-label="change estimated completion date"
-                  onClick={() => {
-                    handleEstimatedCompletionOpen();
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
+                <Tooltip title="Edit Date">
+                  <IconButton
+                    edge="end"
+                    aria-label="change estimated completion date"
+                    onClick={() => {
+                      handleEstimatedCompletionOpen();
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
               )
             }
           >

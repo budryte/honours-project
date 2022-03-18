@@ -41,7 +41,15 @@ export default function Home() {
         <h1 className="page-title">Technical Request System</h1>
         <div className="white-container">
           <Grid container spacing={2}>
-            <Grid item xs={XS} md={MD} sm={SM}>
+            <Grid
+              item
+              xs={XS}
+              md={MD}
+              sm={SM}
+              onClick={() => {
+                navigate("/my-account");
+              }}
+            >
               <div
                 className="card"
                 onMouseOver={() => accRef.current.play()}
@@ -57,19 +65,8 @@ export default function Home() {
                       className="animation-smaller"
                     />
                   </Grid>
-                  <Grid
-                    item
-                    xs={9}
-                    onClick={() => {
-                      navigate("/my-account");
-                    }}
-                  >
-                    <p
-                      className="link-to-menu-item para"
-                      onClick={() => {
-                        navigate("/my-account");
-                      }}
-                    >
+                  <Grid item xs={9}>
+                    <p className="link-to-menu-item para">
                       My Account
                       <ArrowForwardIcon
                         fontSize="small"
@@ -83,7 +80,15 @@ export default function Home() {
             </Grid>
 
             {position !== "Technician" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/agreement");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => reqRef.current.play()}
@@ -100,19 +105,8 @@ export default function Home() {
                         src="https://assets8.lottiefiles.com/packages/lf20_65fiagjg.json"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/agreement");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/agreement");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         New Request
                         <ArrowForwardIcon
                           fontSize="small"
@@ -127,7 +121,15 @@ export default function Home() {
             )}
 
             {position !== "Technician" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/track-requests");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => trackRef.current.play()}
@@ -143,19 +145,8 @@ export default function Home() {
                         className="animation-smaller"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/track-requests");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/track-requests");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         Track Your Requests
                         <ArrowForwardIcon
                           fontSize="small"
@@ -170,7 +161,15 @@ export default function Home() {
             )}
 
             {position === "Supervisor" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/pending-requests");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => signRef.current.play()}
@@ -187,19 +186,8 @@ export default function Home() {
                         className="animation-bigger"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/pending-requests");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/pending-requests");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         Pending Requests
                         <ArrowForwardIcon
                           fontSize="small"
@@ -214,7 +202,15 @@ export default function Home() {
             )}
 
             {position === "Technician" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/list-of-requests");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => listRef.current.play()}
@@ -231,19 +227,8 @@ export default function Home() {
                         style={{ width: "70px", heigth: "70px" }}
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/list-of-requests");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/list-of-requests");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         List of Requests
                         <ArrowForwardIcon
                           fontSize="small"
@@ -258,7 +243,15 @@ export default function Home() {
             )}
 
             {position === "Technician" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/my-work");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => workRef.current.play()}
@@ -274,19 +267,8 @@ export default function Home() {
                         className="animation-smaller"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/my-work");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/my-work");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         My Work
                         <ArrowForwardIcon
                           fontSize="small"
@@ -301,7 +283,15 @@ export default function Home() {
             )}
 
             {position === "Technician" && !!isAdmin ? (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/overview");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => techRef.current.play()}
@@ -317,19 +307,8 @@ export default function Home() {
                         className="animation-bigger"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/overview");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/overview");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         Technicians
                         <ArrowForwardIcon
                           fontSize="small"
@@ -343,7 +322,15 @@ export default function Home() {
               </Grid>
             ) : undefined}
 
-            <Grid item xs={XS} md={MD} sm={SM}>
+            <Grid
+              item
+              xs={XS}
+              md={MD}
+              sm={SM}
+              onClick={() => {
+                navigate("/archive");
+              }}
+            >
               <div
                 className="card"
                 onMouseOver={() => arcRef.current.play()}
@@ -359,19 +346,8 @@ export default function Home() {
                       className="animation-smaller"
                     />
                   </Grid>
-                  <Grid
-                    item
-                    xs={9}
-                    onClick={() => {
-                      navigate("/archive");
-                    }}
-                  >
-                    <p
-                      className="link-to-menu-item para"
-                      onClick={() => {
-                        navigate("/archive");
-                      }}
-                    >
+                  <Grid item xs={9}>
+                    <p className="link-to-menu-item para">
                       Archive
                       <ArrowForwardIcon
                         fontSize="small"
@@ -385,7 +361,15 @@ export default function Home() {
             </Grid>
 
             {position !== "Client" && (
-              <Grid item xs={XS} md={MD} sm={SM}>
+              <Grid
+                item
+                xs={XS}
+                md={MD}
+                sm={SM}
+                onClick={() => {
+                  navigate("/custom-search");
+                }}
+              >
                 <div
                   className="card"
                   onMouseOver={() => searchRef.current.play()}
@@ -401,19 +385,8 @@ export default function Home() {
                         className="animation-smaller"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={9}
-                      onClick={() => {
-                        navigate("/custom-search");
-                      }}
-                    >
-                      <p
-                        className="link-to-menu-item para"
-                        onClick={() => {
-                          navigate("/custom-search");
-                        }}
-                      >
+                    <Grid item xs={9}>
+                      <p className="link-to-menu-item para">
                         Custom Search
                         <ArrowForwardIcon
                           fontSize="small"

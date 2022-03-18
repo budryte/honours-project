@@ -97,6 +97,7 @@ export default function Account() {
     updatePassword(user, newPassword)
       .then(() => {
         console.log("Update successful.");
+        alert("Password was changed successfully.");
         changePasswordClose();
       })
       .catch((error) => {

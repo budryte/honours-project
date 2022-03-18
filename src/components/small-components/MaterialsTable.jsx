@@ -24,6 +24,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import { Tooltip } from "@material-ui/core";
 
 export default function MaterialsTable({ position }) {
   const [addOpen, setAddOpen] = useState(false);
@@ -166,47 +167,53 @@ export default function MaterialsTable({ position }) {
                   <TableCell>£{mat.price}</TableCell>
                   {position === "Technician" && status !== "Completed" ? (
                     <TableCell>
-                      <IconButton>
-                        <EditIcon
-                          aria-label="edit material"
-                          onClick={() => {
-                            setMaterial(mat.material);
-                            setQuantity(mat.quantity);
-                            setPrice(mat.price);
-                            setTempMat(mat.material);
-                            setTempQty(mat.quantity);
-                            setTempPrice(mat.price);
-                            handleEditOpen();
-                          }}
-                        />
-                      </IconButton>
-                      <IconButton>
-                        <DeleteOutlineIcon
-                          aria-label="delete material"
-                          className="bin"
-                          onClick={() => {
-                            setMaterial(mat.material);
-                            setQuantity(mat.quantity);
-                            setPrice(mat.price);
-                            handleRemoveOpen();
-                          }}
-                        />
-                      </IconButton>
+                      <Tooltip title="Edit">
+                        <IconButton>
+                          <EditIcon
+                            aria-label="edit material"
+                            onClick={() => {
+                              setMaterial(mat.material);
+                              setQuantity(mat.quantity);
+                              setPrice(mat.price);
+                              setTempMat(mat.material);
+                              setTempQty(mat.quantity);
+                              setTempPrice(mat.price);
+                              handleEditOpen();
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton>
+                          <DeleteOutlineIcon
+                            aria-label="delete material"
+                            className="bin"
+                            onClick={() => {
+                              setMaterial(mat.material);
+                              setQuantity(mat.quantity);
+                              setPrice(mat.price);
+                              handleRemoveOpen();
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   ) : undefined}
                 </TableRow>
               ))}
               {position === "Technician" && status !== "Completed" ? (
                 <TableRow>
-                  <IconButton>
-                    <AddIcon
-                      aria-label="add material"
-                      fontSize="large"
-                      onClick={() => {
-                        handleAddOpen();
-                      }}
-                    />
-                  </IconButton>
+                  <Tooltip title="Add">
+                    <IconButton>
+                      <AddIcon
+                        aria-label="add material"
+                        fontSize="large"
+                        onClick={() => {
+                          handleAddOpen();
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableRow>
               ) : undefined}
               <TableRow>

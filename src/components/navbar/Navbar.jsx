@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { db } from "../../config/db";
@@ -131,7 +132,7 @@ export default function Navbar() {
 
   return (
     <header>
-      <nav>
+      <nav className="header-menu">
         <React.Fragment key="left">
           <MenuIcon
             className="hamburger"
@@ -140,6 +141,11 @@ export default function Navbar() {
           >
             {"left"}
           </MenuIcon>
+          <HomeIcon
+            className="hamburger"
+            fontSize="large"
+            onClick={() => navigate("/home")}
+          ></HomeIcon>
           <Drawer anchor="left" open={left} onClose={toggleDrawer(false)}>
             <Menu />
           </Drawer>

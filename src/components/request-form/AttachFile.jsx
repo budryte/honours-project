@@ -40,12 +40,15 @@ export function AttachFile(props) {
 
   return (
     <div className="request-form-tab">
-      <h2>Nature of Request</h2>
+      <h2 style={{ marginBottom: 0 }}>Nature of Request</h2>
+      <p style={{ marginBottom: "25px" }}>
+        * Required - Please fill in all fields in order to proceed
+      </p>
       {/* <Basic /> */}
       <h3>OneDrive Link *</h3>
       <TextArea
         className="onedrive-link"
-        placeholder="Insert a link to the OneDrive folder"
+        placeholder="Insert a link to the OneDrive folder where technicians could find relevant drawings, schemes and files in order to build what's requested"
         value={linkToFolder}
         onChange={(e) => setLinkToFolder(e.target.value)}
       />
@@ -53,7 +56,7 @@ export function AttachFile(props) {
         <h3>Additional Information *</h3>
         <TextArea
           className="extra-info"
-          placeholder="Please include any additional information"
+          placeholder="Please include any additional information to explain the nature of your request"
           value={extraInfo}
           onChange={(e) => setExtraInfo(e.target.value)}
         />
