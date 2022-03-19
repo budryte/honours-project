@@ -64,7 +64,16 @@ export default function ReviewRequest() {
   };
 
   const [grant, setGrant] = useState("");
+  const [grantError, setGrantError] = useState(null);
   const [account, setAccount] = useState("");
+
+  function checkGrant() {
+    if (!/^(\d*[.])?\d+$/.test(grant)) {
+      setGrantError("Please enter numerical values only");
+      return false;
+    }
+    return true;
+  }
 
   async function addFields() {
     const firestore = getFirestore();
@@ -208,7 +217,7 @@ export default function ReviewRequest() {
             Approve Request
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter account to be charged:
+            Enter account to be charged*:
           </Typography>
           <TextField
             className="form-group"
@@ -232,10 +241,13 @@ export default function ReviewRequest() {
             variant="outlined"
             size="small"
             required
+            error={grantError !== null}
             value={grant}
             onChange={(e) => {
               setGrant(e.target.value);
+              setGrantError(null);
             }}
+            helperText={grantError}
           />
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -254,15 +266,27 @@ export default function ReviewRequest() {
               color="success"
               disabled={grant === "" || account === ""}
               onClick={() => {
-                addFields();
-                alert("The request was signed and sent successfully.");
-                navigate("/pending-requests");
-                handleSigningClose();
+                if (checkGrant()) {
+                  try {
+                    addFields();
+                  } catch (error) {
+                    console.log(error);
+                  } finally {
+                    alert("The request was signed and sent successfully.");
+                    navigate("/pending-requests");
+                    handleSigningClose();
+                  }
+                }
               }}
             >
               Save
             </Button>
           </div>
+          <p style={{ fontSize: "12px" }}>
+            * If you do not know the approved School's account, please add any
+            information (i.e. your School name) that would help us to identify
+            the account to be charged.
+          </p>
         </Box>
       </Modal>
 
