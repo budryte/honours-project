@@ -98,6 +98,7 @@ export default function Home() {
                     <Grid item xs={3}>
                       <Player
                         className="animation-bigger"
+                        style={{ width: "110px", height: "110px" }}
                         ref={reqRef}
                         autoplay={false}
                         loop={false}
@@ -184,6 +185,7 @@ export default function Home() {
                         keepLastFrame
                         src="https://assets10.lottiefiles.com/packages/lf20_s3u31uyq.json"
                         className="animation-bigger"
+                        style={{ width: "110px", height: "110px" }}
                       />
                     </Grid>
                     <Grid item xs={9}>
@@ -354,7 +356,7 @@ export default function Home() {
                         style={{ marginLeft: "8px" }}
                       />
                     </p>
-                    <p>View archive</p>
+                    <p>View your completed requests in archive</p>
                   </Grid>
                 </Grid>
               </div>
