@@ -146,6 +146,23 @@ export function ReviewAndSend(props) {
           </Box>
         </Modal>
       </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+        }}
+      >
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          Cancel Request
+        </Button>
+      </div>
     </div>
   );
 }
