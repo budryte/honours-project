@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import "./request-form-style.scss";
+import { useNavigate } from "react-router-dom";
 
 const disciplineValues = [
   "Mech Eng",
@@ -32,6 +33,7 @@ const projectTypeValues = [
 ];
 
 export function RequestDetails(props) {
+  let navigate = useNavigate();
   const { details, setDetails, handleChange } = props;
   const [discipline, setDiscipline] = useState(
     details?.discipline === undefined
@@ -278,6 +280,23 @@ export function RequestDetails(props) {
             }}
           >
             Next
+          </Button>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
+            Cancel Request
           </Button>
         </div>
       </div>
