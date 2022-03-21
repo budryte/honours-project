@@ -30,6 +30,7 @@ export default function Requests({ prevPage }) {
   let navigate = useNavigate();
   const users = useLiveQuery(() => dexieDB.users.toArray());
 
+  const [position, setPosition] = useState(null);
   const [filters, setFilters] = useState(null);
   const [sorting, setSorting] = useState(null);
   const [allRequests, setAllRequests] = useState([]);
@@ -64,9 +65,10 @@ export default function Requests({ prevPage }) {
 
       const currentUserEmail = users[0].email;
       const pos = users[0].position;
+      setPosition(pos);
 
       try {
-        let querySnapshot;
+        let querySnapshot, qs;
 
         switch (prevPage) {
           case "/my-work": {
@@ -74,13 +76,9 @@ export default function Requests({ prevPage }) {
             setEmptyReqMsg("You haven't picked up any requests.");
             break;
           }
-          case "/archive": {
-            querySnapshot = await getArchivedRequests(currentUserEmail, pos);
-            setEmptyReqMsg("There are no completed requests.");
-            break;
-          }
           case "/track-requests": {
             querySnapshot = await getTrackedRequests(currentUserEmail);
+            qs = await getApprovedRequests(currentUserEmail);
             setEmptyReqMsg("You have no active requests.");
             break;
           }
@@ -95,7 +93,7 @@ export default function Requests({ prevPage }) {
             setEmptyReqMsg("There are no requests in the queue.");
         }
 
-        let { reqArr, reqArrAlt } = prepareReqArr(querySnapshot);
+        let { reqArr, reqArrAlt } = prepareReqArr(querySnapshot, qs, pos);
 
         reqArr.sort(function (x, y) {
           return x.data.time - y.data.time;
@@ -170,15 +168,11 @@ export default function Requests({ prevPage }) {
     );
   }, [allFilteredReqs, page]);
 
-  function prepareReqArr(querySnapshot) {
+  function prepareReqArr(querySnapshot, qs, pos) {
     let reqArr = [],
       reqArrAlt = [];
 
-    if (prevPage !== "/pending-requests") {
-      querySnapshot.forEach((doc) => {
-        reqArr.push({ data: doc.data() });
-      });
-    } else {
+    if (prevPage === "/pending-requests") {
       querySnapshot.forEach((doc) => {
         if (!doc.data().technicianInCharge) {
           reqArr.push({ data: doc.data() });
@@ -186,55 +180,49 @@ export default function Requests({ prevPage }) {
           reqArrAlt.push({ data: doc.data() });
         }
       });
+    } else if (prevPage === "/track-requests" && pos === "Supervisor") {
+      querySnapshot.forEach((doc) => {
+        reqArr.push({ data: doc.data() });
+      });
+      qs.forEach((doc) => {
+        reqArrAlt.push({ data: doc.data() });
+      });
+    } else {
+      querySnapshot.forEach((doc) => {
+        reqArr.push({ data: doc.data() });
+      });
     }
 
     return { reqArr, reqArrAlt };
   }
 
   function getIncompleteRequests() {
-    return getDocs(
-      query(
-        collectionGroup(getFirestore(), "requests"),
-        where("status", "!=", "Completed")
-      )
-    );
+    return getDocs(query(collectionGroup(getFirestore(), "requests")));
   }
 
   function getTechnicianRequests(currentUserEmail) {
     return getDocs(
       query(
         collectionGroup(getFirestore(), "requests"),
-        where("technicianInCharge", "==", currentUserEmail),
-        where("status", "!=", "Completed")
+        where("technicianInCharge", "==", currentUserEmail)
       )
     );
-  }
-
-  function getArchivedRequests(currentUserEmail, pos) {
-    if (pos === "Technician") {
-      return getDocs(
-        query(
-          collectionGroup(getFirestore(), "requests"),
-          where("status", "==", "Completed")
-        )
-      );
-    } else {
-      return getDocs(
-        query(
-          collectionGroup(getFirestore(), "requests"),
-          where("email", "==", currentUserEmail),
-          where("status", "==", "Completed")
-        )
-      );
-    }
   }
 
   function getTrackedRequests(currentUserEmail) {
     return getDocs(
       query(
         collectionGroup(getFirestore(), "requests"),
-        where("email", "==", currentUserEmail),
-        where("status", "!=", "Completed")
+        where("email", "==", currentUserEmail)
+      )
+    );
+  }
+
+  function getApprovedRequests(currentUserEmail) {
+    return getDocs(
+      query(
+        collectionGroup(getFirestore(), "requests"),
+        where("supervisor", "==", currentUserEmail)
       )
     );
   }
@@ -314,25 +302,36 @@ export default function Requests({ prevPage }) {
               alignItems: "flex-end",
             }}
           >
-            <Pagination
-              count={Math.ceil(allFilteredReqs.length / REQUESTS_PER_PAGE)}
-              page={page}
-              onChange={handlePageChange}
-            />
+            {position !== "Supervisor" && (
+              <Pagination
+                count={Math.ceil(allFilteredReqs.length / REQUESTS_PER_PAGE)}
+                page={page}
+                onChange={handlePageChange}
+              />
+            )}
           </Box>
           {prevPage === "/pending-requests" && <h2>From students</h2>}
+          {prevPage === "/track-requests" && position === "Supervisor" ? (
+            <h2>Your requests</h2>
+          ) : undefined}
           {requestsToShow.length > 0 ? (
             <List>{requestsToShow.map(requestToJSX)}</List>
           ) : (
             <p>{emptyReqMsg}</p>
           )}
           {prevPage === "/pending-requests" && <h2>From technicians</h2>}
-          {prevPage === "/pending-requests" &&
-            (requestsAlt.length > 0 ? (
+          {prevPage === "/track-requests" && position === "Supervisor" ? (
+            <h2>Your approved requests</h2>
+          ) : undefined}
+          {(prevPage === "/pending-requests" ||
+            prevPage === "/track-requests") &&
+          position === "Supervisor" ? (
+            requestsAlt.length > 0 ? (
               <List>{requestsAlt.map(requestToJSX)}</List>
             ) : (
               <p>{emptyReqMsg}</p>
-            ))}
+            )
+          ) : undefined}
         </Grid>
       </Grid>
     </div>
