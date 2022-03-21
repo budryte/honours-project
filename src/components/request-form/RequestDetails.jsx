@@ -70,6 +70,17 @@ export function RequestDetails(props) {
   const [supervisor, setSupervisor] = useState(details?.supervisor ?? "");
   const [account, setAccount] = useState(details?.account ?? "");
 
+  const [supervisorError, setSupervisorError] = useState("");
+
+  function checkEmail() {
+    let add = true;
+    if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(supervisor)) {
+      setSupervisorError("Please enter a valid email address");
+      add = false;
+    }
+    return add;
+  }
+
   return (
     <div className="request-form-tab">
       <h2 style={{ marginBottom: 0 }}>Request Details</h2>
@@ -192,14 +203,17 @@ export function RequestDetails(props) {
           variant="outlined"
           size="small"
           required
+          error={supervisorError !== ""}
           value={supervisor}
           onChange={(e) => {
+            setSupervisorError("");
             setSupervisor(e.target.value);
             setDetails((p) => ({
               ...p,
               supervisor: e.target.value,
             }));
           }}
+          helperText={supervisorError}
         />
         <p style={{ marginTop: 0 }}>
           <b style={{ color: "red" }}>Important:</b> for testing purposes please
@@ -276,7 +290,9 @@ export function RequestDetails(props) {
               (approvalRequired === "No" && account === "")
             }
             onClick={() => {
-              handleChange(null, 1);
+              if (checkEmail()) {
+                handleChange(null, 1);
+              }
             }}
           >
             Next

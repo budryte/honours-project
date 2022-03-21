@@ -23,7 +23,7 @@ export default function Agreement() {
       <Navbar />
       <main className="box">
         <h1 className="page-title">Guidelines</h1>
-        <div className="white-container">
+        <div className="white-container-account">
           <h2>Request for Technical Assistance Guidelines</h2>
           <List>
             <ListItemText className="list-item">

@@ -32,6 +32,26 @@ export function NewRequestContainer() {
     setValue(newValue);
   };
 
+  function checkEmail() {
+    if (
+      !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
+        details.supervisor
+      )
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  function validateLink() {
+    let pattern =
+      /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/gm;
+    if (!pattern.test(linkToFolder)) {
+      return false;
+    }
+    return true;
+  }
+
   return (
     <div>
       <Navbar />
@@ -55,7 +75,8 @@ export function NewRequestContainer() {
                 (details.projectType === "Other" &&
                   details.otherProjectType === undefined) ||
                 details.priority === undefined ||
-                details.supervisor === undefined ||
+                details.supervisor === "" ||
+                !checkEmail() ||
                 details.approvalRequired === undefined ||
                 (details.approvalRequired === "No" &&
                   details.account === undefined)
@@ -64,7 +85,9 @@ export function NewRequestContainer() {
             <Tab
               label="Review & Send"
               style={{ fontSize: "18px", fontFamily: "Baxter Sans Regular" }}
-              disabled={extraInfo === ""}
+              disabled={
+                extraInfo === "" || linkToFolder === "" || !validateLink()
+              }
             />
           </Tabs>
           <TabPanel value={value} index={0}>

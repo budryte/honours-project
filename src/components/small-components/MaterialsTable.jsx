@@ -231,7 +231,7 @@ export default function MaterialsTable({ position }) {
         </TableContainer>
       ) : (
         status !== "Waiting on technician" && (
-          <p className="tech-item">There no materials ordered.</p>
+          <p className="tech-item">There are no materials ordered.</p>
         )
       )}
       <br></br>
