@@ -63,68 +63,129 @@ export default function Navbar() {
         <CloseIcon fontSize="large" onClick={toggleDrawer(false)} />
       </div>
       <div className="image">
-        <img src={logo} alt="" />
+        <img
+          src={logo}
+          alt="logo"
+          onClick={() => {
+            navigate("/home");
+          }}
+        />
       </div>
-      <List>
-        <ListItem button onClick={() => navigate("/home")}>
-          <ListItemText className="menu-item" primary="Home" />
+      <List style={{ paddingTop: "15px" }}>
+        <ListItem
+          button
+          className="menu-item"
+          style={{ paddingLeft: "40px" }}
+          onClick={() => navigate("/home")}
+        >
+          Home
         </ListItem>
 
-        <ListItem button onClick={() => navigate("/my-account")}>
-          <ListItemText className="menu-item" primary="My Account" />
+        <ListItem
+          button
+          className="menu-item"
+          style={{ paddingLeft: "40px" }}
+          onClick={() => navigate("/my-account")}
+        >
+          My Account
         </ListItem>
 
         {position !== "Technician" && (
-          <ListItem button onClick={() => navigate("/agreement")}>
-            <ListItemText className="menu-item" primary="New Request" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/agreement")}
+          >
+            New Request
           </ListItem>
         )}
 
         {position !== "Technician" && (
-          <ListItem button onClick={() => navigate("/track-requests")}>
-            <ListItemText className="menu-item" primary="Track Your Requests" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/track-requests")}
+          >
+            Track Your Requests
           </ListItem>
         )}
 
         {position === "Supervisor" && (
-          <ListItem button onClick={() => navigate("/pending-requests")}>
-            <ListItemText className="menu-item" primary="Pending Requests" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/pending-requests")}
+          >
+            Pending Requests
           </ListItem>
         )}
 
         {position === "Technician" && (
-          <ListItem button onClick={() => navigate("/list-of-requests")}>
-            <ListItemText className="menu-item" primary="List of Requests" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/list-of-requests")}
+          >
+            List of Requests
           </ListItem>
         )}
 
         {position === "Technician" && (
-          <ListItem button onClick={() => navigate("/my-work")}>
-            <ListItemText className="menu-item" primary="My Work" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/my-work")}
+          >
+            My Work
           </ListItem>
         )}
 
         {position === "Technician" && !!isAdmin ? (
-          <ListItem button onClick={() => navigate("/overview")}>
-            <ListItemText className="menu-item" primary="Technicians" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/overview")}
+          >
+            Technicians
           </ListItem>
         ) : undefined}
 
-        <ListItem button onClick={() => navigate("/archive")}>
-          <ListItemText className="menu-item" primary="Archive" />
+        <ListItem
+          button
+          className="menu-item"
+          style={{ paddingLeft: "40px" }}
+          onClick={() => navigate("/archive")}
+        >
+          Archive
         </ListItem>
 
         {position === "Technician" || position === "Supervisor" ? (
-          <ListItem button onClick={() => navigate("/custom-search")}>
-            <ListItemText className="menu-item" primary="Custom Search" />
+          <ListItem
+            button
+            className="menu-item"
+            style={{ paddingLeft: "40px" }}
+            onClick={() => navigate("/custom-search")}
+          >
+            Custom Search
           </ListItem>
         ) : undefined}
       </List>
 
       <Divider />
       <List>
-        <ListItem button onClick={handleLogout}>
-          <ListItemText className="menu-item" primary="Log Out" />
+        <ListItem
+          button
+          className="menu-item"
+          style={{ paddingLeft: "40px" }}
+          onClick={handleLogout}
+        >
+          <b>Log Out</b>
         </ListItem>
       </List>
     </Box>
@@ -132,7 +193,7 @@ export default function Navbar() {
 
   return (
     <header>
-      <nav className="header-menu">
+      <nav>
         <React.Fragment key="left">
           <MenuIcon
             className="hamburger"
