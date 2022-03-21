@@ -38,7 +38,7 @@ export default function Home() {
     <div>
       <Navbar />
       <main className="box">
-        <h1 className="page-title">Technical Request System</h1>
+        <h1 className="page-title">Request Management System</h1>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid
@@ -97,8 +97,7 @@ export default function Home() {
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <Player
-                        className="animation-bigger"
-                        style={{ width: "110px", height: "110px" }}
+                        className="spec-animation"
                         ref={reqRef}
                         autoplay={false}
                         loop={false}
@@ -184,8 +183,7 @@ export default function Home() {
                         loop={false}
                         keepLastFrame
                         src="https://assets10.lottiefiles.com/packages/lf20_s3u31uyq.json"
-                        className="animation-bigger"
-                        style={{ width: "110px", height: "110px" }}
+                        className="spec-animation"
                       />
                     </Grid>
                     <Grid item xs={9}>
@@ -362,7 +360,7 @@ export default function Home() {
               </div>
             </Grid>
 
-            {position !== "Client" && (
+            {position === "Supervisor" || position === "Technician" ? (
               <Grid
                 item
                 xs={XS}
@@ -400,7 +398,7 @@ export default function Home() {
                   </Grid>
                 </div>
               </Grid>
-            )}
+            ) : undefined}
           </Grid>
         </div>
       </main>
