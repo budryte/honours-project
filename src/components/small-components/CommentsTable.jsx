@@ -191,7 +191,7 @@ export default function CommentsTable({ position, email }) {
         </TableContainer>
       ) : (
         status !== "Waiting on technician" && (
-          <p className="tech-item"> There no comments.</p>
+          <p className="tech-item"> There are no technicians' comments yet.</p>
         )
       )}
       <br></br>
