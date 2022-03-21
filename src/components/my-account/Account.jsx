@@ -160,7 +160,7 @@ export default function Account() {
         <h1 className="page-title">My Account</h1>
         <div className="white-container-account">
           <h2 style={{ marginTop: 0 }}>Account Details</h2>
-          <List className="request-details">
+          <List>
             <ListItem disablePadding>
               <ListItemText>
                 <b>First Name:</b> {firstname}
