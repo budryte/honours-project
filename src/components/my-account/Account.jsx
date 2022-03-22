@@ -74,7 +74,7 @@ export default function Account() {
       proceed = false;
     } else if (newPassword !== confirmPassword) {
       setNewPasswordError("New passwords should match");
-      setConfirmPasswordError("New passwords shoudld match");
+      setConfirmPasswordError("New passwords should match");
       proceed = false;
     }
 
