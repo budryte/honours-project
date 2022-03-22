@@ -20,8 +20,6 @@ async function saveToFirestore(details, extraInfo, linkToFolder, user) {
       ? "Waiting on technician"
       : "Pending approval";
 
-  console.log(statusOnSubmission);
-
   const db = getFirestore();
   const auth = getAuth();
   const id = `RTA${Date.now().toString()}`;
