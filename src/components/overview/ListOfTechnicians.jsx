@@ -35,10 +35,11 @@ export default function ListOfTechncians() {
   const users = useLiveQuery(() => dexieDB.users.toArray());
 
   const [email, setEmail] = useState(null);
+  const [tempEmail, setTempEmail] = useState(null);
   const [emailError, setEmailError] = useState(null);
 
   const [admin, setAdmin] = useState(null);
-  const [tempEmail, setTempEmail] = useState(null);
+  const [tempAdmin, setTempAdmin] = useState(null);
 
   const [setupCode, setSetupCode] = useState(null);
   const [technicians, setTechnicians] = useState([]);
@@ -57,7 +58,7 @@ export default function ListOfTechncians() {
   const handleRemoveClose = () => {
     setRemoveOpen(false);
     setSetupCode(null);
-    setEmail(null);
+    setEmail("");
   };
 
   const [confirmAdmin, setConfirmAdmin] = useState(null);
@@ -136,7 +137,6 @@ export default function ListOfTechncians() {
   }
 
   function deleteTechnician(code) {
-    console.log("code ", code);
     const db = getFirestore();
     try {
       return deleteDoc(doc(db, "technicians", code));
@@ -205,7 +205,7 @@ export default function ListOfTechncians() {
                   {!tech.data.isAdmin && (
                     <Button
                       onClick={() => {
-                        setTempEmail(tech.data.email);
+                        setTempAdmin(tech.data.email);
                         confirmAdminOpen();
                       }}
                     >
@@ -242,7 +242,7 @@ export default function ListOfTechncians() {
               if (checkEmail()) {
                 addNewTechnician()
                   .then(() => {
-                    console.log(setupCode);
+                    console.log(" setupCode:", setupCode);
                     setWaitingToJoin((p) => [
                       ...p,
                       {
@@ -276,6 +276,8 @@ export default function ListOfTechncians() {
                       aria-label="delete technician waiting in line"
                       className="bin"
                       onClick={() => {
+                        setEmail(user.data.email);
+                        setTempEmail(user.data.email);
                         setSetupCode(user.data.code);
                         handleRemoveOpen();
                       }}
@@ -338,7 +340,7 @@ export default function ListOfTechncians() {
             Confirmation
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Would you like to remove <b>{email}</b> from the waiting list?
+            Would you like to remove <b>{tempEmail}</b> from the waiting list?
           </Typography>
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -404,7 +406,7 @@ export default function ListOfTechncians() {
             Confirmation
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Would you like to give administrator rights to <b>{tempEmail}</b>?
+            Would you like to give administrator rights to <b>{tempAdmin}</b>?
           </Typography>
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -423,7 +425,7 @@ export default function ListOfTechncians() {
               variant="outlined"
               color="success"
               onClick={() => {
-                changeAdmin(tempEmail);
+                changeAdmin(tempAdmin);
                 alert("Admin was successfully changed");
                 navigate("/home");
               }}
