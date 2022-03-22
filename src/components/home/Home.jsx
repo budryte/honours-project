@@ -235,7 +235,7 @@ export default function Home() {
                           style={{ marginLeft: "8px" }}
                         />
                       </p>
-                      <p>View the list of requests</p>
+                      <p>View the common list of requests</p>
                     </Grid>
                   </Grid>
                 </div>
@@ -275,7 +275,7 @@ export default function Home() {
                           style={{ marginLeft: "8px" }}
                         />
                       </p>
-                      <p>View your tasks</p>
+                      <p>View your picked up requests</p>
                     </Grid>
                   </Grid>
                 </div>
@@ -354,7 +354,12 @@ export default function Home() {
                         style={{ marginLeft: "8px" }}
                       />
                     </p>
-                    <p>View your completed requests in archive</p>
+                    <p>
+                      {" "}
+                      {position === "Technician"
+                        ? "View all completed requests in archive"
+                        : "View your completed requests in archive"}
+                    </p>
                   </Grid>
                 </Grid>
               </div>
