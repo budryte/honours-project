@@ -126,13 +126,10 @@ export default function ListOfTechncians() {
   }
 
   function addNewTechnician() {
-    let code = `SETUP${Date.now().toString()}`;
-    setSetupCode(code);
-
     const db = getFirestore();
-    return setDoc(doc(db, "technicians", code), {
+    return setDoc(doc(db, "technicians", setupCode), {
       email: email,
-      code: code,
+      code: setupCode,
     });
   }
 
@@ -232,6 +229,7 @@ export default function ListOfTechncians() {
               onChange={(e) => {
                 setEmailError(null);
                 setEmail(e.target.value);
+                setSetupCode(`SETUP${Date.now().toString()}`);
               }}
               helperText={emailError}
             />
@@ -242,7 +240,7 @@ export default function ListOfTechncians() {
               if (checkEmail()) {
                 addNewTechnician()
                   .then(() => {
-                    console.log(" setupCode:", setupCode);
+                    console.log("setupCode:", setupCode);
                     setWaitingToJoin((p) => [
                       ...p,
                       {
