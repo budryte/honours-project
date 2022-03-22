@@ -77,7 +77,6 @@ export default function ReviewRequest() {
 
   async function addFields() {
     const firestore = getFirestore();
-    console.log(parentId);
     const requestRef = doc(firestore, "users", parentId, "requests", id);
     await updateDoc(requestRef, {
       grant: grant,
