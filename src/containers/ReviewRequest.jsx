@@ -221,7 +221,7 @@ export default function ReviewRequest() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="account-to-be-charged"
             label="Account to be charged"
             variant="outlined"
             size="small"
@@ -236,7 +236,7 @@ export default function ReviewRequest() {
           </Typography>
           <TextField
             className="form-group"
-            id="outlined-basic"
+            id="grant"
             label="Grant"
             variant="outlined"
             size="small"
@@ -333,9 +333,15 @@ export default function ReviewRequest() {
               color="success"
               disabled={!estimatedTime}
               onClick={() => {
-                pickUpRequest();
-                handlePickupClose();
-                navigate("/list-of-requests");
+                try {
+                  pickUpRequest();
+                } catch (error) {
+                  console.log(error);
+                } finally {
+                  alert("Request was successfully picked up");
+                  navigate("/list-of-requests");
+                  handlePickupClose();
+                }
               }}
             >
               Save
@@ -383,8 +389,15 @@ export default function ReviewRequest() {
               variant="outlined"
               color="success"
               onClick={() => {
-                sendToSupervisor();
-                handleApprovalClose();
+                try {
+                  sendToSupervisor();
+                } catch (error) {
+                  console.log(error);
+                } finally {
+                  alert("Request was successfully sent to supervisor");
+                  navigate("/list-of-requests");
+                  handleApprovalClose();
+                }
               }}
             >
               Send
