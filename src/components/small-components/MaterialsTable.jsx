@@ -271,7 +271,7 @@ export default function MaterialsTable({ position }) {
             helperText={materialError}
           />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Enter Quanity:
+            Enter Quantity:
           </Typography>
           <TextField
             className="form-group"
@@ -390,7 +390,6 @@ export default function MaterialsTable({ position }) {
                       return pp;
                     });
                   })
-                  .then(() => calculateTotal())
                   .catch((err) => {
                     console.log(err);
                     // Could not remove material from Firestore
