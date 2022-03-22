@@ -197,3 +197,10 @@
   font-size: 18px;
   width: 75%;
 }
+
+.request-details {
+  width: 75%;
+  @media (max-width: 700px) {
+    width: 100%;
+  }
+}

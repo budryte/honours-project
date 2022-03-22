@@ -48,6 +48,7 @@ export default function TechnicianDetails(props) {
   const handleTechnicianOpen = () => setTechnicianOpen(true);
   const handleTechnicianClose = () => {
     setTechnicianOpen(false);
+    setTempTIC(null);
     setTICError(null);
   };
 
@@ -358,7 +359,6 @@ export default function TechnicianDetails(props) {
                 if (checkDetails()) {
                   setTechnicianInCharge(tempTIC);
                   changeTechnicianInCharge();
-                  setTempTIC(null);
                   handleTechnicianClose();
                 }
               }}
