@@ -183,6 +183,14 @@ export default function Navbar() {
           button
           className="menu-item"
           style={{ paddingLeft: "40px" }}
+          onClick={() => navigate("/about")}
+        >
+          Help
+        </ListItem>
+        <ListItem
+          button
+          className="menu-item"
+          style={{ paddingLeft: "40px" }}
           onClick={handleLogout}
         >
           <b>Log Out</b>
