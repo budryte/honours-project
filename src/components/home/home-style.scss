@@ -204,3 +204,9 @@
     width: 100%;
   }
 }
+
+.custom-search-textfield {
+  @media (max-width: 377px) {
+    width: 50%;
+  }
+}
