@@ -92,8 +92,8 @@ export default function CustomSearch() {
           </h2>
           <p style={{ fontStyle: "italic" }}>For example: RTA0000000000001</p>
           <TextField
+            className="custom-search-textfield"
             style={{ marginRight: "15px" }}
-            className="form-group"
             id="outlined-basic"
             label="Request ID"
             variant="outlined"

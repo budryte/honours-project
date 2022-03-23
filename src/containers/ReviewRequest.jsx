@@ -278,7 +278,7 @@ export default function ReviewRequest() {
                 }
               }}
             >
-              Save
+              Approve
             </Button>
           </div>
           <p style={{ fontSize: "12px" }}>
@@ -343,7 +343,7 @@ export default function ReviewRequest() {
                 }
               }}
             >
-              Save
+              Pick Up
             </Button>
           </div>
         </Box>

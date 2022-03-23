@@ -13,6 +13,7 @@ import { doc, setDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
+import CancelRequestButton from "../../components/small-components/CancelRequestButton";
 
 async function saveToFirestore(details, extraInfo, linkToFolder, user) {
   let statusOnSubmission =
@@ -96,6 +97,7 @@ export function ReviewAndSend(props) {
       <div className="buttons">
         <div className="request-form-button">
           <Button
+            size="large"
             variant="contained"
             onClick={() => {
               handleChange(null, 1);
@@ -105,6 +107,7 @@ export function ReviewAndSend(props) {
           </Button>
         </div>
         <Button
+          size="large"
           variant="contained"
           onClick={() => {
             saveToFirestore(details, extraInfo, linkToFolder, users[0]);
@@ -113,54 +116,38 @@ export function ReviewAndSend(props) {
         >
           Send
         </Button>
-        <Modal
-          open={open}
-          onClose={() => {
-            navigate("/home");
-          }}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Confirmation
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Your request has been sent successfully. <br></br>You can now
-              track your request.
-            </Typography>
-            <div className="modal-buttons">
-              <div className="request-form-button">
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    navigate("/track-requests");
-                  }}
-                >
-                  Track Request
-                </Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
+      <CancelRequestButton />
+      <Modal
+        open={open}
+        onClose={() => {
+          navigate("/home");
         }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          Cancel Request
-        </Button>
-      </div>
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Confirmation
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Your request has been sent successfully. <br></br>You can now track
+            your request.
+          </Typography>
+          <div className="modal-buttons">
+            <div className="request-form-button">
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  navigate("/track-requests");
+                }}
+              >
+                Track Request
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import ReviewRequest from "./containers/ReviewRequest";
 import Account from "./components/my-account/Account";
 import ListOfTechncians from "./components/overview/ListOfTechnicians";
 import CustomSearch from "./components/custom-search/CustomSearch";
+import AboutPage from "./components/about-page/AboutPage";
 import { initializeApp } from "firebase/app";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -70,6 +71,7 @@ function App() {
         <Route path="my-account" element={<Account />} />
         <Route path="archive" element={<Archive />} />
         <Route path="review-request" element={<ReviewRequest />} />
+        <Route path="about" element={<AboutPage />} />
 
         {whichPosition() !== "Technician" ? (
           <Route path="agreement" element={<Agreement />} />

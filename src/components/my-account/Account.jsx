@@ -176,11 +176,6 @@ export default function Account() {
                 <b>Email address:</b> {email}
               </ListItemText>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemText>
-                <b>Password: </b> *******
-              </ListItemText>
-            </ListItem>
           </List>
           <h2>Change password</h2>
           <p>Make sure it's at least 6 characters long</p>

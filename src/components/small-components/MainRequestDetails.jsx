@@ -23,7 +23,9 @@ export default function MainRequestDetails() {
   };
   return (
     <div>
-      <h1 style={{ marginTop: 0 }}>{id}</h1>
+      <h1 style={{ marginTop: "10px", fontFamily: "Arial", fontSize: "28px" }}>
+        {id}
+      </h1>
       <h2
         style={{
           fontSize: "24px",
@@ -33,12 +35,12 @@ export default function MainRequestDetails() {
         {status}
       </h2>
       <p style={{ fontSize: "20px" }}>
-        Requested by{" "}
+        Requested by: {""}
         <b>
           {firstname} {lastname}
         </b>
         <br></br>
-        <b style={{ fontStyle: "italic" }}>{email}</b>
+        Email: <b>{email}</b>
         <br></br>
         Submitted: <b>{new Date(time.seconds * 1000).toLocaleDateString()}</b>
       </p>

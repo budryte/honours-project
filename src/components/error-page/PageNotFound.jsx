@@ -9,7 +9,7 @@ export default function PageNotFound() {
     <div>
       <Navbar />
       <div className="box">
-        <div className="page-title">Page Not Found</div>
+        <h1 className="page-title">Page Not Found</h1>
         <div className="white-container">
           <h2>Page you are looking for cannot be accessed.</h2>
           <p style={{ fontSize: "18px" }}>Go back to Home page.</p>
