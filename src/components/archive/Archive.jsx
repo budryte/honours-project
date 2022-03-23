@@ -29,7 +29,7 @@ export default function Archive() {
   const [requestsToShow, setRequestsToShow] = useState([]);
   const [lastReq, setLastReq] = useState();
   const [isEnd, setIsEnd] = useState(false);
-  const emptyReqMsg = "There are no completed requests.";
+  const [emptyReqMsg, setEmptyReqMsg] = useState(null);
   const [totalArchived, setTotalArchived] = useState(0);
   const [page, setPage] = useState(1);
   const [baseQuery, setBaseQuery] = useState();
@@ -46,7 +46,11 @@ export default function Archive() {
     // Get archived request count and set the total number of pages
     if (pos === "Technician") {
       getTotalArhived();
+      setEmptyReqMsg("There are no completed requests.");
     } else {
+      setEmptyReqMsg(
+        "None of your submitted requests have been completed yet. You will be able to see your request here once it is finished and marked 'Completed' by technicians."
+      );
       getUserArchived(userId);
     }
 
@@ -217,11 +221,13 @@ export default function Archive() {
                   alignItems: "flex-end",
                 }}
               >
-                <Pagination
-                  count={Math.ceil(totalArchived / REQUESTS_PER_PAGE)}
-                  page={page}
-                  onChange={handlePageChange}
-                />
+                {totalArchived > 0 && (
+                  <Pagination
+                    count={Math.ceil(totalArchived / REQUESTS_PER_PAGE)}
+                    page={page}
+                    onChange={handlePageChange}
+                  />
+                )}
               </Box>
             </Grid>
             <Grid item xs={12}>
