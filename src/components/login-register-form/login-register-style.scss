@@ -9,9 +9,12 @@
     margin-top: 20px;
     font-family: "Baxter Sans Bold";
     margin-bottom: 0;
+    @media (max-width: 400px) {
+      font-size: 22px;
+    }
   }
 
-  .header {
+  .login-header {
     font-size: 22px;
     font-family: "Baxter Sans Bold";
     margin-bottom: 0px;

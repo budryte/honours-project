@@ -86,8 +86,8 @@ export function Login() {
         <div className="image">
           <img src={logo} alt="" />
         </div>
-        <h1 className="title">Technical Request System</h1>
-        <h2 className="header">Sign In</h2>
+        <h1 className="title">Request Management System</h1>
+        <h2 className="login-header">Sign In</h2>
         <div className="content">
           <div className="form">
             <TextField
