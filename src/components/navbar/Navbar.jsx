@@ -62,7 +62,7 @@ export default function Navbar() {
       <div className="close-button">
         <CloseIcon fontSize="large" onClick={toggleDrawer(false)} />
       </div>
-      <div className="image">
+      <div className="image-navbar">
         <img
           src={logo}
           alt="logo"
