@@ -61,7 +61,7 @@ export default function MainRequestDetails() {
             ))}
             {linkToFolder !== undefined ? (
               <TableRow>
-                <TableCell>Link To Folder</TableCell>
+                <TableCell>Link To OneDrive Folder *</TableCell>
                 <TableCell style={{ display: "flex", justifyContent: "row" }}>
                   <Link href={linkToFolder} target="_blank" rel="noopener">
                     {linkToFolder}
@@ -80,6 +80,13 @@ export default function MainRequestDetails() {
           </TableBody>
         </Table>
       </TableContainer>
+      <p style={{ fontSize: "16px" }}>
+        {" "}
+        <b style={{ color: "red" }}>* Please note:</b> for testing purposes now
+        links lead to random websites - in production links would lead to{" "}
+        <b>OneDrive folder</b> where you would be able to find drawings and
+        other files related to the request
+      </p>
       <br></br>
     </div>
   );

@@ -149,8 +149,8 @@ export function Register() {
       <div className="image">
         <img src={logo} alt="" />
       </div>
-      <h1 className="title">Technical Request System</h1>
-      <h2 className="header">Sign Up</h2>
+      <h1 className="title">Request Management System</h1>
+      <h2 className="login-header">Sign Up</h2>
       <div className="content">
         <div className="form">
           <TextField

@@ -49,7 +49,7 @@ export default function Archive() {
       setEmptyReqMsg("There are no completed requests.");
     } else {
       setEmptyReqMsg(
-        "None of your submitted requests have been completed yet. You will be able to see your request here once it is finished and marked 'Completed' by technicians."
+        "None of your submitted requests have been completed yet. You will be able to see your request here once it is finished and marked 'Completed' by technical staff."
       );
       getUserArchived(userId);
     }
