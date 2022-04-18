@@ -25,7 +25,7 @@ export default function TechnicianDetails(props) {
   const position = props.position;
 
   const { state } = useLocation();
-  const { id, estimatedTime: eTime, userId: parentId } = state.data;
+  const { id, pickupDate, estimatedTime: eTime, userId: parentId } = state.data;
 
   const [status, setStatus] = useState(state.data.status);
   const [technicianInCharge, setTechnicianInCharge] = useState(
@@ -129,27 +129,11 @@ export default function TechnicianDetails(props) {
     <div>
       <h2>Technician Details</h2>
       <List className="request-details">
-        {!!technicianInCharge ? (
-          <ListItem
-            disablePadding
-            secondaryAction={
-              isEditingAllowed() ? (
-                <Tooltip title="Edit Technician">
-                  <IconButton
-                    edge="end"
-                    aria-label="change technician"
-                    onClick={() => {
-                      handleTechnicianOpen();
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              ) : undefined
-            }
-          >
+        {!!pickupDate ? (
+          <ListItem disablePadding>
             <div className="tech-details-item">
-              <b>Technician in charge:</b> {technicianInCharge}
+              <b>Request picked-up on: </b>
+              {new Date(pickupDate.seconds * 1000).toLocaleDateString()}
             </div>
           </ListItem>
         ) : undefined}
@@ -175,6 +159,30 @@ export default function TechnicianDetails(props) {
             <b>Status:</b> {status}
           </div>
         </ListItem>
+        {!!technicianInCharge ? (
+          <ListItem
+            disablePadding
+            secondaryAction={
+              isEditingAllowed() ? (
+                <Tooltip title="Edit Technician">
+                  <IconButton
+                    edge="end"
+                    aria-label="change technician"
+                    onClick={() => {
+                      handleTechnicianOpen();
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : undefined
+            }
+          >
+            <div className="tech-details-item">
+              <b>Technician in charge:</b> {technicianInCharge}
+            </div>
+          </ListItem>
+        ) : undefined}
         {!!estimatedTime ? (
           <ListItem
             disablePadding
