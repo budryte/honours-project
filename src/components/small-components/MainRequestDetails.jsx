@@ -44,13 +44,18 @@ export default function MainRequestDetails() {
         <br></br>
         Submitted: <b>{new Date(time.seconds * 1000).toLocaleDateString()}</b>
       </p>
-      <h2>Request Details</h2>
+      <h2>Main Request Details</h2>
       <TableContainer>
-        <Table sx={{ minWidth: 450 }} aria-label="main request details table">
+        <Table sx={{ width: "auto" }} aria-label="main request details table">
           <TableBody>
             {Object.keys(requestDetails ?? {}).map((key) => (
-              <TableRow key={key}>
-                <TableCell component="th" scope="row">
+              <TableRow key={key} hover>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ width: 200 }}
+                  style={{ fontWeight: "bold" }}
+                >
                   {(key.charAt(0).toUpperCase() + key.slice(1))
                     .match(/([A-Z]?[^A-Z]*)/g)
                     .slice(0, -1)
@@ -60,8 +65,10 @@ export default function MainRequestDetails() {
               </TableRow>
             ))}
             {linkToFolder !== undefined ? (
-              <TableRow>
-                <TableCell>Link To OneDrive Folder *</TableCell>
+              <TableRow hover>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Link To OneDrive Folder *
+                </TableCell>
                 <TableCell style={{ display: "flex", justifyContent: "row" }}>
                   <Link href={linkToFolder} target="_blank" rel="noopener">
                     {linkToFolder}

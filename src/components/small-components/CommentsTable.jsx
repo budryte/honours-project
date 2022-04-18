@@ -104,7 +104,7 @@ export default function CommentsTable({ position, email }) {
       {status !== "Waiting on technician" && <h2>Comments History</h2>}
       {commentsArray?.length > 0 || status !== "Completed" ? (
         <TableContainer>
-          <Table sx={{ minWidth: 450 }} aria-label="comments table">
+          <Table sx={{ width: "auto" }} aria-label="comments table">
             <TableHead className="table-head">
               <TableRow>
                 <TableCell>
@@ -117,7 +117,7 @@ export default function CommentsTable({ position, email }) {
                   <b>Date</b>
                 </TableCell>
                 {position === "Technician" && status !== "Completed" ? (
-                  <TableCell>
+                  <TableCell sx={{ minWidth: "80px" }}>
                     <b>Tools</b>
                   </TableCell>
                 ) : undefined}
@@ -125,7 +125,7 @@ export default function CommentsTable({ position, email }) {
             </TableHead>
             <TableBody>
               {commentsArray?.map((commentObj) => (
-                <TableRow key={commentObj.comment}>
+                <TableRow key={commentObj.comment} hover>
                   <TableCell component="th" scope="row">
                     {commentObj.comment}
                   </TableCell>
@@ -173,7 +173,7 @@ export default function CommentsTable({ position, email }) {
               ))}
               {position === "Technician" && status !== "Completed" ? (
                 <TableRow>
-                  <Tooltip title="Add">
+                  <Tooltip title="Add comment">
                     <IconButton>
                       <AddIcon
                         aria-label="add comment"
