@@ -132,7 +132,10 @@ export default function MaterialsTable({ position }) {
       {status !== "Waiting on technician" && <h2>Ordered Materials</h2>}
       {matArr?.length > 0 || status !== "Completed" ? (
         <TableContainer>
-          <Table sx={{ minWidth: 450 }} aria-label="materials table">
+          <Table
+            sx={{ width: "auto", minWidth: 550 }}
+            aria-label="materials table"
+          >
             <TableHead className="table-head">
               <TableRow>
                 <TableCell>
@@ -145,7 +148,7 @@ export default function MaterialsTable({ position }) {
                   <b>Price</b>
                 </TableCell>
                 {position === "Technician" && status !== "Completed" ? (
-                  <TableCell>
+                  <TableCell sx={{ minWidth: "80px" }}>
                     <b>Tools</b>
                   </TableCell>
                 ) : undefined}
@@ -153,7 +156,7 @@ export default function MaterialsTable({ position }) {
             </TableHead>
             <TableBody>
               {matArr?.map((mat) => (
-                <TableRow key={mat.material}>
+                <TableRow key={mat.material} hover>
                   <TableCell component="th" scope="row">
                     {(
                       mat.material.charAt(0).toUpperCase() +
@@ -203,7 +206,7 @@ export default function MaterialsTable({ position }) {
               ))}
               {position === "Technician" && status !== "Completed" ? (
                 <TableRow>
-                  <Tooltip title="Add">
+                  <Tooltip title="Add material">
                     <IconButton>
                       <AddIcon
                         aria-label="add material"
@@ -221,7 +224,23 @@ export default function MaterialsTable({ position }) {
                 <TableCell align="right" colSpan={1}>
                   <b>Total:</b>
                 </TableCell>
-                <TableCell align="left">£{total.toFixed(2)}</TableCell>
+                <TableCell
+                  align="left"
+                  style={{
+                    color: state.data.grant < total ? "red" : undefined,
+                  }}
+                >
+                  {!!state.data.grant < total ? (
+                    <Tooltip
+                      title="Materials costs exceed available grant"
+                      followCursor
+                    >
+                      <div>£{total.toFixed(2)}</div>
+                    </Tooltip>
+                  ) : (
+                    <div>£{total.toFixed(2)}</div>
+                  )}
+                </TableCell>
                 {position === "Technician" && status !== "Completed" && (
                   <TableCell />
                 )}
