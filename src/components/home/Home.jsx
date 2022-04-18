@@ -38,7 +38,7 @@ export default function Home() {
     <div>
       <Navbar />
       <main className="box">
-        <h1 className="page-title">Request Management System</h1>
+        <h1 className="page-title">Dashboard</h1>
         <div className="white-container">
           <Grid container spacing={2}>
             <Grid

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 4em;
+  margin-top: 3em;
   margin-bottom: 2em;
   &:hover {
     cursor: pointer;
@@ -41,10 +41,35 @@
 .menu-item {
   font-family: "Baxter Sans Regular";
   font-size: 22px;
+  &:hover {
+    font-weight: bold;
+  }
 }
 
 .fixed-navbar {
   position: fixed;
   top: 0;
   width: 100%;
+}
+
+.menu-icon {
+  color: #464646;
+  padding-right: 15px;
+  padding-top: 2px;
+}
+
+.account-intro {
+  font-family: "Baxter Sans Regular";
+  font-size: 22px;
+  display: flex;
+  justify-content: flex-start;
+  font-weight: bold;
+  padding-left: 40px;
+}
+
+.position {
+  font-family: "Baxter Sans Regular";
+  font-size: 16px;
+  margin-left: 78px;
+  margin-bottom: 20px;
 }

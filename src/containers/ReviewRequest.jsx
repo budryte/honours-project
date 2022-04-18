@@ -9,7 +9,12 @@ import BackButton from "../components/small-components/BackButton";
 import DeleteRequest from "../components/small-components/DeleteRequest";
 import { Grid, Button, Box, Typography, TextField, Modal } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-import { doc, updateDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../config/db";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -117,6 +122,7 @@ export default function ReviewRequest() {
       estimatedTime: estimatedTime,
       technicianInCharge: auth.currentUser.email,
       status: "In progress",
+      pickupDate: serverTimestamp(),
     });
   }
 
@@ -154,7 +160,8 @@ export default function ReviewRequest() {
               )}
               <div className="buttons">
                 <div className="request-form-button">
-                  {prevPage === "/list-of-requests" &&
+                  {(prevPage === "/list-of-requests" ||
+                    prevPage === "/custom-search") &&
                   status === "Waiting on technician" ? (
                     <Button
                       variant="contained"
@@ -165,7 +172,8 @@ export default function ReviewRequest() {
                       Send to Supervisor
                     </Button>
                   ) : undefined}
-                  {prevPage === "/pending-requests" &&
+                  {(prevPage === "/pending-requests" ||
+                    prevPage === "/custom-search") &&
                   position === "Supervisor" ? (
                     <Button
                       variant="contained"
@@ -177,7 +185,8 @@ export default function ReviewRequest() {
                     </Button>
                   ) : undefined}
                 </div>
-                {prevPage === "/list-of-requests" &&
+                {(prevPage === "/list-of-requests" ||
+                  prevPage === "/custom-search") &&
                 status === "Waiting on technician" ? (
                   <Button
                     variant="contained"

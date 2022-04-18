@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Drawer,
-  List,
-  Divider,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Box, Drawer, List, Divider, ListItem } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import SupervisorAccountOutlinedIcon from "@mui/icons-material/SupervisorAccountOutlined";
+import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
+import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { db } from "../../config/db";
@@ -24,12 +30,16 @@ export default function Navbar() {
   const [left, setLeft] = useState(false);
   const [position, setPosition] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [firstname, setFirstname] = useState(null);
+  const [lastname, setLastname] = useState(null);
   const pos = useLiveQuery(() => db.users.toArray());
 
   useEffect(() => {
     if (!pos || !pos[0] || !pos[0].position) return;
     setPosition(pos[0].position);
     setIsAdmin(pos[0].isAdmin);
+    setFirstname(pos[0].firstname);
+    setLastname(pos[0].lastname);
   }, [pos]);
 
   const handleLogout = async () => {
@@ -71,6 +81,21 @@ export default function Navbar() {
           }}
         />
       </div>
+      <Divider />
+      <p
+        className="account-intro"
+        style={{ marginBottom: position !== "Client" ? "5px" : undefined }}
+      >
+        <PersonIcon
+          className="menu-icon"
+          onClick={() => {
+            navigate("/my-account");
+          }}
+        />{" "}
+        {firstname} {lastname}
+      </p>
+      {position !== "Client" && <div className="position">{position}</div>}
+      <Divider />
       <List style={{ paddingTop: "15px" }}>
         <ListItem
           button
@@ -78,18 +103,18 @@ export default function Navbar() {
           style={{ paddingLeft: "40px" }}
           onClick={() => navigate("/home")}
         >
+          <HomeOutlinedIcon className="menu-icon" />
           Home
         </ListItem>
-
         <ListItem
           button
           className="menu-item"
           style={{ paddingLeft: "40px" }}
           onClick={() => navigate("/my-account")}
         >
+          <AccountCircleOutlinedIcon className="menu-icon" />
           My Account
         </ListItem>
-
         {position !== "Technician" && (
           <ListItem
             button
@@ -97,10 +122,10 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/agreement")}
           >
+            <PostAddOutlinedIcon className="menu-icon" />
             New Request
           </ListItem>
         )}
-
         {position !== "Technician" && (
           <ListItem
             button
@@ -108,10 +133,10 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/track-requests")}
           >
+            <ManageSearchOutlinedIcon className="menu-icon" />
             Track Your Requests
           </ListItem>
         )}
-
         {position === "Supervisor" && (
           <ListItem
             button
@@ -119,10 +144,10 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/pending-requests")}
           >
+            <FactCheckOutlinedIcon className="menu-icon" />
             Pending Requests
           </ListItem>
         )}
-
         {position === "Technician" && (
           <ListItem
             button
@@ -130,10 +155,10 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/list-of-requests")}
           >
+            <ViewListOutlinedIcon className="menu-icon" />
             List of Requests
           </ListItem>
         )}
-
         {position === "Technician" && (
           <ListItem
             button
@@ -141,10 +166,10 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/my-work")}
           >
+            <AccessTimeOutlinedIcon className="menu-icon" />
             My Work
           </ListItem>
         )}
-
         {position === "Technician" && !!isAdmin ? (
           <ListItem
             button
@@ -152,19 +177,19 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/overview")}
           >
+            <SupervisorAccountOutlinedIcon className="menu-icon" />
             Technicians
           </ListItem>
         ) : undefined}
-
         <ListItem
           button
           className="menu-item"
           style={{ paddingLeft: "40px" }}
           onClick={() => navigate("/archive")}
         >
+          <ArchiveOutlinedIcon className="menu-icon" />
           Archive
         </ListItem>
-
         {position === "Technician" || position === "Supervisor" ? (
           <ListItem
             button
@@ -172,11 +197,11 @@ export default function Navbar() {
             style={{ paddingLeft: "40px" }}
             onClick={() => navigate("/custom-search")}
           >
+            <SearchOutlinedIcon className="menu-icon" />
             Custom Search
           </ListItem>
         ) : undefined}
       </List>
-
       <Divider />
       <List>
         <ListItem
@@ -185,6 +210,7 @@ export default function Navbar() {
           style={{ paddingLeft: "40px" }}
           onClick={() => navigate("/about")}
         >
+          <HelpOutlineOutlinedIcon className="menu-icon" />
           Help
         </ListItem>
         <ListItem
@@ -193,7 +219,8 @@ export default function Navbar() {
           style={{ paddingLeft: "40px" }}
           onClick={handleLogout}
         >
-          <b>Log Out</b>
+          <LogoutOutlinedIcon className="menu-icon" />
+          Log Out
         </ListItem>
       </List>
     </Box>
