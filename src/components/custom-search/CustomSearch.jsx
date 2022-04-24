@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function CustomSearch() {
   let navigate = useNavigate();
-  const [requestID, setRequestID] = useState(null);
-  const [requestIDError, setRequestIDError] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [requestID, setRequestID] = useState("");
+  const [requestIDError, setRequestIDError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   function checkID() {
     if (!requestID) {
@@ -100,7 +100,7 @@ export default function CustomSearch() {
             required
             size="small"
             value={requestID}
-            error={requestIDError !== null}
+            error={!!requestIDError}
             onChange={(e) => {
               setRequestIDError(null);
               setErrorMessage(null);
@@ -122,7 +122,7 @@ export default function CustomSearch() {
           >
             Search
           </Button>
-          {errorMessage && <p>{errorMessage}</p>}
+          {!!errorMessage && <p>{errorMessage}</p>}
         </div>
       </main>
     </div>

@@ -10,10 +10,17 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+const statusValues = [
+  "Pending approval",
+  "In progress",
+  "Waiting on technician",
+  "Waiting on materials",
+  "Waiting to be collected",
+];
 
 export default function Filters(props) {
   const [status, setStatus] = useState(null);
@@ -80,32 +87,15 @@ export default function Filters(props) {
                 });
               }}
             >
-              <FormControlLabel
-                style={{ padding: 0 }}
-                value="Pending approval"
-                control={<Radio size="small" />}
-                label="Pending approval"
-              />
-              <FormControlLabel
-                value="In progress"
-                control={<Radio size="small" />}
-                label="In progress"
-              />
-              <FormControlLabel
-                value="Waiting on technician"
-                control={<Radio size="small" />}
-                label="Waiting on technician"
-              />
-              <FormControlLabel
-                value="Waiting on materials"
-                control={<Radio size="small" />}
-                label="Waiting on materials"
-              />
-              <FormControlLabel
-                value="Waiting to be collected"
-                control={<Radio size="small" />}
-                label="Waiting to be collected"
-              />
+              {statusValues.map((val, i) => (
+                <FormControlLabel
+                  key={val}
+                  {...(i === 0 ? { style: { padding: 0 } } : {})}
+                  value={val}
+                  control={<Radio size="small" />}
+                  label={val}
+                />
+              ))}
             </RadioGroup>
           </fieldset>
           <fieldset style={{ marginTop: "10px", paddingBottom: 0 }}>

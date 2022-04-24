@@ -3,13 +3,14 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { TextArea } from "semantic-ui-react";
+import { styled } from "@mui/material/styles";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableContainer,
-  TableRow,
+  TableRow as UTableRow,
   IconButton,
   Button,
   Modal,
@@ -25,6 +26,13 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+
+const TableRow = styled(UTableRow)(() => ({
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 export default function CommentsTable({ position, email }) {
   const { state } = useLocation();
@@ -90,13 +98,11 @@ export default function CommentsTable({ position, email }) {
   };
 
   function checkComment() {
-    let toAdd = true;
-
     if (!comment) {
       setCommentError("Comment cannot be empty.");
-      toAdd = false;
+      return false;
     }
-    return toAdd;
+    return true;
   }
 
   return (
@@ -135,57 +141,57 @@ export default function CommentsTable({ position, email }) {
                   <TableCell>
                     {new Date(commentObj.commentDate).toLocaleDateString()}
                   </TableCell>
-                  {position === "Technician" && status !== "Completed" ? (
+                  {position === "Technician" && status !== "Completed" && (
                     <TableCell>
                       <Tooltip title="Edit">
-                        <IconButton>
-                          <EditIcon
-                            aria-label="edit comment"
-                            onClick={() => {
-                              setComment(commentObj.comment);
-                              setCommentDate(commentObj.commentDate);
-                              setCommenter(commentObj.commenter);
-                              setTempComment(commentObj.comment);
-                              setTempCommentDate(commentObj.commentDate);
-                              setTempCommenter(commentObj.commenter);
-                              handleEditOpen();
-                            }}
-                          />
+                        <IconButton
+                          onClick={() => {
+                            setComment(commentObj.comment);
+                            setCommentDate(commentObj.commentDate);
+                            setCommenter(commentObj.commenter);
+                            setTempComment(commentObj.comment);
+                            setTempCommentDate(commentObj.commentDate);
+                            setTempCommenter(commentObj.commenter);
+                            handleEditOpen();
+                          }}
+                        >
+                          <EditIcon aria-label="edit comment" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete">
-                        <IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setComment(commentObj.comment);
+                            setCommentDate(commentObj.commentDate);
+                            setCommenter(commentObj.commenter);
+                            handleRemoveOpen();
+                          }}
+                        >
                           <DeleteOutlineIcon
                             aria-label="delete comment"
                             className="bin"
-                            onClick={() => {
-                              setComment(commentObj.comment);
-                              setCommentDate(commentObj.commentDate);
-                              setCommenter(commentObj.commenter);
-                              handleRemoveOpen();
-                            }}
                           />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
-                  ) : undefined}
+                  )}
                 </TableRow>
               ))}
-              {position === "Technician" && status !== "Completed" ? (
+              {position === "Technician" && status !== "Completed" && (
                 <TableRow>
-                  <Tooltip title="Add comment">
-                    <IconButton>
-                      <AddIcon
-                        aria-label="add comment"
-                        fontSize="large"
+                  <TableCell>
+                    <Tooltip title="Add comment">
+                      <IconButton
                         onClick={() => {
                           handleAddOpen();
                         }}
-                      />
-                    </IconButton>
-                  </Tooltip>
+                      >
+                        <AddIcon aria-label="add comment" fontSize="large" />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
-              ) : undefined}
+              )}
             </TableBody>
           </Table>
         </TableContainer>

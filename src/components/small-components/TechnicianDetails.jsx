@@ -15,11 +15,18 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { doc, updateDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  getFirestore,
+  getDocs,
+  query,
+} from "firebase/firestore";
 import EditIcon from "@mui/icons-material/Edit";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+import { getAuth } from "firebase/auth";
 
 export default function TechnicianDetails(props) {
   const position = props.position;
@@ -53,10 +60,11 @@ export default function TechnicianDetails(props) {
   };
 
   //change technician in charge on Firebase
-  async function changeTechnicianInCharge() {
+  function changeTechnicianInCharge() {
     const fireStore = getFirestore();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
-    await updateDoc(requestRef, {
+
+    return updateDoc(requestRef, {
       technicianInCharge: tempTIC,
     });
   }
@@ -106,23 +114,16 @@ export default function TechnicianDetails(props) {
   ];
 
   //change request status on Firebase
-  async function changeStatus() {
+  function changeStatus() {
     const fireStore = getFirestore();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
-    await updateDoc(requestRef, {
+    return updateDoc(requestRef, {
       status: tempStatus,
     });
   }
 
   function isEditingAllowed() {
-    let edits = false;
-    if (position === "Technician") {
-      edits = true;
-    }
-    if (status === "Completed") {
-      edits = false;
-    }
-    return edits;
+    return position === "Technician" && status !== "Completed";
   }
 
   return (
@@ -289,7 +290,9 @@ export default function TechnicianDetails(props) {
               }}
             >
               {statusValues.map((val) => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem key={val} value={val}>
+                  {val}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -309,9 +312,10 @@ export default function TechnicianDetails(props) {
               variant="outlined"
               color="success"
               onClick={() => {
-                setStatus(tempStatus);
-                changeStatus();
-                handleStatusClose();
+                changeStatus()
+                  .then(() => setStatus(tempStatus))
+                  .catch(console.warn)
+                  .finally(() => handleStatusClose());
               }}
             >
               Save
@@ -365,9 +369,15 @@ export default function TechnicianDetails(props) {
               color="success"
               onClick={() => {
                 if (checkDetails()) {
-                  setTechnicianInCharge(tempTIC);
-                  changeTechnicianInCharge();
-                  handleTechnicianClose();
+                  changeTechnicianInCharge()
+                    .then(() => {
+                      setTechnicianInCharge(tempTIC);
+                      handleTechnicianClose();
+                    })
+                    .catch((e) => {
+                      console.warn(e);
+                      alert(e);
+                    });
                 }
               }}
             >

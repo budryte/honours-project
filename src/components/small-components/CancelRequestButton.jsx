@@ -17,7 +17,7 @@ export default function CancelRequestButton() {
         variant="outlined"
         color="error"
         onClick={() => {
-          navigate("/home");
+          navigate("/");
         }}
       >
         Cancel Request
