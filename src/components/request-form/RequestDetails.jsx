@@ -13,24 +13,7 @@ import {
 import CancelRequestButton from "../../components/small-components/CancelRequestButton";
 
 import "./request-form-style.scss";
-
-const disciplineValues = [
-  "Mech Eng",
-  "Civil CTU",
-  "Civil Geotechs",
-  "CAHID",
-  "LRCFS",
-  "Other",
-];
-
-const projectTypeValues = [
-  "Hons",
-  "MSc",
-  "PhD",
-  "Research",
-  "Teaching",
-  "Other",
-];
+import { disciplineValues, projectTypeValues } from "../../config/constants";
 
 export function RequestDetails(props) {
   const { details, setDetails, handleChange } = props;
@@ -80,6 +63,12 @@ export function RequestDetails(props) {
     return add;
   }
 
+  const valueToJSX = (val) => (
+    <MenuItem key={val} value={val}>
+      {val}
+    </MenuItem>
+  );
+
   return (
     <div className="request-form-tab">
       <h2 style={{ marginBottom: 0 }}>Request Details</h2>
@@ -103,32 +92,28 @@ export function RequestDetails(props) {
               }));
             }}
           >
-            {disciplineValues.map((val) => (
-              <MenuItem value={val}>{val}</MenuItem>
-            ))}
+            {disciplineValues.map(valueToJSX)}
           </Select>
         </FormControl>
-        <div>
-          {discipline === "Other" ? (
-            <div className="other-item">
-              <TextField
-                id="other-disicpline"
-                label="If other, please specifiy.."
-                variant="outlined"
-                size="small"
-                required
-                value={otherDiscipline}
-                onChange={(e) => {
-                  setOtherDiscipline(e.target.value);
-                  setDetails((p) => ({
-                    ...p,
-                    discipline: e.target.value,
-                  }));
-                }}
-              />
-            </div>
-          ) : undefined}
-        </div>
+        {discipline === "Other" && (
+          <div className="other-item">
+            <TextField
+              id="other-disicpline"
+              label="If other, please specifiy.."
+              variant="outlined"
+              size="small"
+              required
+              value={otherDiscipline}
+              onChange={(e) => {
+                setOtherDiscipline(e.target.value);
+                setDetails((p) => ({
+                  ...p,
+                  discipline: e.target.value,
+                }));
+              }}
+            />
+          </div>
+        )}
         <FormControl fullWidth size="small">
           <InputLabel id="project-type">Project Type *</InputLabel>
           <Select
@@ -145,35 +130,28 @@ export function RequestDetails(props) {
               }));
             }}
           >
-            <MenuItem value={"Hons"}>Hons</MenuItem>
-            <MenuItem value={"MSc"}>MSc</MenuItem>
-            <MenuItem value={"PhD"}>PhD</MenuItem>
-            <MenuItem value={"Research"}>Research</MenuItem>
-            <MenuItem value={"Teaching"}>Teaching</MenuItem>
-            <MenuItem value={"Other"}>Other</MenuItem>
+            {projectTypeValues.map(valueToJSX)}
           </Select>
         </FormControl>
-        <div>
-          {projectType === "Other" ? (
-            <div className="other-item">
-              <TextField
-                id="other-project-type"
-                label="If other, please specifiy.."
-                variant="outlined"
-                size="small"
-                required
-                value={otherProjectType}
-                onChange={(e) => {
-                  setOtherProjectType(e.target.value);
-                  setDetails((p) => ({
-                    ...p,
-                    projectType: e.target.value,
-                  }));
-                }}
-              />
-            </div>
-          ) : undefined}
-        </div>
+        {projectType === "Other" && (
+          <div className="other-item">
+            <TextField
+              id="other-project-type"
+              label="If other, please specifiy.."
+              variant="outlined"
+              size="small"
+              required
+              value={otherProjectType}
+              onChange={(e) => {
+                setOtherProjectType(e.target.value);
+                setDetails((p) => ({
+                  ...p,
+                  projectType: e.target.value,
+                }));
+              }}
+            />
+          </div>
+        )}
         <FormControl fullWidth size="small">
           <InputLabel id="priority-level">Priority Level *</InputLabel>
           <Select
@@ -214,12 +192,12 @@ export function RequestDetails(props) {
           }}
           helperText={supervisorError}
         />
-        <p style={{ marginTop: 0 }}>
+        {/* <p style={{ marginTop: 0 }}>
           <b style={{ color: "red" }}>Important:</b> for testing purposes please
           enter <b>supervisor1@dundee.ac.uk</b> email address and select{" "}
           <b>'Yes'</b> for the question below in order to see this request later
           on the supervisor's account
-        </p>
+        </p> */}
         <h3 className="heading">Supervisor approval required? *</h3>
         <FormControl>
           <RadioGroup
@@ -248,33 +226,31 @@ export function RequestDetails(props) {
             />
           </RadioGroup>
         </FormControl>
-        <div>
-          {approvalRequired === "No" ? (
-            <div>
-              <p style={{ fontStyle: "italic" }}>
-                If you do not know the approved School's account covering you
-                request, please add any information (i.e. your School name) that
-                would help us to identify the account to be charged. You won't
-                be charged anything.
-              </p>
-              <TextField
-                id="outlined-basic"
-                label="Account to be charged"
-                variant="outlined"
-                size="small"
-                required
-                value={account}
-                onChange={(e) => {
-                  setAccount(e.target.value);
-                  setDetails((p) => ({
-                    ...p,
-                    account: e.target.value,
-                  }));
-                }}
-              />
-            </div>
-          ) : undefined}
-        </div>
+        {approvalRequired === "No" && (
+          <div>
+            <p style={{ fontStyle: "italic" }}>
+              If you do not know the approved School's account covering you
+              request, please add any information (i.e. your School name) that
+              would help us to identify the account to be charged. You won't be
+              charged anything.
+            </p>
+            <TextField
+              id="outlined-basic"
+              label="Account to be charged"
+              variant="outlined"
+              size="small"
+              required
+              value={account}
+              onChange={(e) => {
+                setAccount(e.target.value);
+                setDetails((p) => ({
+                  ...p,
+                  account: e.target.value,
+                }));
+              }}
+            />
+          </div>
+        )}
         <div className="buttons">
           <Button
             size="large"
