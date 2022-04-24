@@ -2,19 +2,21 @@ import React, { useState, useEffect } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import { styled } from "@mui/material/styles";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableContainer,
-  TableRow,
+  TableRow as UTableRow,
   IconButton,
   Button,
   Modal,
   Box,
   Typography,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import {
@@ -24,7 +26,13 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import { Tooltip } from "@material-ui/core";
+
+const TableRow = styled(UTableRow)(() => ({
+  // hide 2nd to last last border
+  "&:nth-last-of-type(2) td, &:nth-last-of-type(2) th": {
+    border: 0,
+  },
+}));
 
 export default function MaterialsTable({ position }) {
   const [addOpen, setAddOpen] = useState(false);
@@ -90,25 +98,23 @@ export default function MaterialsTable({ position }) {
   }
 
   function checkMaterial() {
-    let toAdd = true;
-
     if (!material) {
       setMaterialError("Please enter material");
-      toAdd = false;
+      return false;
     }
     if (!quantity) {
       setQtyError("Please enter quantity");
-      toAdd = false;
+      return false;
     }
     if (!price) {
       setPriceError("Please enter price");
-      toAdd = false;
+      return false;
     } else if (!/^(\d*[.])?\d+$/.test(price)) {
       setPriceError("Please enter numerical values only");
-      toAdd = false;
+      return false;
     }
 
-    return toAdd;
+    return true;
   }
 
   function addNewMaterial() {
@@ -171,32 +177,32 @@ export default function MaterialsTable({ position }) {
                   {position === "Technician" && status !== "Completed" ? (
                     <TableCell>
                       <Tooltip title="Edit">
-                        <IconButton>
-                          <EditIcon
-                            aria-label="edit material"
-                            onClick={() => {
-                              setMaterial(mat.material);
-                              setQuantity(mat.quantity);
-                              setPrice(mat.price);
-                              setTempMat(mat.material);
-                              setTempQty(mat.quantity);
-                              setTempPrice(mat.price);
-                              handleEditOpen();
-                            }}
-                          />
+                        <IconButton
+                          onClick={() => {
+                            setMaterial(mat.material);
+                            setQuantity(mat.quantity);
+                            setPrice(mat.price);
+                            setTempMat(mat.material);
+                            setTempQty(mat.quantity);
+                            setTempPrice(mat.price);
+                            handleEditOpen();
+                          }}
+                        >
+                          <EditIcon aria-label="edit material" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete">
-                        <IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setMaterial(mat.material);
+                            setQuantity(mat.quantity);
+                            setPrice(mat.price);
+                            handleRemoveOpen();
+                          }}
+                        >
                           <DeleteOutlineIcon
                             aria-label="delete material"
                             className="bin"
-                            onClick={() => {
-                              setMaterial(mat.material);
-                              setQuantity(mat.quantity);
-                              setPrice(mat.price);
-                              handleRemoveOpen();
-                            }}
                           />
                         </IconButton>
                       </Tooltip>
@@ -204,21 +210,21 @@ export default function MaterialsTable({ position }) {
                   ) : undefined}
                 </TableRow>
               ))}
-              {position === "Technician" && status !== "Completed" ? (
+              {position === "Technician" && status !== "Completed" && (
                 <TableRow>
-                  <Tooltip title="Add material">
-                    <IconButton>
-                      <AddIcon
-                        aria-label="add material"
-                        fontSize="large"
+                  <TableCell>
+                    <Tooltip title="Add material">
+                      <IconButton
                         onClick={() => {
                           handleAddOpen();
                         }}
-                      />
-                    </IconButton>
-                  </Tooltip>
+                      >
+                        <AddIcon aria-label="add material" fontSize="large" />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
-              ) : undefined}
+              )}
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell align="right" colSpan={1}>
@@ -230,10 +236,10 @@ export default function MaterialsTable({ position }) {
                     color: state.data.grant < total ? "red" : undefined,
                   }}
                 >
-                  {!!state.data.grant < total ? (
+                  {state.data.grant < total ? (
                     <Tooltip
-                      title="Materials costs exceed available grant"
                       followCursor
+                      title="Materials costs exceed available grant"
                     >
                       <div>£{total.toFixed(2)}</div>
                     </Tooltip>

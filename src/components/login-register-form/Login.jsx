@@ -26,7 +26,7 @@ export function Login() {
         try {
           const userDoc = await initPosition();
           const { position, firstname, lastname, isAdmin } = userDoc.data();
-          return db.users.add({
+          await db.table("users").add({
             userId: userDoc.id,
             position,
             email,

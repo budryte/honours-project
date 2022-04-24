@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { TextArea } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
 import CancelRequestButton from "../../components/small-components/CancelRequestButton";
 
 import "./request-form-style.scss";
@@ -15,7 +14,6 @@ export function AttachFile(props) {
     setLinkToFolder,
   } = props;
 
-  let navigate = useNavigate();
   const [linkError, setLinkError] = useState(null);
 
   function validateLink() {
@@ -45,9 +43,7 @@ export function AttachFile(props) {
           setLinkError(null);
         }}
       />
-      {linkError !== null && (
-        <p style={{ color: "red", marginTop: 0 }}>{linkError}</p>
-      )}
+      {!!linkError && <p style={{ color: "red", marginTop: 0 }}>{linkError}</p>}
       <div>
         <h3>Additional Information *</h3>
         <TextArea

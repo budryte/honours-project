@@ -27,7 +27,11 @@ else console.warn("Could not find the firebase config");
 
 function App() {
   const [user, setUser] = useState("");
-  const users = useLiveQuery(() => db.users.toArray());
+  const localUser = useLiveQuery(() =>
+    db.table("users").toCollection().first()
+  );
+  const isAdmin = localUser?.isAdmin ?? false;
+  const position = localUser?.position ?? "";
 
   useEffect(() => {
     const auth = getAuth();
@@ -39,20 +43,6 @@ function App() {
       }
     });
   }, []);
-
-  function whichPosition() {
-    let position = "";
-    if (users?.length > 0 && users[0].position === "Technician") {
-      position = "Technician";
-    }
-    if (users?.length > 0 && users[0].position === "Supervisor") {
-      position = "Supervisor";
-    }
-    if (users?.length > 0 && users[0].position === "Client") {
-      position = "Client";
-    }
-    return position;
-  }
 
   return (
     <div
@@ -67,52 +57,32 @@ function App() {
         ) : (
           <Route index element={<SignInSignUpContainer />} />
         )}
-        <Route path="home" element={<Home />} />
         <Route path="my-account" element={<Account />} />
         <Route path="archive" element={<Archive />} />
         <Route path="review-request" element={<ReviewRequest />} />
         <Route path="about" element={<AboutPage />} />
 
-        {whichPosition() !== "Technician" ? (
-          <Route path="agreement" element={<Agreement />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
+        {position !== "Technician" && (
+          <>
+            <Route path="agreement" element={<Agreement />} />
+            <Route path="new-request" element={<NewRequestContainer />} />
+            <Route path="track-requests" element={<TrackRequest />} />
+          </>
         )}
-        {whichPosition() !== "Technician" ? (
-          <Route path="new-request" element={<NewRequestContainer />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
+        {position === "Supervisor" && (
+          <>
+            <Route path="pending-requests" element={<PendingRequests />} />
+            <Route path="custom-search" element={<CustomSearch />} />
+          </>
         )}
-        {whichPosition() !== "Technician" ? (
-          <Route path="track-requests" element={<TrackRequest />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
+        {position === "Technician" && (
+          <>
+            <Route path="list-of-requests" element={<ListofRequests />} />
+            <Route path="my-work" element={<MyWork />} />
+            <Route path="custom-search" element={<CustomSearch />} />
+          </>
         )}
-        {whichPosition() === "Supervisor" ? (
-          <Route path="pending-requests" element={<PendingRequests />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
-        )}
-        {whichPosition() === "Technician" ? (
-          <Route path="list-of-requests" element={<ListofRequests />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
-        )}
-        {whichPosition() === "Technician" ? (
-          <Route path="my-work" element={<MyWork />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
-        )}
-        {whichPosition() !== "Client" ? (
-          <Route path="custom-search" element={<CustomSearch />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
-        )}
-        {users?.length > 0 && users[0].isAdmin ? (
-          <Route path="overview" element={<ListOfTechncians />} />
-        ) : (
-          <Route path="*" element={<PageNotFound />} />
-        )}
+        {isAdmin && <Route path="overview" element={<ListOfTechncians />} />}
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

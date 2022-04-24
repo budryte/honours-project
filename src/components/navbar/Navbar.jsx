@@ -32,23 +32,22 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [firstname, setFirstname] = useState(null);
   const [lastname, setLastname] = useState(null);
-  const pos = useLiveQuery(() => db.users.toArray());
+  const user = useLiveQuery(() => db.table("users").toCollection().first());
 
   useEffect(() => {
-    if (!pos || !pos[0] || !pos[0].position) return;
-    setPosition(pos[0].position);
-    setIsAdmin(pos[0].isAdmin);
-    setFirstname(pos[0].firstname);
-    setLastname(pos[0].lastname);
-  }, [pos]);
+    if (!user) return;
+
+    setPosition(user.position);
+    setIsAdmin(user.isAdmin);
+    setFirstname(user.firstname);
+    setLastname(user.lastname);
+  }, [user]);
 
   const handleLogout = async () => {
-    const auth = getAuth();
-    await auth.signOut();
-    await db.users
-      .where("position")
-      .anyOf(["Supervisor", "Technician", "Client"])
-      .delete();
+    await Promise.all([
+      getAuth().signOut(),
+      db.table("users").toCollection().delete(),
+    ]);
     navigate("/");
   };
 
@@ -77,7 +76,7 @@ export default function Navbar() {
           src={logo}
           alt="logo"
           onClick={() => {
-            navigate("/home");
+            navigate("/");
           }}
         />
       </div>
@@ -101,7 +100,7 @@ export default function Navbar() {
           button
           className="menu-item"
           style={{ paddingLeft: "40px" }}
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/")}
         >
           <HomeOutlinedIcon className="menu-icon" />
           Home
@@ -240,7 +239,7 @@ export default function Navbar() {
           <HomeIcon
             className="hamburger"
             fontSize="large"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
           ></HomeIcon>
           <Drawer anchor="left" open={left} onClose={toggleDrawer(false)}>
             <Menu />

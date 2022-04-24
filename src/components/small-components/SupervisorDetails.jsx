@@ -15,29 +15,29 @@ export default function SupervisorDetails() {
             {approvalRequired}
           </div>
         </ListItem>
-        {supervisor !== undefined ? (
+        {!!supervisor && (
           <ListItem disablePadding>
             <div className="tech-details-item">
               <b>Supervised by: </b>
               {supervisor}
             </div>
           </ListItem>
-        ) : undefined}
-        {grant !== undefined ? (
+        )}
+        {!!grant && (
           <ListItem disablePadding>
             <div className="tech-details-item">
               <b>Student grant: </b>£{grant}
             </div>
           </ListItem>
-        ) : undefined}
-        {account !== undefined ? (
+        )}
+        {!!account && (
           <ListItem disablePadding>
             <div className="tech-details-item">
               <b>Account to be charged: </b>
               {account}
             </div>
           </ListItem>
-        ) : undefined}
+        )}
       </List>
     </div>
   );

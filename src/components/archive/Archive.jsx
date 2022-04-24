@@ -22,7 +22,9 @@ import { REQUESTS_PER_PAGE } from "../../config/constants";
 
 export default function Archive() {
   let navigate = useNavigate();
-  const users = useLiveQuery(() => dexieDB.users.toArray());
+  const user = useLiveQuery(() =>
+    dexieDB.table("users").toCollection().first()
+  );
 
   const [sorting, setSorting] = useState("desc"); // "desc" | "asc"
   const [accRequests, setAccRequests] = useState([]);
@@ -39,32 +41,33 @@ export default function Archive() {
     newPage > page ? nextPageRequests(newPage) : prevPageRequests(newPage);
 
   useEffect(() => {
-    if (!users || !users[0]?.position) return;
-    const pos = users[0].position;
-    const userId = users[0].userId;
+    if (!user) return;
+
+    const position = user.position;
+    const userId = user.userId;
 
     // Get archived request count and set the total number of pages
-    if (pos === "Technician") {
+    if (position === "Technician") {
       getTotalArhived();
       setEmptyReqMsg("There are no completed requests.");
     } else {
       setEmptyReqMsg(
-        "None of your submitted requests have been completed yet. You will be able to see your request here once it is finished and marked 'Completed' by technical staff."
+        "None of your submitted requests have been completed yet. You will be able to see your requests here once they are finished and marked 'Completed' by the technical staff."
       );
       getUserArchived(userId);
     }
 
-    setBaseQuery(getQuery(pos, userId));
+    setBaseQuery(getQuery(position, userId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users]);
+  }, [user]);
 
   useEffect(() => {
     if (!baseQuery) return;
-    (async () => {
-      try {
-        const querySnapshot = await getDocs(
-          query(baseQuery, orderBy("time", sorting), limit(REQUESTS_PER_PAGE))
-        );
+
+    getDocs(
+      query(baseQuery, orderBy("time", sorting), limit(REQUESTS_PER_PAGE))
+    )
+      .then((querySnapshot) => {
         const docArr = querySnapshot.docs;
         const reqArr = docArr.map((req) => req.data());
 
@@ -75,41 +78,34 @@ export default function Archive() {
         setAccRequests(reqArr);
 
         // Set if all archived requests have been downloaded
-        setIsEnd(reqArr.length >= totalArchived); // Maybe not needed
+        setIsEnd(reqArr.length >= totalArchived);
 
         // Set last request for pagination
         const lastReqDoc = docArr[docArr.length - 1];
         setLastReq(lastReqDoc);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+      })
+      .catch(console.warn)
+      .finally(() => setIsLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseQuery]);
 
-  async function getTotalArhived() {
-    try {
-      const countRef = doc(getFirestore(), "metadata", "count");
-      const countSnap = await getDoc(countRef);
-      const totalArchived = countSnap.data().totalArchived;
-      setTotalArchived(totalArchived);
-    } catch (error) {
-      console.warn(error);
-    }
+  function getTotalArhived() {
+    const countRef = doc(getFirestore(), "metadata", "count");
+    getDoc(countRef)
+      .then((snap) => snap.data())
+      .then((data) => data.totalArchived)
+      .then(setTotalArchived)
+      .catch(console.warn);
   }
 
-  async function getUserArchived(userId) {
-    try {
-      const userRef = doc(getFirestore(), "users", userId);
-      const userSnap = await getDoc(userRef);
-      const archivedCount = userSnap.data().archivedRequests;
-      setTotalArchived(archivedCount);
-    } catch (error) {
-      console.warn(error);
-    }
+  function getUserArchived(userId) {
+    const userRef = doc(getFirestore(), "users", userId);
+    getDoc(userRef)
+      .then((snap) => snap.data())
+      .then((data) => data.archivedRequests)
+      .then(setTotalArchived)
+      .catch(console.warn);
   }
 
   function getQuery(pos, userId) {

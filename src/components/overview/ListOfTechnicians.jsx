@@ -16,32 +16,33 @@ import {
   IconButton,
 } from "@mui/material";
 import {
-  collectionGroup,
   query,
   where,
   getDocs,
+  getDoc,
   getFirestore,
   doc,
-  setDoc,
   updateDoc,
   collection,
-  deleteDoc,
+  arrayRemove,
+  arrayUnion,
 } from "firebase/firestore";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../../config/db";
 
 export default function ListOfTechncians() {
   let navigate = useNavigate();
-  const users = useLiveQuery(() => dexieDB.users.toArray());
+  const user = useLiveQuery(() =>
+    dexieDB.table("users").toCollection().first()
+  );
 
-  const [email, setEmail] = useState(null);
-  const [tempEmail, setTempEmail] = useState(null);
+  const [email, setEmail] = useState("");
+  const [tempEmail, setTempEmail] = useState("");
   const [emailError, setEmailError] = useState(null);
 
   const [admin, setAdmin] = useState(null);
   const [tempAdmin, setTempAdmin] = useState(null);
 
-  const [setupCode, setSetupCode] = useState(null);
   const [technicians, setTechnicians] = useState([]);
   const [waitingToJoin, setWaitingToJoin] = useState([]);
 
@@ -53,29 +54,29 @@ export default function ListOfTechncians() {
     setConfirmation(false);
   };
 
-  const [removeOpen, setRemoveOpen] = useState(null);
+  const [removeOpen, setRemoveOpen] = useState(false);
   const handleRemoveOpen = () => setRemoveOpen(true);
   const handleRemoveClose = () => {
     setRemoveOpen(false);
-    setSetupCode(null);
     setEmail("");
   };
 
-  const [confirmAdmin, setConfirmAdmin] = useState(null);
+  const [confirmAdmin, setConfirmAdmin] = useState(false);
   const confirmAdminOpen = () => setConfirmAdmin(true);
   const confirmAdminClose = () => setConfirmAdmin(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const querySnapshot = await getDocs(
-          query(
-            collectionGroup(getFirestore(), "users"),
-            where("position", "==", "Technician")
-          )
-        );
+    let isCancelled = false;
+    const db = getFirestore();
+
+    getDocs(
+      query(collection(db, "users"), where("position", "==", "Technician"))
+    )
+      .then((snap) => {
+        if (isCancelled) return;
+
         let techArr = [];
-        querySnapshot.forEach((document) => {
+        snap.forEach((document) => {
           techArr.push({
             id: document.id,
             data: document.data(),
@@ -88,29 +89,27 @@ export default function ListOfTechncians() {
             });
         });
         setTechnicians(techArr);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+      })
+      .catch(console.warn);
+
+    return () => (isCancelled = true);
   }, []);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const querySnapshot = await getDocs(
-          query(collectionGroup(getFirestore(), "technicians"))
-        );
-        let array = [];
-        querySnapshot.forEach((document) => {
-          array.push({
-            data: document.data(),
-          });
-        });
-        setWaitingToJoin(array);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    let isCancelled = false;
+    const db = getFirestore();
+    const techniciansDoc = doc(db, "metadata", "technicians");
+
+    getDoc(techniciansDoc)
+      .then((snap) => snap.data())
+      .then((data) => data.waiting)
+      .then((waiting) => {
+        if (isCancelled || waiting.length === 0) return;
+        setWaitingToJoin(waiting);
+      })
+      .catch(console.warn);
+
+    return () => (isCancelled = true);
   }, []);
 
   function checkEmail() {
@@ -127,18 +126,21 @@ export default function ListOfTechncians() {
 
   function addNewTechnician() {
     const db = getFirestore();
-    return setDoc(doc(db, "technicians", setupCode), {
-      email: email,
-      code: setupCode,
-    });
+    try {
+      const techniciansDoc = doc(db, "metadata", "technicians");
+      return updateDoc(techniciansDoc, arrayUnion(email));
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
-  function deleteTechnician(code) {
+  function deleteTechnician() {
     const db = getFirestore();
     try {
-      return deleteDoc(doc(db, "technicians", code));
+      const techniciansDoc = doc(db, "metadata", "technicians");
+      return updateDoc(techniciansDoc, arrayRemove(email));
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   }
 
@@ -150,7 +152,7 @@ export default function ListOfTechncians() {
       isAdmin: false,
     });
     // Set the current logged-in user's local admin status to false
-    dexieDB.users.update(users[0].id, { isAdmin: false });
+    dexieDB.table("users").update(user.id, { isAdmin: false });
 
     // Get the new admin's document
     const docArr = await getDocs(
@@ -183,7 +185,7 @@ export default function ListOfTechncians() {
           {technicians.length > 0 ? (
             <List>
               {technicians.map((tech) => (
-                <ListItem>
+                <ListItem key={tech.data.email}>
                   <ListItemAvatar>
                     <Avatar
                       style={{
@@ -229,7 +231,6 @@ export default function ListOfTechncians() {
               onChange={(e) => {
                 setEmailError(null);
                 setEmail(e.target.value);
-                setSetupCode(`SETUP${Date.now().toString()}`);
               }}
               helperText={emailError}
             />
@@ -240,13 +241,7 @@ export default function ListOfTechncians() {
               if (checkEmail()) {
                 addNewTechnician()
                   .then(() => {
-                    console.log("setupCode:", setupCode);
-                    setWaitingToJoin((p) => [
-                      ...p,
-                      {
-                        data: { email: email, code: setupCode },
-                      },
-                    ]);
+                    setWaitingToJoin((p) => [...p, { email }]);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -264,28 +259,26 @@ export default function ListOfTechncians() {
           <h3>Waiting to join the system</h3>
           {waitingToJoin.length > 0 ? (
             <List>
-              {waitingToJoin?.map((user) => (
-                <ListItem>
-                  <div className="tech-item">
-                    {user.data.email}| Set-up code: <b>{user.data.code}</b>
-                  </div>
-                  <IconButton>
+              {waitingToJoin.map((userEmail) => (
+                <ListItem key={userEmail}>
+                  <div className="tech-item">{userEmail}</div>
+                  <IconButton
+                    onClick={() => {
+                      setEmail(userEmail);
+                      setTempEmail(userEmail);
+                      handleRemoveOpen();
+                    }}
+                  >
                     <DeleteOutlineIcon
                       aria-label="delete technician waiting in line"
                       className="bin"
-                      onClick={() => {
-                        setEmail(user.data.email);
-                        setTempEmail(user.data.email);
-                        setSetupCode(user.data.code);
-                        handleRemoveOpen();
-                      }}
                     />
                   </IconButton>
                 </ListItem>
               ))}
             </List>
           ) : (
-            <p>No one is waiting to join.</p>
+            <p>There are no waiting technicians.</p>
           )}
         </div>
       </main>
@@ -306,7 +299,6 @@ export default function ListOfTechncians() {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             New technician added successfully. <br></br>
-            Set up code is: {setupCode}
           </Typography>
           <div className="modal-buttons">
             <div className="request-form-button">
@@ -355,15 +347,12 @@ export default function ListOfTechncians() {
             <Button
               variant="outlined"
               onClick={() => {
-                deleteTechnician(setupCode)
+                deleteTechnician()
                   .then(() => {
                     setWaitingToJoin((p) => {
                       let pp = [...p];
                       for (let i = 0; i < pp.length; i++) {
-                        if (
-                          pp[i].data.email === email &&
-                          pp[i].data.code === setupCode
-                        ) {
+                        if (pp[i].email === email) {
                           pp.splice(i, 1);
                           break;
                         }
@@ -425,7 +414,7 @@ export default function ListOfTechncians() {
               onClick={() => {
                 changeAdmin(tempAdmin);
                 alert("Admin was successfully changed");
-                navigate("/home");
+                navigate("/");
               }}
             >
               Yes

@@ -17,7 +17,7 @@ export default function PageNotFound() {
             <Button
               variant="contained"
               onClick={() => {
-                navigate("/home");
+                navigate("/");
               }}
             >
               Go to Home
