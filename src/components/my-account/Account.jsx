@@ -23,7 +23,9 @@ import {
 
 export default function Account() {
   let navigate = useNavigate();
-  const users = useLiveQuery(() => dexieDB.users.toArray());
+  const localUser = useLiveQuery(() =>
+    dexieDB.table("users").toCollection().first()
+  );
   const [email, setEmail] = useState(null);
   const [firstname, setFirstname] = useState(null);
   const [lastname, setLastname] = useState(null);
@@ -56,9 +58,21 @@ export default function Account() {
   const [newPasswordError, setNewPasswordError] = useState(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
+  function reauthenticate(user, callback) {
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+
+    return reauthenticateWithCredential(user, credential)
+      .then(callback)
+      .catch((err) => {
+        console.warn("User not re-authenticated", err);
+        if (err.code === "auth/wrong-password") {
+          setOldPasswordError("Password is incorrect");
+        }
+      });
+  }
+
   async function changePass() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const user = getAuth().currentUser;
     let proceed = true;
 
     if (!oldPassword) {
@@ -78,80 +92,48 @@ export default function Account() {
       proceed = false;
     }
 
-    const credential = EmailAuthProvider.credential(user.email, oldPassword);
-
-    await reauthenticateWithCredential(user, credential)
-      .then(() => {
-        console.log("User re-authenticated.");
-      })
-      .catch((err) => {
-        console.log("User not re-authenticated", err);
-        if (err.code === "auth/wrong-password") {
-          setOldPasswordError("Password is incorrect");
-          proceed = false;
-        }
-      });
-
     if (!proceed) return;
 
-    updatePassword(user, newPassword)
-      .then(() => {
-        console.log("Update successful.");
-        alert("Password was changed successfully.");
-        changePasswordClose();
-      })
-      .catch((error) => {
-        console.log("Password update failed", error);
-        if (error.code === "auth/weak-password") {
-          setNewPasswordError("Password should be at least 6 characters long");
-          setConfirmPasswordError(
-            "Password should be at least 6 characters long"
-          );
-        }
-      });
+    reauthenticate(
+      user,
+      updatePassword(user, newPassword)
+        .then(() => {
+          alert("Password was changed successfully.");
+          changePasswordClose();
+        })
+        .catch((error) => {
+          console.warn("Password update failed", error);
+          if (error.code === "auth/weak-password") {
+            const msg = "Password should be at least 6 characters long";
+            setNewPasswordError(msg);
+            setConfirmPasswordError(msg);
+          }
+        })
+    );
   }
 
   async function deleteAccount() {
-    let proceed = true;
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const user = getAuth().currentUser;
 
     if (!oldPassword) {
       setOldPasswordError("Please enter old password");
-      proceed = false;
+      return;
     }
 
-    const credential = EmailAuthProvider.credential(user.email, oldPassword);
-
-    await reauthenticateWithCredential(user, credential)
-      .then(() => {
-        console.log("User re-authenticated.");
-      })
-      .catch((err) => {
-        console.log("User not re-authenticated", err);
-        if (err.code === "auth/wrong-password") {
-          setOldPasswordError("Password is incorrect");
-          proceed = false;
-        }
-      });
-
-    if (!proceed) return;
-
-    deleteUser(user)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    reauthenticate(
+      user,
+      deleteUser(user)
+        .then(() => navigate("/"))
+        .catch(console.warn)
+    );
   }
 
   useEffect(() => {
-    if (!users || !users[0] || !users[0].email) return;
-    setEmail(users[0].email);
-    setFirstname(users[0].firstname);
-    setLastname(users[0].lastname);
-  }, [users]);
+    if (!localUser) return;
+    setEmail(localUser.email);
+    setFirstname(localUser.firstname);
+    setLastname(localUser.lastname);
+  }, [localUser]);
 
   return (
     <div>

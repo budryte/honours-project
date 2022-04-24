@@ -26,9 +26,11 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db as dexieDB } from "../config/db";
 import { REQUESTS_PER_PAGE } from "../config/constants";
 
-export default function Requests({ prevPage }) {
+export default function Requests({ prevPage, setRequests = null }) {
   let navigate = useNavigate();
-  const users = useLiveQuery(() => dexieDB.users.toArray());
+  const user = useLiveQuery(() =>
+    dexieDB.table("users").toCollection().first()
+  );
 
   const [position, setPosition] = useState(null);
   const [filters, setFilters] = useState(null);
@@ -41,30 +43,21 @@ export default function Requests({ prevPage }) {
   const [page, setPage] = useState(1);
 
   const filtersNeeded = () => {
-    if (prevPage === "/archive") {
-      return false;
-    }
-    if (prevPage === "/track-requests") {
-      return false;
-    }
-    if (prevPage === "/pending-requests") {
-      return false;
-    }
-    return true;
-  };
-
-  const paginationNeeded = () => {
-    return true;
+    return (
+      prevPage !== "/archive" &&
+      prevPage !== "/track-requests" &&
+      prevPage !== "/pending-requests"
+    );
   };
 
   const handlePageChange = (_, p) => setPage(p);
 
   useEffect(() => {
     (async () => {
-      if (!users || !users[0] || !users[0].email) return;
+      if (!user) return;
 
-      const currentUserEmail = users[0].email;
-      const pos = users[0].position;
+      const currentUserEmail = user.email;
+      const pos = user.position;
       setPosition(pos);
 
       try {
@@ -95,21 +88,18 @@ export default function Requests({ prevPage }) {
 
         let { reqArr, reqArrAlt } = prepareReqArr(querySnapshot, qs, pos);
 
-        reqArr.sort(function (x, y) {
-          return x.data.time - y.data.time;
-        });
-        reqArrAlt.sort(function (x, y) {
-          return x.data.time - y.data.time;
-        });
+        reqArr.sort((x, y) => x.data.time - y.data.time);
+        reqArrAlt.sort((x, y) => x.data.time - y.data.time);
 
         setAllFilteredReqs(reqArr);
         setAllRequests(reqArr);
+        if (!!setRequests) setRequests(reqArr);
         setRequestsAlt(reqArrAlt);
       } catch (error) {
         console.warn(error);
       }
     })();
-  }, [users]);
+  }, [user]);
 
   useEffect(() => {
     if (!filters) return;
@@ -159,12 +149,10 @@ export default function Requests({ prevPage }) {
 
   useEffect(() => {
     setRequestsToShow(
-      !paginationNeeded()
-        ? allFilteredReqs
-        : allFilteredReqs.slice(
-            (page - 1) * REQUESTS_PER_PAGE,
-            page * REQUESTS_PER_PAGE
-          )
+      allFilteredReqs.slice(
+        (page - 1) * REQUESTS_PER_PAGE,
+        page * REQUESTS_PER_PAGE
+      )
     );
   }, [allFilteredReqs, page]);
 

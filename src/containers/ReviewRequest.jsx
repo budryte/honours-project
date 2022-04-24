@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "../components/navbar/Navbar";
 import MainRequestDetails from "../components/small-components/MainRequestDetails";
 import SupervisorDetails from "../components/small-components/SupervisorDetails";
@@ -41,25 +41,27 @@ export default function ReviewRequest() {
   //getting loged-in users's position
   const [position, setPosition] = useState("");
   const [email, setEmail] = useState(null);
-  const pos = useLiveQuery(() => db.users.toArray());
+  const user = useLiveQuery(() => db.table("users").toCollection().first());
 
   useEffect(() => {
-    if (!pos || !pos[0] || !pos[0].position) return;
-    setPosition(pos[0].position);
-    setEmail(pos[0].email);
-  }, [pos]);
+    if (!user) return;
+
+    setPosition(user.position);
+    setEmail(user.email);
+  }, [user]);
 
   //changing page title
-  let title = "";
-  if (prevPage === "/archive") {
-    title = "Review Archived Request";
-  } else if (prevPage === "/track-requests") {
-    title = "Review Tracked Request";
-  } else if (prevPage === "/pending-requests") {
-    title = "Review Pending Request";
-  } else if (prevPage === "/list-of-requests" || prevPage === "/my-work") {
-    title = "Review Request";
-  }
+  const title = useMemo(() => {
+    if (prevPage === "/archive") {
+      return "Review Archived Request";
+    } else if (prevPage === "/track-requests") {
+      return "Review Tracked Request";
+    } else if (prevPage === "/pending-requests") {
+      return "Review Pending Request";
+    } else if (prevPage === "/list-of-requests" || prevPage === "/my-work") {
+      return "Review Request";
+    }
+  }, []);
 
   //signing request
   const [signingOpen, setSigningOpen] = useState(false);
@@ -80,10 +82,11 @@ export default function ReviewRequest() {
     return true;
   }
 
-  async function addFields() {
+  function addFields() {
     const firestore = getFirestore();
     const requestRef = doc(firestore, "users", parentId, "requests", id);
-    await updateDoc(requestRef, {
+
+    return updateDoc(requestRef, {
       grant: grant,
       account: account,
       status: "Waiting on technician",
@@ -95,11 +98,12 @@ export default function ReviewRequest() {
   const handleApprovalOpen = () => setApprovalOpen(true);
   const handleApprovalClose = () => setApprovalOpen(false);
 
-  async function sendToSupervisor() {
+  function sendToSupervisor() {
     const fireStore = getFirestore();
     const auth = getAuth();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
-    await updateDoc(requestRef, {
+
+    return updateDoc(requestRef, {
       approvalRequired: "Yes",
       technicianInCharge: auth.currentUser.email,
       status: "Pending approval",
@@ -114,24 +118,17 @@ export default function ReviewRequest() {
     setEstimatedTime(null);
   };
 
-  async function pickUpRequest() {
+  function pickUpRequest() {
     const fireStore = getFirestore();
     const auth = getAuth();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
-    await updateDoc(requestRef, {
+
+    return updateDoc(requestRef, {
       estimatedTime: estimatedTime,
       technicianInCharge: auth.currentUser.email,
       status: "In progress",
       pickupDate: serverTimestamp(),
     });
-  }
-
-  function isVisible() {
-    let proceed = true;
-    if (status === "Pending approval" || status === "Waiting on technician") {
-      proceed = false;
-    }
-    return proceed;
   }
 
   return (
@@ -141,23 +138,24 @@ export default function ReviewRequest() {
         <h1 className="page-title">{title}</h1>
         <div className="white-container">
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={1} md={1}>
+            <Grid item xs={12} sm={1}>
               <BackButton pageTitle={prevPage} />
             </Grid>
-            <Grid item xs={12} sm={11} md={11}>
+            <Grid item xs={12} sm={11}>
               <MainRequestDetails />
               <SupervisorDetails />
-              {isVisible() && <TechnicianDetails position={position} />}
-              {isVisible() && (
-                <MaterialsTable parentId={parentId} position={position} />
-              )}
-              {isVisible() && (
-                <CommentsTable
-                  parentId={parentId}
-                  position={position}
-                  email={email}
-                />
-              )}
+              {status !== "Pending approval" &&
+                status !== "Waiting on technician" && (
+                  <>
+                    <TechnicianDetails position={position} />
+                    <MaterialsTable parentId={parentId} position={position} />
+                    <CommentsTable
+                      parentId={parentId}
+                      position={position}
+                      email={email}
+                    />
+                  </>
+                )}
               <div className="buttons">
                 <div className="request-form-button">
                   {(prevPage === "/list-of-requests" ||
@@ -274,17 +272,15 @@ export default function ReviewRequest() {
               color="success"
               disabled={grant === "" || account === ""}
               onClick={() => {
-                if (checkGrant()) {
-                  try {
-                    addFields();
-                  } catch (error) {
-                    console.log(error);
-                  } finally {
+                if (!checkGrant()) return;
+
+                addFields()
+                  .catch(console.warn)
+                  .finally(() => {
                     alert("The request was signed and sent successfully.");
                     navigate("/pending-requests");
                     handleSigningClose();
-                  }
-                }
+                  });
               }}
             >
               Approve
@@ -341,15 +337,13 @@ export default function ReviewRequest() {
               color="success"
               disabled={!estimatedTime}
               onClick={() => {
-                try {
-                  pickUpRequest();
-                } catch (error) {
-                  console.log(error);
-                } finally {
-                  alert("Request was successfully picked up");
-                  navigate("/list-of-requests");
-                  handlePickupClose();
-                }
+                pickUpRequest()
+                  .catch(console.warn)
+                  .finally(() => {
+                    alert("Request was successfully picked up");
+                    navigate("/list-of-requests");
+                    handlePickupClose();
+                  });
               }}
             >
               Pick Up
@@ -397,15 +391,13 @@ export default function ReviewRequest() {
               variant="outlined"
               color="success"
               onClick={() => {
-                try {
-                  sendToSupervisor();
-                } catch (error) {
-                  console.log(error);
-                } finally {
-                  alert("Request was successfully sent to supervisor");
-                  navigate("/list-of-requests");
-                  handleApprovalClose();
-                }
+                sendToSupervisor()
+                  .catch(console.warn)
+                  .finally(() => {
+                    alert("Request was successfully sent to supervisor");
+                    navigate("/list-of-requests");
+                    handleApprovalClose();
+                  });
               }}
             >
               Send

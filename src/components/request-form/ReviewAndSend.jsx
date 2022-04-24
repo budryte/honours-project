@@ -54,7 +54,7 @@ export function ReviewAndSend(props) {
   const { handleChange, details, extraInfo, linkToFolder } = props;
 
   const [open, setOpen] = useState(false);
-  const users = useLiveQuery(() => dexieDB.users.toArray());
+  const user = useLiveQuery(() => db.table("users").toCollection().first());
   const handleOpen = () => setOpen(true);
   let navigate = useNavigate();
 
@@ -110,7 +110,7 @@ export function ReviewAndSend(props) {
           size="large"
           variant="contained"
           onClick={() => {
-            saveToFirestore(details, extraInfo, linkToFolder, users[0]);
+            saveToFirestore(details, extraInfo, linkToFolder, user);
             handleOpen();
           }}
         >
@@ -121,7 +121,7 @@ export function ReviewAndSend(props) {
       <Modal
         open={open}
         onClose={() => {
-          navigate("/home");
+          navigate("/");
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
