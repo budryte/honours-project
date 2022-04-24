@@ -12,13 +12,7 @@ import Select from "@mui/material/Select";
 import { db as dexieDB } from "../../config/db";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  getFirestore,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 import "./login-register-style.scss";
 
@@ -29,13 +23,11 @@ export function Register() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [position, setPosition] = useState("");
-  const [code, setCode] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [firstnameError, setFirstnameError] = useState("");
   const [lastnameError, setLastnameError] = useState("");
   const [positionError, setPositionError] = useState("");
-  const [codeError, setCodeError] = useState("");
 
   const handleSignup = async (e) => {
     //prevent from refreshing page
@@ -62,10 +54,6 @@ export function Register() {
       setPositionError("Please select position");
       createAccount = false;
     }
-    if (position === "Technician" && code === "") {
-      setCodeError("Please enter set-up code");
-      createAccount = false;
-    }
     if (password !== passwordConfirm) {
       setPasswordError("Passwords don't match");
       createAccount = false;
@@ -74,48 +62,24 @@ export function Register() {
       setEmailError("Please enter your email address");
       createAccount = false;
     }
-    if (position === "Technician") {
-      await checkCode();
-    }
-
-    async function checkCode() {
-      const docRef = doc(getFirestore(), "technicians", code);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        setCodeError("Set up code is invalid");
-        createAccount = false;
-        return;
-      }
-      if (docSnap.data().email !== email) {
-        setEmailError("Set-up code or email is incorrect");
-        setCodeError("Set-up code or email is incorrect");
-        createAccount = false;
-        return;
-      }
-      try {
-        deleteDoc(doc(getFirestore(), "technicians", code));
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
     if (!createAccount) return;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        return setDoc(doc(db, "users", auth.currentUser.uid), {
+      .then(() =>
+        setDoc(doc(db, "users", auth.currentUser.uid), {
           firstname: firstname,
           lastname: lastname,
           position: position,
           email: email,
           isAdmin: false,
           archivedRequests: 0,
-        });
-      })
+          approvedTechnician: false,
+        })
+      )
       .then(async () => {
         try {
-          await dexieDB.users.add({
+          await dexieDB.table("users").add({
             userId: auth.currentUser.uid,
             position,
             email,
@@ -257,7 +221,7 @@ export function Register() {
               onChange={handleChange}
             >
               <MenuItem
-                value={"Client"}
+                value="Client"
                 onClick={(e) => {
                   setPositionError("");
                   setPosition(e.target.value);
@@ -266,7 +230,7 @@ export function Register() {
                 Client
               </MenuItem>
               <MenuItem
-                value={"Supervisor"}
+                value="Supervisor"
                 onClick={(e) => {
                   setPositionError("");
                   setPosition(e.target.value);
@@ -275,7 +239,7 @@ export function Register() {
                 Supervisor
               </MenuItem>
               <MenuItem
-                value={"Technician"}
+                value="toBeApproved"
                 onClick={(e) => {
                   setPositionError("");
                   setPosition(e.target.value);
@@ -286,7 +250,7 @@ export function Register() {
             </Select>
             <FormHelperText>{positionError}</FormHelperText>
           </FormControl>
-          {position === "Technician" && (
+          {/* {position === "Technician" && (
             <TextField
               className="form-group-code"
               id="outlined-basic"
@@ -302,7 +266,7 @@ export function Register() {
               }}
               helperText={codeError}
             />
-          )}
+          )} */}
         </div>
       </div>
       <div className="footer">
