@@ -15,18 +15,11 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import {
-  doc,
-  updateDoc,
-  getFirestore,
-  getDocs,
-  query,
-} from "firebase/firestore";
+import { doc, updateDoc, getFirestore } from "firebase/firestore";
 import EditIcon from "@mui/icons-material/Edit";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
-import { getAuth } from "firebase/auth";
 
 export default function TechnicianDetails(props) {
   const position = props.position;

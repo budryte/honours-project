@@ -144,19 +144,19 @@ export default function Account() {
           <h2 style={{ marginTop: 0 }}>Account Details</h2>
           <List>
             <ListItem disablePadding>
-              <ListItemText>
+              <div className="tech-details-item">
                 <b>First Name:</b> {firstname}
-              </ListItemText>
+              </div>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemText>
+              <div className="tech-details-item">
                 <b>Last Name:</b> {lastname}
-              </ListItemText>
+              </div>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemText>
+              <div className="tech-details-item">
                 <b>Email address:</b> {email}
-              </ListItemText>
+              </div>
             </ListItem>
           </List>
           <h2>Change password</h2>

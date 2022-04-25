@@ -87,14 +87,14 @@ export default function MainRequestDetails() {
           </TableBody>
         </Table>
       </TableContainer>
-      <p style={{ fontSize: "16px" }}>
+      {/* <p style={{ fontSize: "16px" }}>
         {" "}
         <b style={{ color: "red" }}>* Please note:</b> for testing purposes now
         links lead to random websites - in production links would lead to{" "}
         <b>OneDrive folder</b> where you would be able to find drawings and
         other files related to the request
       </p>
-      <br></br>
+      <br></br> */}
     </div>
   );
 }

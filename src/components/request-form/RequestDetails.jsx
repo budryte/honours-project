@@ -231,8 +231,8 @@ export function RequestDetails(props) {
             <p style={{ fontStyle: "italic" }}>
               If you do not know the approved School's account covering you
               request, please add any information (i.e. your School name) that
-              would help us to identify the account to be charged. You won't be
-              charged anything.
+              would help the technical staff to identify the account to be
+              charged. You won't be charged anything.
             </p>
             <TextField
               id="outlined-basic"
