@@ -14,6 +14,7 @@ import {
   ListItemAvatar,
   Avatar,
   IconButton,
+  Grid,
 } from "@mui/material";
 import {
   query,
@@ -128,7 +129,9 @@ export default function ListOfTechncians() {
     const db = getFirestore();
     try {
       const techniciansDoc = doc(db, "metadata", "technicians");
-      return updateDoc(techniciansDoc, arrayUnion(email));
+      return updateDoc(techniciansDoc, {
+        waiting: arrayUnion(email.toLowerCase()),
+      });
     } catch (error) {
       console.warn(error);
     }
@@ -136,12 +139,10 @@ export default function ListOfTechncians() {
 
   function deleteTechnician() {
     const db = getFirestore();
-    try {
-      const techniciansDoc = doc(db, "metadata", "technicians");
-      return updateDoc(techniciansDoc, arrayRemove(email));
-    } catch (error) {
-      console.warn(error);
-    }
+    const techniciansDoc = doc(db, "metadata", "technicians");
+    return updateDoc(techniciansDoc, {
+      waiting: arrayRemove(email.toLowerCase()),
+    });
   }
 
   async function changeAdmin(newAdminEmail) {
@@ -158,7 +159,7 @@ export default function ListOfTechncians() {
     const docArr = await getDocs(
       query(
         collection(getFirestore(), "users"),
-        where("email", "==", newAdminEmail)
+        where("email", "==", newAdminEmail.toLowerCase())
       )
     );
     const newAdmin = docArr.docs[0];
@@ -197,20 +198,26 @@ export default function ListOfTechncians() {
                       <PersonIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <div className="tech-item">
-                    {tech.data.firstname} {tech.data.lastname} |{" "}
-                    <b>{tech.data.email}</b>
-                  </div>
-                  {!tech.data.isAdmin && (
-                    <Button
-                      onClick={() => {
-                        setTempAdmin(tech.data.email);
-                        confirmAdminOpen();
-                      }}
-                    >
-                      Make admin
-                    </Button>
-                  )}
+                  <Grid container>
+                    <Grid item md={6} sm={12}>
+                      <div className="tech-item">
+                        {tech.data.firstname} {tech.data.lastname} |{" "}
+                        <b>{tech.data.email}</b>
+                      </div>
+                    </Grid>
+                    <Grid item md={6} sm={12}>
+                      {!tech.data.isAdmin && (
+                        <Button
+                          onClick={() => {
+                            setTempAdmin(tech.data.email.toLowerCase());
+                            confirmAdminOpen();
+                          }}
+                        >
+                          Make admin
+                        </Button>
+                      )}
+                    </Grid>
+                  </Grid>
                 </ListItem>
               ))}
             </List>
@@ -241,15 +248,13 @@ export default function ListOfTechncians() {
               if (checkEmail()) {
                 addNewTechnician()
                   .then(() => {
-                    setWaitingToJoin((p) => [...p, { email }]);
+                    setWaitingToJoin((p) => [...p, email.toLowerCase()]);
                   })
                   .catch((err) => {
-                    console.log(err);
-                    // Could not save code to Firestore
+                    console.warn(err);
+                    alert("Could not add technician to Firestore");
                   })
-                  .finally(() => {
-                    confirmationOpen();
-                  });
+                  .finally(confirmationOpen);
               }
             }}
           >
@@ -261,11 +266,10 @@ export default function ListOfTechncians() {
             <List>
               {waitingToJoin.map((userEmail) => (
                 <ListItem key={userEmail}>
-                  <div className="tech-item">{userEmail}</div>
                   <IconButton
                     onClick={() => {
-                      setEmail(userEmail);
-                      setTempEmail(userEmail);
+                      setEmail(userEmail.toLowerCase());
+                      setTempEmail(userEmail.toLowerCase());
                       handleRemoveOpen();
                     }}
                   >
@@ -274,6 +278,7 @@ export default function ListOfTechncians() {
                       className="bin"
                     />
                   </IconButton>
+                  <div className="tech-item">{userEmail}</div>
                 </ListItem>
               ))}
             </List>
@@ -351,25 +356,18 @@ export default function ListOfTechncians() {
                   .then(() => {
                     setWaitingToJoin((p) => {
                       let pp = [...p];
-                      for (let i = 0; i < pp.length; i++) {
-                        if (pp[i].email === email) {
-                          pp.splice(i, 1);
-                          break;
-                        }
-                      }
+                      pp.splice(pp.indexOf(email.toLowerCase()), 1);
                       return pp;
                     });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    // Could not remove technician from Firestore
-                  })
-                  .finally(() => {
-                    handleRemoveClose();
                     alert(
                       "Techncian was successfully removed from the waiting list"
                     );
-                  });
+                  })
+                  .catch((err) => {
+                    console.warn(err);
+                    alert("Could not remove technician from Firestore");
+                  })
+                  .finally(handleRemoveClose);
               }}
             >
               OK

@@ -100,12 +100,11 @@ export default function ReviewRequest() {
 
   function sendToSupervisor() {
     const fireStore = getFirestore();
-    const auth = getAuth();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
 
     return updateDoc(requestRef, {
       approvalRequired: "Yes",
-      technicianInCharge: auth.currentUser.email,
+      technicianInCharge: email,
       status: "Pending approval",
     });
   }
@@ -120,12 +119,11 @@ export default function ReviewRequest() {
 
   function pickUpRequest() {
     const fireStore = getFirestore();
-    const auth = getAuth();
     const requestRef = doc(fireStore, "users", parentId, "requests", id);
 
     return updateDoc(requestRef, {
       estimatedTime: estimatedTime,
-      technicianInCharge: auth.currentUser.email,
+      technicianInCharge: email,
       status: "In progress",
       pickupDate: serverTimestamp(),
     });
@@ -172,7 +170,8 @@ export default function ReviewRequest() {
                   ) : undefined}
                   {(prevPage === "/pending-requests" ||
                     prevPage === "/custom-search") &&
-                  position === "Supervisor" ? (
+                  position === "Supervisor" &&
+                  status === "Pending approval" ? (
                     <Button
                       variant="contained"
                       onClick={() => {
@@ -341,7 +340,7 @@ export default function ReviewRequest() {
                   .catch(console.warn)
                   .finally(() => {
                     alert("Request was successfully picked up");
-                    navigate("/list-of-requests");
+                    navigate("/my-work");
                     handlePickupClose();
                   });
               }}

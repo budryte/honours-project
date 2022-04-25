@@ -68,8 +68,8 @@ export default function Filters(props) {
                 props.setSorting({ sortingType: e.target.value });
               }}
             >
-              <MenuItem value={"newest last"}>Oldest</MenuItem>
-              <MenuItem value={"newest first"}>Newest</MenuItem>
+              <MenuItem value={"newest last"}>Oldest First</MenuItem>
+              <MenuItem value={"newest first"}>Newest First</MenuItem>
             </Select>
           </FormControl>
           <h3 style={{ textDecoration: "underline" }}>Filter by:</h3>

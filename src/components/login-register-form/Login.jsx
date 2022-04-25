@@ -21,7 +21,7 @@ export function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email.toLowerCase(), password)
       .then(async () => {
         try {
           const userDoc = await initPosition();
@@ -29,7 +29,7 @@ export function Login() {
           await db.table("users").add({
             userId: userDoc.id,
             position,
-            email,
+            email: email.toLowerCase(),
             firstname,
             lastname,
             isAdmin,
@@ -51,7 +51,7 @@ export function Login() {
 
   function resetPassword() {
     const auth = getAuth();
-    sendPasswordResetEmail(auth, email)
+    sendPasswordResetEmail(auth, email.toLowerCase())
       .then(() => {
         alert("Password reset email has been sent - please check your inbox");
       })

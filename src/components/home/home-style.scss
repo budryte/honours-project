@@ -13,7 +13,7 @@
 
 .box-list {
   width: 70%;
-  padding-left: 10%;
+  padding: 0% 0% 2% 10%;
   @media (max-width: 1300px) {
     width: 90%;
     padding: 2%;
@@ -28,8 +28,7 @@
   color: white;
   font-size: 4em;
   font-family: "Baxter Sans Bold";
-  margin-bottom: 15px;
-  margin-right: 10px;
+  margin: 15px 10px 15px 0px;
   @media (max-width: 700px) {
     font-size: 2em;
   }
@@ -212,6 +211,7 @@
 }
 
 .chart {
+  max-width: 350px;
   justify-content: center;
   display: flex;
   flex-direction: column;

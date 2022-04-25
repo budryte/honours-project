@@ -25,7 +25,14 @@ export default function SupervisorDetails() {
         )}
         {!!grant && (
           <ListItem disablePadding>
-            <div className="tech-details-item">
+            <div
+              className="tech-details-item"
+              style={{
+                maxWidth: "500px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
               <b>Student grant: </b>£{grant}
             </div>
           </ListItem>

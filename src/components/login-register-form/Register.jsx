@@ -65,24 +65,26 @@ export function Register() {
 
     if (!createAccount) return;
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() =>
-        setDoc(doc(db, "users", auth.currentUser.uid), {
-          firstname: firstname,
-          lastname: lastname,
-          position: position,
-          email: email,
-          isAdmin: false,
-          archivedRequests: 0,
-          approvedTechnician: false,
-        })
-      )
+    const userData = {
+      firstname,
+      lastname,
+      position,
+      email: email.toLowerCase(),
+      isAdmin: false,
+      archivedRequests: 0,
+    };
+
+    createUserWithEmailAndPassword(auth, email.toLowerCase(), password)
+      .then(() => {
+        const uid = getAuth().currentUser.uid;
+        return setDoc(doc(db, "users", uid), userData);
+      })
       .then(async () => {
         try {
           await dexieDB.table("users").add({
             userId: auth.currentUser.uid,
             position,
-            email,
+            email: email.toLowerCase(),
             firstname,
             lastname,
             isAdmin: false,
@@ -105,6 +107,7 @@ export function Register() {
   };
 
   const handleChange = (event) => {
+    setPositionError("");
     setPosition(event.target.value);
   };
 
@@ -220,53 +223,12 @@ export function Register() {
               error={positionError !== ""}
               onChange={handleChange}
             >
-              <MenuItem
-                value="Client"
-                onClick={(e) => {
-                  setPositionError("");
-                  setPosition(e.target.value);
-                }}
-              >
-                Client
-              </MenuItem>
-              <MenuItem
-                value="Supervisor"
-                onClick={(e) => {
-                  setPositionError("");
-                  setPosition(e.target.value);
-                }}
-              >
-                Supervisor
-              </MenuItem>
-              <MenuItem
-                value="toBeApproved"
-                onClick={(e) => {
-                  setPositionError("");
-                  setPosition(e.target.value);
-                }}
-              >
-                Technician
-              </MenuItem>
+              <MenuItem value="Client">Client</MenuItem>
+              <MenuItem value="Supervisor">Supervisor</MenuItem>
+              <MenuItem value="toBeApproved">Technician</MenuItem>
             </Select>
             <FormHelperText>{positionError}</FormHelperText>
           </FormControl>
-          {/* {position === "Technician" && (
-            <TextField
-              className="form-group-code"
-              id="outlined-basic"
-              label="Set-up code"
-              variant="outlined"
-              size="small"
-              required
-              error={codeError !== ""}
-              value={code}
-              onChange={(e) => {
-                setCodeError("");
-                setCode(e.target.value);
-              }}
-              helperText={codeError}
-            />
-          )} */}
         </div>
       </div>
       <div className="footer">

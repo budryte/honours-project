@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut, Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { Grid, List, ListItem } from "@mui/material";
 import {
   query,
@@ -112,10 +112,10 @@ export default function Charts({ requests = [] }) {
     labels: Object.keys(chartObj.types),
     datasets: [
       {
-        label: "# of Votes",
         data: Object.keys(chartObj.types).map(
           (key) => sortedRequests.types[key]
         ),
+        label: "# of Votes",
         backgroundColor: [
           //   "#CAE7B9",
           //   "#F3DE8A",
@@ -148,6 +148,7 @@ export default function Charts({ requests = [] }) {
           "#E49273",
           "#A37A74",
           "#C89B7B",
+          "#97A7B3",
         ],
       },
     ],
@@ -158,7 +159,8 @@ export default function Charts({ requests = [] }) {
     plugins: {
       legend: {
         position: "bottom",
-        align: "center",
+        align: "left",
+        display: true,
       },
     },
   };
@@ -195,20 +197,20 @@ export default function Charts({ requests = [] }) {
   return (
     <div className="white-container">
       <h2>Total Active Requests: {requests.length} </h2>
-      <Grid container spacing={2}>
-        <Grid item xs={8} sm={6} md={4}>
+      <Grid container spacing={4}>
+        <Grid item xs={9} sm={6} md={4}>
           <div className="chart">
             <h2>Status</h2>
             <Doughnut options={options} data={statusData} />
           </div>
         </Grid>
-        <Grid item xs={8} sm={6} md={3.8}>
+        <Grid item xs={9} sm={6} md={4}>
           <div className="chart">
             <h2>Project Type</h2>
             <Doughnut options={options} data={typeData} />
           </div>
         </Grid>
-        <Grid item xs={8} sm={6} md={3.8}>
+        <Grid item xs={9} sm={6} md={4}>
           <div className="chart">
             <h2>Project Discipline</h2>
             <Doughnut options={options} data={disciplineData} />

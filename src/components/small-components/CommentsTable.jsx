@@ -56,7 +56,7 @@ export default function CommentsTable({ position, email }) {
       comments: arrayUnion({
         comment: comment,
         commentDate: new Date().getTime(),
-        commenter: email,
+        commenter: email.toLowerCase(),
       }),
     });
   }
@@ -255,7 +255,7 @@ export default function CommentsTable({ position, email }) {
                         {
                           comment: comment,
                           commentDate: new Date(),
-                          commenter: email,
+                          commenter: email.toLowerCase(),
                         },
                       ]);
                     })
