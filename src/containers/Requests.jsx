@@ -210,7 +210,8 @@ export default function Requests({ prevPage, setRequests = null }) {
     return getDocs(
       query(
         collectionGroup(getFirestore(), "requests"),
-        where("supervisor", "==", currentUserEmail)
+        where("supervisor", "==", currentUserEmail),
+        where("status", "!=", "Pending approval")
       )
     );
   }

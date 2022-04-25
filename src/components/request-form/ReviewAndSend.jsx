@@ -54,7 +54,9 @@ export function ReviewAndSend(props) {
   const { handleChange, details, extraInfo, linkToFolder } = props;
 
   const [open, setOpen] = useState(false);
-  const user = useLiveQuery(() => db.table("users").toCollection().first());
+  const user = useLiveQuery(() =>
+    dexieDB.table("users").toCollection().first()
+  );
   const handleOpen = () => setOpen(true);
   let navigate = useNavigate();
 

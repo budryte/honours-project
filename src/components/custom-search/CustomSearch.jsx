@@ -39,7 +39,6 @@ export default function CustomSearch() {
         });
       });
       if (arr.length > 0) {
-        console.log("Successfully found");
         navigate("/review-request", {
           state: {
             data: arr[0].data,
@@ -61,7 +60,6 @@ export default function CustomSearch() {
             });
           });
           if (array.length > 0) {
-            console.log("Successfully found");
             navigate("/review-request", {
               state: {
                 data: array[0].data,

@@ -53,7 +53,7 @@ export default function Home() {
           await getDoc(doc(getFirestore(), "users", auth.currentUser.uid))
         ).data();
 
-        if (isCancelled) return;
+        if (isCancelled || !userDoc) return;
 
         if (userDoc.position === "toBeApproved") {
           if (position.endsWith("++++")) {
