@@ -158,6 +158,7 @@ export default function ReviewRequest() {
                 <div className="request-form-button">
                   {(prevPage === "/list-of-requests" ||
                     prevPage === "/custom-search") &&
+                  position === "Technician" &&
                   status === "Waiting on technician" ? (
                     <Button
                       variant="contained"
@@ -184,6 +185,7 @@ export default function ReviewRequest() {
                 </div>
                 {(prevPage === "/list-of-requests" ||
                   prevPage === "/custom-search") &&
+                position === "Technician" &&
                 status === "Waiting on technician" ? (
                   <Button
                     variant="contained"
